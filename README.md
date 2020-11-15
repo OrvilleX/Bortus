@@ -1,30 +1,14 @@
-<h1 style="text-align: center">EL-ADMIN 后台管理系统</h1>
-<div style="text-align: center">
+# Bortus数据管理平台
 
-[![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://github.com/elunez/eladmin/blob/master/LICENSE)
-[![star](https://gitee.com/elunez/eladmin/badge/star.svg?theme=white)](https://gitee.com/elunez/eladmin)
-[![GitHub stars](https://img.shields.io/github/stars/elunez/eladmin.svg?style=social&label=Stars)](https://github.com/elunez/eladmin)
-[![GitHub forks](https://img.shields.io/github/forks/elunez/eladmin.svg?style=social&label=Fork)](https://github.com/elunez/eladmin)
+[![GitHub stars](https://img.shields.io/github/stars/elunez/eladmin.svg?style=social&label=Stars)](https://github.com/OrvilleX/Bortus)
+[![GitHub forks](https://img.shields.io/github/forks/elunez/eladmin.svg?style=social&label=Fork)](https://github.com/OrvilleX/Bortus)
 
-</div>
+## 项目简介  
 
-#### 项目简介
-一个基于 Spring Boot 2.1.0 、 Spring Boot Jpa、 JWT、Spring Security、Redis、Vue的前后端分离的后台管理系统
+中文名柏图斯，提供企业级管理平台，便于管理旗下的相关大数据产品功能。  
 
-**开发文档：**  [https://el-admin.vip](https://el-admin.vip)
+### 主要特性  
 
-**体验地址：**  [https://el-admin.xin](https://el-admin.xin)
-
-**账号密码：** `admin / 123456`
-
-#### 项目源码
-
-|     |   后端源码  |   前端源码  |
-|---  |--- | --- |
-|  github   |  https://github.com/elunez/eladmin   |  https://github.com/elunez/eladmin-web   |
-|  码云   |  https://gitee.com/elunez/eladmin   |  https://gitee.com/elunez/eladmin-web   |
-
-#### 主要特性
 - 使用最新技术栈，社区资源丰富。
 - 高效率开发，代码生成器可一键生成前后端代码
 - 支持数据字典，可方便地对一些状态进行管理
@@ -36,7 +20,7 @@
 - 支持在线用户管理与服务器性能监控，支持限制单用户登录
 - 支持运维管理，可方便地对远程服务器的应用进行部署与管理
 
-####  系统功能
+###  系统功能
 - 用户管理：提供用户的相关配置，新增用户后，默认密码为123456
 - 角色管理：对权限与菜单进行分配，可根据部门设置角色的数据权限
 - 菜单管理：已实现菜单动态路由，后端可配置化，支持多级菜单
@@ -54,7 +38,7 @@
 - 服务监控：监控服务器的负载情况
 - 运维管理：一键部署你的应用
 
-#### 项目结构
+### 项目结构
 项目采用按功能分模块的开发方式，结构如下
 
 - `eladmin-common` 为系统的公共模块，各种工具类，公共配置存在该模块
@@ -85,43 +69,4 @@
 - eladmin-tools 系统第三方工具模块
 - eladmin-generator 系统代码生成模块
 ```
-    
-#### 系统预览
-<table>
-    <tr>
-        <td><img src="https://img.el-admin.vip/images/2020/09/05/image.png" alt="image.png" border="0" /></td>
-        <td><img src="https://img.el-admin.vip/images/2020/09/05/image1fdb6befae2368c8.png" alt="image1fdb6befae2368c8.png" border="0" /></td>
-    </tr>
-    <tr>
-        <td><img src="https://img.el-admin.vip/images/2020/09/05/image80b090dc27faea86.png" alt="image80b090dc27faea86.png" border="0" /></td>
-        <td><img src="https://img.el-admin.vip/images/2020/09/05/imagec7e0a6b8701cd890.png" alt="imagec7e0a6b8701cd890.png" border="0" /></td>
-    </tr>
-    <tr>
-        <td><img src="https://img.el-admin.vip/images/2020/09/05/imageff0d9e4ab8d3674c.png" alt="imageff0d9e4ab8d3674c.png" border="0" /></td>
-        <td><img src="https://img.el-admin.vip/images/2020/09/05/image923ef574ace41404.png" alt="image923ef574ace41404.png" border="0" /></td>
-    </tr>
-    <tr>
-        <td><img src="https://img.el-admin.vip/images/2020/09/05/imagef37b559927af1a10.png" alt="imagef37b559927af1a10.png" border="0" /></td>
-        <td><img src="https://img.el-admin.vip/images/2020/09/05/imageabafc6a7f0522967.png" alt="imageabafc6a7f0522967.png" border="0" /></td>
-    </tr>
-</table>
 
-#### 特别鸣谢
-
-- 感谢 [JetBrains](https://www.jetbrains.com/) 提供的非商业开源软件开发授权
-
-- 感谢 [PanJiaChen](https://github.com/PanJiaChen/vue-element-admin) 大佬提供的前端模板
-
-- 感谢 [Moxun](https://github.com/moxun1639) 大佬提供的前端 Curd 通用组件
-
-- 感谢 [zhy6599](https://gitee.com/zhy6599) 大佬提供的后端运维管理相关功能
-
-- 感谢 [j.yao.SUSE](https://github.com/everhopingandwaiting) 大佬提供的匿名接口与Redis限流等功能
-
-- 感谢 [d15801543974](https://github.com/d15801543974) 大佬提供的基于注解的通用查询方式
-
-#### 项目捐赠
-项目的发展离不开你的支持，请作者喝杯咖啡吧☕  [Donate](https://el-admin.vip/donation/)
-
-#### 反馈交流
-- QQ交流群：891137268

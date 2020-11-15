@@ -4,21 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.zhengjie</groupId>
-    <artifactId>eladmin</artifactId>
-    <packaging>pom</packaging>
+    <groupId>com.orvillex.bortus</groupId>
+    <artifactId>manager</artifactId>
+    <packaging>jar</packaging>
     <version>2.6</version>
 
-    <modules>
-        <module>eladmin-common</module>
-        <module>eladmin-logging</module>
-        <module>eladmin-system</module>
-        <module>eladmin-tools</module>
-        <module>eladmin-generator</module>
-    </modules>
-
-    <name>EL-ADMIN 后台管理</name>
-    <url>http://auauz.net</url>
+    <name>Bortus数据管理平台</name>
+    <url>https://orvillex.com</url>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -36,6 +28,7 @@
         <druid.version>1.1.22</druid.version>
         <commons-pool2.version>2.5.0</commons-pool2.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
+        <hutool.version>5.3.4</hutool.version>
     </properties>
 
     <dependencies>
@@ -206,10 +199,21 @@
             <artifactId>UserAgentUtils</artifactId>
             <version>1.21</version>
         </dependency>
+
+        <!--工具包-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <!-- 打包时跳过测试 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
