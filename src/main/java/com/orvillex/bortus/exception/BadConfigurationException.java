@@ -2,6 +2,8 @@ package com.orvillex.bortus.exception;
 
 /**
  * 配置异常
+ * @author y-z-f
+ * @version 0.1
  */
 public class BadConfigurationException extends RuntimeException {
 
