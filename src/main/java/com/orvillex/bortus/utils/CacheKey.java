@@ -52,4 +52,24 @@ public interface CacheKey {
      * 角色信息
      */
     String ROLE_ID = "role::id:";
+
+    /**
+     * 通过手机号重置邮箱
+     */
+    String PHONE_RESET_EMAIL_CODE = "phone_reset_email_code_";
+
+    /**
+     * 通过旧邮箱重置邮箱
+     */
+    String EMAIL_RESET_EMAIL_CODE = "email_reset_email_code_";
+
+    /**
+     * 通过手机号重置密码
+     */
+    String PHONE_RESET_PWD_CODE = "phone_reset_pwd_code_";
+
+    /**
+     * 通过邮箱重置密码
+     */
+    String EMAIL_RESET_PWD_CODE = "email_reset_pwd_code_";
 }

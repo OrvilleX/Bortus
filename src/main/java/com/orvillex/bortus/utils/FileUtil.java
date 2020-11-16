@@ -16,9 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +37,12 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
     private static final int GB = 1024 * 1024 * 1024;
     private static final int MB = 1024 * 1024;
     private static final int KB = 1024;
+
+    public static final String IMAGE = "图片";
+    public static final String TXT = "文档";
+    public static final String MUSIC  = "音乐";
+    public static final String VIDEO = "视频";
+    public static final String OTHER = "其他";
 
     private static final DecimalFormat DF = new DecimalFormat("0.00");
 
@@ -148,5 +152,145 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         return null;
     }
 
-    
+    /**
+     * 导出excel
+     */
+    public static void downloadExcel(List<Map<String, Object>> list, HttpServletResponse response) throws Exception {
+        String tempPath = SYS_TEM_DIR + IdUtil.fastSimpleUUID() + ".xlsx";
+        File file = new File(tempPath);
+        BigExcelWriter writer = ExcelUtil.getBigWriter(file);
+        writer.write(list, true);
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=file.xlsx");
+        ServletOutputStream out = response.getOutputStream();
+        file.deleteOnExit();
+        writer.flush(out, true);
+        IoUtil.close(out);
+    }
+
+    /**
+     * 获取文件类型
+     */
+    public static String getFileType(String type) {
+        String documents = "txt doc pdf ppt pps xlsx xls docx";
+        String music = "mp3 wav wma mpa ram ra aac aif m4a";
+        String video = "avi mpg mpe mpeg asf wmv mov qt rm mp4 flv m4v webm ogv ogg";
+        String image = "bmp dib pcp dif wmf gif jpg tif eps psd cdr iff tga pcd mpt png jpeg";
+        if (image.contains(type)) {
+            return IMAGE;
+        } else if (documents.contains(type)) {
+            return TXT;
+        } else if (music.contains(type)) {
+            return MUSIC;
+        } else if (video.contains(type)) {
+            return VIDEO;
+        } else {
+            return OTHER;
+        }
+    }
+
+    /**
+     * 判断文件尺寸
+     * @param maxSize 文件最大尺寸，单位MB
+     * @param size 文件尺寸，单位B
+     */
+    public static void checkSize(long maxSize, long size) {
+        int len = 1024 * 1024;
+        if (size > (maxSize * len)) {
+            throw new BadRequestException("文件超出规定大小");
+        }
+    }
+
+    /**
+     * 判断两个文件是否相等
+     */
+    public static boolean check(File origin, File dest) {
+        String file1Md5 = getMd5(origin);
+        String file2Md5 = getMd5(dest);
+        return file1Md5.equals(file2Md5);
+    }
+
+    /**
+     * 下载文件
+     */
+    public static void downloadFile(HttpServletRequest request, HttpServletResponse response, File file, boolean deleteOnExit) {
+        response.setCharacterEncoding(request.getCharacterEncoding());
+        response.setContentType("application/octet-stream");
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+            response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
+            IOUtils.copy(inputStream, response.getOutputStream());
+            response.flushBuffer();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                    if (deleteOnExit) {
+                        file.deleteOnExit();
+                    }
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取文件MD5码
+     */
+    public static String getMd5(File file) {
+        return getMd5(getByte(file));
+    }
+
+    /**
+     * 获取文件字节组
+     */
+    private static byte[] getByte(File file) {
+        byte[] b = new byte[(int)file.length()];
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+            System.out.println(inputStream.read(b));
+        } catch (IOException io) {
+            log.error(io.getMessage(), io);
+            return null;
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return b;
+    }
+
+    /**
+     * 获取文件MD5
+     */
+    private static String getMd5(byte[] bytes) {
+        char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(bytes);
+            byte[] md = md5.digest();
+            int j = md.length;
+            char[] str = new char[j * 2];
+            int k = 0;
+            for (byte bytetmp : md) {
+                str[k++] = hexDigits[bytetmp >>> 4 & 0xf];
+                str[k++] = hexDigits[bytetmp & 0xf];
+            }
+            return new String(str);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+
 }
