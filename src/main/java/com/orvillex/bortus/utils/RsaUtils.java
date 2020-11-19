@@ -14,7 +14,6 @@ import java.security.spec.X509EncodedKeySpec;
  * @version 0.1
  */
 public class RsaUtils {
-    private static final String SRC = "orvillex";
 
     /**
      * 基于公钥解密

@@ -10,7 +10,7 @@ public interface CallBack {
     /**
      * 回调方法
      */
-    String executor();
+    void executor();
 
     /**
      * 回调任务名
