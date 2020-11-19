@@ -14,12 +14,12 @@ public class PageUtil extends cn.hutool.core.util.PageUtil {
     /**
      * List 分页
      */
-    public static List toPage(int page, int size, List list) {
+    public static List<?> toPage(int page, int size, List<?> list) {
         int fromIndex = page * size;
         int toIndex = page * size + size;
         int count = list.size();
         if (fromIndex > count) {
-            return new ArrayList();
+            return new ArrayList<>();
         } else if (toIndex >= count) {
             return list.subList(fromIndex, count);
         } else {
@@ -30,7 +30,7 @@ public class PageUtil extends cn.hutool.core.util.PageUtil {
     /**
      * Page 数据处理
      */
-    public static Map<String, Object> toPage(Page page) {
+    public static Map<String, Object> toPage(Page<?> page) {
         Map<String, Object> map = new LinkedHashMap<>(2);
         map.put("content", page.getContent());
         map.put("totalElements", page.getTotalElements());

@@ -12,7 +12,7 @@ public class EntityExistException extends RuntimeException {
 
     private static final long serialVersionUID = -7016750488091536956L;
 
-    public EntityExistException(Class clazz, String field, String val) {
+    public EntityExistException(Class<?> clazz, String field, String val) {
         super(EntityExistException.generateMessage(clazz.getSimpleName(), field, val));
     }
     
