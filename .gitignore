@@ -8,5 +8,5 @@
 .factorypath
 .project
 .settings
-
+target/*
 .vscode/*
