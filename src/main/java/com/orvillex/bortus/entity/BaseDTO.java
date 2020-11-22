@@ -1,4 +1,4 @@
-package me.zhengjie.base;
+package com.orvillex.bortus.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,20 +7,20 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 
+
 /**
- * @author Zheng Jie
- * @date 2019年10月24日20:48:53
+ * 基础数据传输对象
+ * @author y-z-f
+ * @version 0.1
  */
-@Getter
 @Setter
-public class BaseDTO  implements Serializable {
-
+@Getter
+public class BaseDTO implements Serializable {
+    private static final long serialVersionUID = 9177294154311308608L;
+    
     private String createBy;
-
-    private String updatedBy;
-
+    private String updateBy;
     private Timestamp createTime;
-
     private Timestamp updateTime;
 
     @Override

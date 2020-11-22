@@ -347,6 +347,10 @@ switch (q.type()) {
 
 ## 异常  
 
+## 配置
+
+1. 数据库审计由`config`中的`AuditorConfig`进行配置操作员的名称，从而确保在数据新增和修改时可以自动填充其中的`createBy`和`update_by`字段;  
+2. 
 
 ## 其他  
 
