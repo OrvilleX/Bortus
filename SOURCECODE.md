@@ -353,6 +353,14 @@ switch (q.type()) {
 2. 文件上传当前采用的是本地的存储方式，需要根据系统自动判断具体的路径，主要由`config`中的`FileProperties`进行控制，需要参数需要通过配置文件填充；  
 3. 
 
+```java
+public class RequestHolder {
+    public static HttpServletRequest getHttpServletRequest() {
+        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+    }
+}
+```
+
 ## 其他  
 
 ### 1. 接口限流  
