@@ -155,7 +155,7 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
     /**
      * 导出excel
      */
-    public static void downloadExcel(List<Map<String, Object>> list, HttpServletResponse response) throws Exception {
+    public static void downloadExcel(List<Map<String, Object>> list, HttpServletResponse response) throws IOException {
         String tempPath = SYS_TEM_DIR + IdUtil.fastSimpleUUID() + ".xlsx";
         File file = new File(tempPath);
         BigExcelWriter writer = ExcelUtil.getBigWriter(file);
