@@ -1,55 +1,40 @@
-/*
- *  Copyright 2019-2020 Zheng Jie
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-package me.zhengjie.modules.system.service.impl;
+package com.orvillex.bortus.modules.system.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.orvillex.bortus.modules.system.domain.Dict;
+import com.orvillex.bortus.modules.system.repository.DictRepository;
+import com.orvillex.bortus.modules.system.service.automap.DictMapper;
+import com.orvillex.bortus.modules.system.service.dto.DictDetailDto;
+import com.orvillex.bortus.modules.system.service.dto.DictDto;
+import com.orvillex.bortus.modules.system.service.dto.DictQueryCriteria;
+import com.orvillex.bortus.utils.*;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.domain.Dict;
-import me.zhengjie.modules.system.service.dto.DictDetailDto;
-import me.zhengjie.modules.system.service.dto.DictQueryCriteria;
-import me.zhengjie.utils.*;
-import me.zhengjie.modules.system.repository.DictRepository;
-import me.zhengjie.modules.system.service.DictService;
-import me.zhengjie.modules.system.service.dto.DictDto;
-import me.zhengjie.modules.system.service.mapstruct.DictMapper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
 /**
-* @author Zheng Jie
-* @date 2019-04-10
-*/
+ * 字段服务实现
+ * @author y-z-f
+ * @version 0.1
+ */
 @Service
 @RequiredArgsConstructor
 @CacheConfig(cacheNames = "dict")
 public class DictServiceImpl implements DictService {
-
     private final DictRepository dictRepository;
     private final DictMapper dictMapper;
     private final RedisUtils redisUtils;
 
     @Override
-    public Map<String, Object> queryAll(DictQueryCriteria dict, Pageable pageable){
-        Page<Dict> page = dictRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, dict, cb), pageable);
+    public Map<String, Object> queryAll(DictQueryCriteria criteria, Pageable pageable) {
+        Page<Dict> page = dictRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, criteria, cb), pageable);
         return PageUtil.toPage(page.map(dictMapper::toDto));
     }
 
@@ -68,10 +53,9 @@ public class DictServiceImpl implements DictService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Dict resources) {
-        // 清理缓存
         delCaches(resources);
         Dict dict = dictRepository.findById(resources.getId()).orElseGet(Dict::new);
-        ValidationUtil.isNull( dict.getId(),"Dict","id",resources.getId());
+        ValidationUtil.isNull(dict.getId(), "Dict", "id", resources.getId());
         resources.setId(dict.getId());
         dictRepository.save(resources);
     }
@@ -79,7 +63,6 @@ public class DictServiceImpl implements DictService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Set<Long> ids) {
-        // 清理缓存
         List<Dict> dicts = dictRepository.findByIdIn(ids);
         for (Dict dict : dicts) {
             delCaches(dict);
@@ -91,19 +74,19 @@ public class DictServiceImpl implements DictService {
     public void download(List<DictDto> dictDtos, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (DictDto dictDTO : dictDtos) {
-            if(CollectionUtil.isNotEmpty(dictDTO.getDictDetails())){
-                for (DictDetailDto dictDetail : dictDTO.getDictDetails()) {
-                    Map<String,Object> map = new LinkedHashMap<>();
+            if (CollectionUtil.isNotEmpty(dictDTO.getDictDetails())) {
+                for (DictDetailDto dictDetailDto : dictDTO.getDictDetails()) {
+                    Map<String, Object> map = new LinkedHashMap<>();
                     map.put("字典名称", dictDTO.getName());
                     map.put("字典描述", dictDTO.getDescription());
-                    map.put("字典标签", dictDetail.getLabel());
-                    map.put("字典值", dictDetail.getValue());
-                    map.put("创建日期", dictDetail.getCreateTime());
+                    map.put("字典标签", dictDetailDto.getLabel());
+                    map.put("字段值", dictDetailDto.getValue());
+                    map.put("创建日期", dictDetailDto.getCreateTime());
                     list.add(map);
                 }
             } else {
-                Map<String,Object> map = new LinkedHashMap<>();
-                map.put("字典名称", dictDTO.getName());
+                Map<String, Object> map = new LinkedHashMap<>();
+                map.put("字段名称", dictDTO.getName());
                 map.put("字典描述", dictDTO.getDescription());
                 map.put("字典标签", null);
                 map.put("字典值", null);
@@ -114,7 +97,7 @@ public class DictServiceImpl implements DictService {
         FileUtil.downloadExcel(list, response);
     }
 
-    public void delCaches(Dict dict){
-        redisUtils.del("dict::name:" + dict.getName());
+    public void delCaches(Dict dict) {
+        redisUtils.delete("dict::name:" + dict.getName());
     }
 }
