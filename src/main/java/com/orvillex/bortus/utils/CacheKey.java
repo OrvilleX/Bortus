@@ -44,6 +44,11 @@ public interface CacheKey {
     String DATE_USER = "data::user:";
 
     /**
+     * 菜单
+     */
+    String MENU_USER = "menu::user:";
+
+    /**
      * 角色授权
      */
     String ROLE_AUTH = "role::auth:";

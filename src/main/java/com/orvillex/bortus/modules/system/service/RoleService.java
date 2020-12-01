@@ -78,7 +78,7 @@ public interface RoleService {
     /**
      * 导出数据
      */
-    void download(List<RoleDto> queryAll, HttpServletResponse response) throws IOException;
+    void download(List<RoleDto> roles, HttpServletResponse response) throws IOException;
 
     /**
      * 获取用户权限信息
