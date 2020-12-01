@@ -2,6 +2,8 @@ package com.orvillex.bortus.modules.system.domain;
 
 import com.orvillex.bortus.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +16,10 @@ import java.util.Objects;
  * @author y-z-f
  * @version 0.1
  */
+@Entity
+@Getter
+@Setter
+@Table(name = "sys_job")
 public class Job extends BaseEntity implements Serializable {
 
     @Id

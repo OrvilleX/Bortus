@@ -51,7 +51,7 @@ public interface JobService {
     /**
      * 导出数据
      */
-    void download(List<JobDto> queryAll, HttpServletResponse response) throws IOException;
+    void download(List<JobDto> jobDtos, HttpServletResponse response) throws IOException;
 
     /**
      * 验证是否被用户关联
