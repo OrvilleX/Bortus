@@ -44,24 +44,4 @@ public interface DictDetailService {
      * 根据字典名称获取字典详情
      */
     List<DictDetailDto> getDictByName(String name);
-
-    /**
-     * 创建
-     */
-    void create(Dict resources);
-
-    /**
-     * 编辑
-     */
-    void update(Dict resources);
-
-    /**
-     * 删除
-     */
-    void delete(Set<Long> ids);
-
-    /**
-     * 导出数据
-     */
-    void download(List<DictDto> queryAll, HttpServletResponse response) throws IOException;
 }
