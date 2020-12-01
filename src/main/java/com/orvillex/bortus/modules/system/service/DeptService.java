@@ -54,7 +54,7 @@ public interface DeptService {
     /**
      * 导出数据
      */
-    void download(List<DeptDto> queryAll, HttpServletResponse response) throws IOException;
+    void download(List<DeptDto> deptDtos, HttpServletResponse response) throws IOException;
 
     /**
      * 获取待删除的部门
