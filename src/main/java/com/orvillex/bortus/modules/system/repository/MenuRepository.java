@@ -32,6 +32,11 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, JpaSpecificat
      */
     List<Menu> findByPid(Long pid);
 
+    /**
+     * 查询顶级菜单
+     */
+    List<Menu> findByPidIsNull();
+
     @Query(value = "SELECT m.* FROM sys_menu m, sys_roles_menus r WHERE m.menu_id = r.menu_id AND r.role_id IN ?1 AND type != ?2 ORDER BY m.menu_sort ASC", nativeQuery = true)
     LinkedHashSet<Menu> findByRoleIdsAndTypeNot(Set<Long> roleIds, int type);
 

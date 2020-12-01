@@ -62,7 +62,7 @@ public class Menu extends BaseEntity implements Serializable {
 
     @Column(columnDefinition = "bit(1) default 0")
     @ApiModelProperty(value = "缓存")
-    private Boolean caache;
+    private Boolean cache;
 
     @Column(columnDefinition = "bit(1) default 0")
     @ApiModelProperty(value = "是否隐藏")
@@ -75,7 +75,7 @@ public class Menu extends BaseEntity implements Serializable {
     private Integer subCount = 0;
 
     @ApiModelProperty(value = "外链菜单")
-    private boolean iFrame;
+    private Boolean iFrame;
 
     @Override
     public boolean equals(Object o) {

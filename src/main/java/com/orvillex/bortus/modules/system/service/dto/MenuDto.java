@@ -1,6 +1,8 @@
 package com.orvillex.bortus.modules.system.service.dto;
 
 import com.orvillex.bortus.entity.BaseDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.Objects;
  * @author y-z-f
  * @version 0.1
  */
+@Getter
+@Setter
 public class MenuDto extends BaseDTO implements Serializable {
     private Long id;
     private List<MenuDto> children;

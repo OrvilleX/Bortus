@@ -1,6 +1,7 @@
 package com.orvillex.bortus.modules.system.service;
 
 import com.orvillex.bortus.modules.system.domain.Menu;
+import com.orvillex.bortus.modules.system.domain.vo.MenuVo;
 import com.orvillex.bortus.modules.system.service.dto.MenuDto;
 import com.orvillex.bortus.modules.system.service.dto.MenuQueryCriteria;
 
@@ -49,7 +50,7 @@ public interface MenuService {
     /**
      * 构建菜单树
      */
-    Object buildMenus(List<MenuDto> menuDtos);
+    List<MenuVo> buildMenus(List<MenuDto> menuDtos);
 
     /**
      * 根据ID查询
@@ -64,7 +65,7 @@ public interface MenuService {
     /**
      * 导出
      */
-    void download(List<MenuDto> queryAll, HttpServletResponse response) throws IOException;
+    void download(List<MenuDto> menuDtos, HttpServletResponse response) throws IOException;
 
     /**
      * 懒加载菜单数据
@@ -74,7 +75,7 @@ public interface MenuService {
     /**
      * 根据ID获取同级与上级数据
      */
-    List<MenuDto> getSuperior(MenuDto menuDto, List<Menu> objects);
+    List<MenuDto> getSuperior(MenuDto menuDto, List<Menu> menus);
 
     /**
      * 根据当前用户获取菜单
