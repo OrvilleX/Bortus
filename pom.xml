@@ -7,7 +7,7 @@
     <groupId>com.orvillex.bortus</groupId>
     <artifactId>manager</artifactId>
     <packaging>jar</packaging>
-    <version>2.6</version>
+    <version>0.1</version>
 
     <name>Bortus数据管理平台</name>
     <url>https://orvillex.com</url>
@@ -17,6 +17,10 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.0.RELEASE</version>
     </parent>
+
+    <modules>
+        <module>scheduler</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
