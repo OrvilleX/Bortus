@@ -41,7 +41,7 @@ public class VerifyServiceImpl implements VerifyService {
         if (oldCode == null) {
             String code = RandomUtil.randomNumbers(6);
             if (!redisUtils.set(redisKey, code, expiration)) {
-                throw new BadRequestException("服务异常");;
+                throw new BadRequestException("服务异常");
             }
             content = template.render(Dict.create().set("code", code));
             emailVo = new EmailVo(Collections.singletonList(email), "Bortus数据平台", content);

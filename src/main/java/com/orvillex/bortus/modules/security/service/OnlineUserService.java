@@ -17,4 +17,8 @@ public class OnlineUserService {
     public Map<String, Object> getAll(String filter, Pageable pageable) {
         return null;
     }
+
+    public void kickOutForUsername(String userName) {
+
+    }
 }

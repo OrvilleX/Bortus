@@ -35,6 +35,13 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     void updatePass(String username, String pass, Date lastPasswordResetTime);
 
     /**
+     * 修改邮箱
+     */
+    @Modifying
+    @Query(value = "UPDATE sys_user SET email = ?2 WHERE username = ?1", nativeQuery = true)
+    void updateEmail(String username, String email);
+
+    /**
      * 根据角色查询用户
      */
     @Query(value = "SELECT u.* FROM sys_user u, sys_users_roles r WHERE u.user_id = r.user_id AND r.role_id = ?1", nativeQuery = true)
