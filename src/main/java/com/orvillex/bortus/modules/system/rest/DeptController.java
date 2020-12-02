@@ -30,8 +30,6 @@ import java.util.*;
 @Api(tags = "系统：部门管理")
 @RequestMapping("/api/dept")
 public class DeptController {
-    private static final String ENTITY_NAME = "dept";
-
     private final DeptService deptService;
 
     @Log("导出部门数据")
@@ -71,7 +69,7 @@ public class DeptController {
     @PreAuthorize("@x.check('dept:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Dept resources){
         if (resources.getId() != null) {
-            throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
+            throw new BadRequestException("不能携带ID");
         }
         deptService.create(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
