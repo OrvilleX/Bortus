@@ -1,26 +1,12 @@
-/*
- *  Copyright 2019-2020 Zheng Jie
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-package me.zhengjie.modules.security.security;
+package com.orvillex.bortus.handler;
 
 import cn.hutool.core.util.StrUtil;
+import com.orvillex.bortus.config.security.SecurityProperties;
+import com.orvillex.bortus.config.security.TokenProvider;
+import com.orvillex.bortus.modules.security.service.OnlineUserService;
+import com.orvillex.bortus.modules.security.service.UserCacheClean;
+import com.orvillex.bortus.modules.security.service.dto.OnlineUserDto;
 import io.jsonwebtoken.ExpiredJwtException;
-import me.zhengjie.modules.security.config.bean.SecurityProperties;
-import me.zhengjie.modules.security.service.UserCacheClean;
-import me.zhengjie.modules.security.service.dto.OnlineUserDto;
-import me.zhengjie.modules.security.service.OnlineUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -37,7 +23,9 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * @author /
+ * 基于JWT的过滤器
+ * @author y-z-f
+ * @version 0.1
  */
 public class TokenFilter extends GenericFilterBean {
     private static final Logger log = LoggerFactory.getLogger(TokenFilter.class);
@@ -48,12 +36,6 @@ public class TokenFilter extends GenericFilterBean {
     private final OnlineUserService onlineUserService;
     private final UserCacheClean userCacheClean;
 
-    /**
-     * @param tokenProvider     Token
-     * @param properties        JWT
-     * @param onlineUserService 用户在线
-     * @param userCacheClean    用户缓存清理工具
-     */
     public TokenFilter(TokenProvider tokenProvider, SecurityProperties properties, OnlineUserService onlineUserService, UserCacheClean userCacheClean) {
         this.properties = properties;
         this.onlineUserService = onlineUserService;
@@ -66,7 +48,6 @@ public class TokenFilter extends GenericFilterBean {
             throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String token = resolveToken(httpServletRequest);
-        // 对于 Token 为空的不需要去查 Redis
         if (StrUtil.isNotBlank(token)) {
             OnlineUserDto onlineUserDto = null;
             boolean cleanUserCache = false;
@@ -83,7 +64,6 @@ public class TokenFilter extends GenericFilterBean {
             if (onlineUserDto != null && StringUtils.hasText(token)) {
                 Authentication authentication = tokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                // Token 续期
                 tokenProvider.checkRenewal(token);
             }
         }
@@ -92,14 +72,10 @@ public class TokenFilter extends GenericFilterBean {
 
     /**
      * 初步检测Token
-     *
-     * @param request /
-     * @return /
      */
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(properties.getHeader());
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(properties.getTokenStartWith())) {
-            // 去掉令牌前缀
             return bearerToken.replace(properties.getTokenStartWith(), "");
         } else {
             log.debug("非法Token：{}", bearerToken);

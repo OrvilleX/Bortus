@@ -1,27 +1,14 @@
-/*
- *  Copyright 2019-2020 Zheng Jie
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-package me.zhengjie.modules.security.config;
+package com.orvillex.bortus.config;
 
+import com.orvillex.bortus.annotation.AnonymousAccess;
+import com.orvillex.bortus.config.security.SecurityProperties;
+import com.orvillex.bortus.config.security.TokenProvider;
+import com.orvillex.bortus.enums.RequestMethodType;
+import com.orvillex.bortus.handler.JwtAccessDeniedHandler;
+import com.orvillex.bortus.handler.JwtAuthenticationHandler;
+import com.orvillex.bortus.modules.security.service.OnlineUserService;
+import com.orvillex.bortus.modules.security.service.UserCacheClean;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.annotation.AnonymousAccess;
-import me.zhengjie.modules.security.config.bean.SecurityProperties;
-import me.zhengjie.modules.security.security.*;
-import me.zhengjie.modules.security.service.OnlineUserService;
-import me.zhengjie.modules.security.service.UserCacheClean;
-import me.zhengjie.utils.enums.RequestMethodEnum;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,17 +31,18 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.util.*;
 
 /**
- * @author Zheng Jie
+ * 覆盖默认的Web安全配置
+ * @author y-z-f
+ * @version 0.1
  */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+public class WebSecurityAdapter extends WebSecurityConfigurerAdapter {
     private final TokenProvider tokenProvider;
     private final CorsFilter corsFilter;
-    private final JwtAuthenticationEntryPoint authenticationErrorHandler;
+    private final JwtAuthenticationHandler jwtAuthenticationHandler;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final ApplicationContext applicationContext;
     private final SecurityProperties properties;
@@ -63,13 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
-        // 去除 ROLE_ 前缀
         return new GrantedAuthorityDefaults("");
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // 密码加密方式
         return new BCryptPasswordEncoder();
     }
 
@@ -85,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 // 授权异常
                 .exceptionHandling()
-                .authenticationEntryPoint(authenticationErrorHandler)
+                .authenticationEntryPoint(jwtAuthenticationHandler)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 // 防止iframe 造成跨域
                 .and()
@@ -121,17 +107,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 自定义匿名访问所有url放行：允许匿名和带Token访问，细腻化到每个 Request 类型
                 // GET
-                .antMatchers(HttpMethod.GET, anonymousUrls.get(RequestMethodEnum.GET.getType()).toArray(new String[0])).permitAll()
+                .antMatchers(HttpMethod.GET, anonymousUrls.get(RequestMethodType.GET.getType()).toArray(new String[0])).permitAll()
                 // POST
-                .antMatchers(HttpMethod.POST, anonymousUrls.get(RequestMethodEnum.POST.getType()).toArray(new String[0])).permitAll()
+                .antMatchers(HttpMethod.POST, anonymousUrls.get(RequestMethodType.POST.getType()).toArray(new String[0])).permitAll()
                 // PUT
-                .antMatchers(HttpMethod.PUT, anonymousUrls.get(RequestMethodEnum.PUT.getType()).toArray(new String[0])).permitAll()
+                .antMatchers(HttpMethod.PUT, anonymousUrls.get(RequestMethodType.PUT.getType()).toArray(new String[0])).permitAll()
                 // PATCH
-                .antMatchers(HttpMethod.PATCH, anonymousUrls.get(RequestMethodEnum.PATCH.getType()).toArray(new String[0])).permitAll()
+                .antMatchers(HttpMethod.PATCH, anonymousUrls.get(RequestMethodType.PATCH.getType()).toArray(new String[0])).permitAll()
                 // DELETE
-                .antMatchers(HttpMethod.DELETE, anonymousUrls.get(RequestMethodEnum.DELETE.getType()).toArray(new String[0])).permitAll()
+                .antMatchers(HttpMethod.DELETE, anonymousUrls.get(RequestMethodType.DELETE.getType()).toArray(new String[0])).permitAll()
                 // 所有类型的接口都放行
-                .antMatchers(anonymousUrls.get(RequestMethodEnum.ALL.getType()).toArray(new String[0])).permitAll()
+                .antMatchers(anonymousUrls.get(RequestMethodType.ALL.getType()).toArray(new String[0])).permitAll()
                 // 所有请求都需要认证
                 .anyRequest().authenticated()
                 .and().apply(securityConfigurerAdapter());
@@ -150,7 +136,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             AnonymousAccess anonymousAccess = handlerMethod.getMethodAnnotation(AnonymousAccess.class);
             if (null != anonymousAccess) {
                 List<RequestMethod> requestMethods = new ArrayList<>(infoEntry.getKey().getMethodsCondition().getMethods());
-                RequestMethodEnum request = RequestMethodEnum.find(requestMethods.size() == 0 ? RequestMethodEnum.ALL.getType() : requestMethods.get(0).name());
+                RequestMethodType request = RequestMethodType.find(requestMethods.size() == 0 ? RequestMethodType.ALL.getType() : requestMethods.get(0).name());
                 switch (Objects.requireNonNull(request)) {
                     case GET:
                         get.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
@@ -173,16 +159,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 }
             }
         }
-        anonymousUrls.put(RequestMethodEnum.GET.getType(), get);
-        anonymousUrls.put(RequestMethodEnum.POST.getType(), post);
-        anonymousUrls.put(RequestMethodEnum.PUT.getType(), put);
-        anonymousUrls.put(RequestMethodEnum.PATCH.getType(), patch);
-        anonymousUrls.put(RequestMethodEnum.DELETE.getType(), delete);
-        anonymousUrls.put(RequestMethodEnum.ALL.getType(), all);
+        anonymousUrls.put(RequestMethodType.GET.getType(), get);
+        anonymousUrls.put(RequestMethodType.POST.getType(), post);
+        anonymousUrls.put(RequestMethodType.PUT.getType(), put);
+        anonymousUrls.put(RequestMethodType.PATCH.getType(), patch);
+        anonymousUrls.put(RequestMethodType.DELETE.getType(), delete);
+        anonymousUrls.put(RequestMethodType.ALL.getType(), all);
         return anonymousUrls;
     }
 
-    private TokenConfigurer securityConfigurerAdapter() {
-        return new TokenConfigurer(tokenProvider, properties, onlineUserService, userCacheClean);
+    private TokenConfig securityConfigurerAdapter() {
+        return new TokenConfig(tokenProvider, properties, onlineUserService, userCacheClean);
     }
 }

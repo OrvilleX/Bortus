@@ -1,30 +1,14 @@
-/*
- *  Copyright 2019-2020 Zheng Jie
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-package me.zhengjie.modules.security.security;
+package com.orvillex.bortus.config.security;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.orvillex.bortus.utils.RedisUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import me.zhengjie.modules.security.config.bean.SecurityProperties;
-import me.zhengjie.utils.RedisUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,12 +27,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * @author /
+ * 提供Token生成
+ * @author y-z-f
+ * @version 0.1
  */
 @Slf4j
 @Component
 public class TokenProvider implements InitializingBean {
-
     private final SecurityProperties properties;
     private final RedisUtils redisUtils;
     public static final String AUTHORITIES_KEY = "auth";
@@ -74,20 +59,13 @@ public class TokenProvider implements InitializingBean {
     /**
      * 创建Token 设置永不过期，
      * Token 的时间有效性转到Redis 维护
-     *
-     * @param authentication /
-     * @return /
      */
     public String createToken(Authentication authentication) {
-        /*
-         * 获取权限列表
-         */
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         return jwtBuilder
-                // 加入ID确保生成的 Token 都不一致
                 .setId(IdUtil.simpleUUID())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setSubject(authentication.getName())
@@ -96,11 +74,8 @@ public class TokenProvider implements InitializingBean {
 
     /**
      * 依据Token 获取鉴权信息
-     *
-     * @param token /
-     * @return /
      */
-    Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
 
         // fix bug: 当前用户如果没有任何权限时，在输入用户名后，刷新验证码会抛IllegalArgumentException
@@ -121,7 +96,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     /**
-     * @param token 需要检查的token
+     * 校验token
      */
     public void checkRenewal(String token) {
         // 判断是否续期token,计算token的过期时间
