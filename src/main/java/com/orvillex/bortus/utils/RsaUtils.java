@@ -44,7 +44,7 @@ public class RsaUtils {
     /**
      * 基于私钥解密
      */
-    public static String decrypyByPrivateKey(String privateKeyText, String text) throws Exception {
+    public static String decryptByPrivateKey(String privateKeyText, String text) throws Exception {
         PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(privateKeyText));
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         PrivateKey privateKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec);

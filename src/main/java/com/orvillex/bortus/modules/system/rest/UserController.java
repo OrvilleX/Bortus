@@ -1,39 +1,22 @@
-/*
- *  Copyright 2019-2020 Zheng Jie
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-package me.zhengjie.modules.system.rest;
+package com.orvillex.bortus.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.orvillex.bortus.annotation.Log;
+import com.orvillex.bortus.config.RsaProperties;
+import com.orvillex.bortus.exception.BadRequestException;
+import com.orvillex.bortus.modules.system.domain.User;
+import com.orvillex.bortus.modules.system.domain.vo.UserPassVo;
+import com.orvillex.bortus.modules.system.service.*;
+import com.orvillex.bortus.modules.system.service.dto.RoleSmallDto;
+import com.orvillex.bortus.modules.system.service.dto.UserDto;
+import com.orvillex.bortus.modules.system.service.dto.UserQueryCriteria;
+import com.orvillex.bortus.utils.CacheKey;
+import com.orvillex.bortus.utils.PageUtil;
+import com.orvillex.bortus.utils.RsaUtils;
+import com.orvillex.bortus.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.annotation.Log;
-import me.zhengjie.config.RsaProperties;
-import me.zhengjie.modules.system.service.DataService;
-import me.zhengjie.modules.system.domain.User;
-import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.modules.system.domain.vo.UserPassVo;
-import me.zhengjie.modules.system.service.DeptService;
-import me.zhengjie.modules.system.service.RoleService;
-import me.zhengjie.modules.system.service.dto.RoleSmallDto;
-import me.zhengjie.modules.system.service.dto.UserDto;
-import me.zhengjie.modules.system.service.dto.UserQueryCriteria;
-import me.zhengjie.modules.system.service.VerifyService;
-import me.zhengjie.utils.*;
-import me.zhengjie.modules.system.service.UserService;
-import me.zhengjie.utils.enums.CodeEnum;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,32 +27,35 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author Zheng Jie
- * @date 2018-11-23
+ * 用户管理API
+ * @author y-z-f
+ * @version 0.1
  */
 @Api(tags = "系统：用户管理")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
-
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final DataService dataService;
     private final DeptService deptService;
     private final RoleService roleService;
-    private final VerifyService verificationCodeService;
+    private final VerifyService verifyService;
 
     @Log("导出用户数据")
     @ApiOperation("导出用户数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('user:list')")
+    @PreAuthorize("@x.check('user:list')")
     public void download(HttpServletResponse response, UserQueryCriteria criteria) throws IOException {
         userService.download(userService.queryAll(criteria), response);
     }
@@ -77,24 +63,20 @@ public class UserController {
     @Log("查询用户")
     @ApiOperation("查询用户")
     @GetMapping
-    @PreAuthorize("@el.check('user:list')")
+    @PreAuthorize("@x.check('user:list')")
     public ResponseEntity<Object> query(UserQueryCriteria criteria, Pageable pageable){
         if (!ObjectUtils.isEmpty(criteria.getDeptId())) {
             criteria.getDeptIds().add(criteria.getDeptId());
             criteria.getDeptIds().addAll(deptService.getDeptChildren(criteria.getDeptId(),
                     deptService.findByPid(criteria.getDeptId())));
         }
-        // 数据权限
         List<Long> dataScopes = dataService.getDeptIds(userService.findByName(SecurityUtils.getCurrentUsername()));
-        // criteria.getDeptIds() 不为空并且数据权限不为空则取交集
         if (!CollectionUtils.isEmpty(criteria.getDeptIds()) && !CollectionUtils.isEmpty(dataScopes)){
-            // 取交集
             criteria.getDeptIds().retainAll(dataScopes);
             if(!CollectionUtil.isEmpty(criteria.getDeptIds())){
-                return new ResponseEntity<>(userService.queryAll(criteria,pageable),HttpStatus.OK);
+                return new ResponseEntity<>(userService.queryAll(criteria,pageable), HttpStatus.OK);
             }
         } else {
-            // 否则取并集
             criteria.getDeptIds().addAll(dataScopes);
             return new ResponseEntity<>(userService.queryAll(criteria,pageable),HttpStatus.OK);
         }
@@ -104,10 +86,9 @@ public class UserController {
     @Log("新增用户")
     @ApiOperation("新增用户")
     @PostMapping
-    @PreAuthorize("@el.check('user:add')")
+    @PreAuthorize("@x.check('user:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody User resources){
         checkLevel(resources);
-        // 默认密码 123456
         resources.setPassword(passwordEncoder.encode("123456"));
         userService.create(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -116,7 +97,7 @@ public class UserController {
     @Log("修改用户")
     @ApiOperation("修改用户")
     @PutMapping
-    @PreAuthorize("@el.check('user:edit')")
+    @PreAuthorize("@x.check('user:edit')")
     public ResponseEntity<Object> update(@Validated(User.Update.class) @RequestBody User resources){
         checkLevel(resources);
         userService.update(resources);
@@ -137,7 +118,7 @@ public class UserController {
     @Log("删除用户")
     @ApiOperation("删除用户")
     @DeleteMapping
-    @PreAuthorize("@el.check('user:del')")
+    @PreAuthorize("@x.check('user:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         for (Long id : ids) {
             Integer currentLevel =  Collections.min(roleService.findByUsersId(SecurityUtils.getCurrentUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
@@ -181,14 +162,13 @@ public class UserController {
         if(!passwordEncoder.matches(password, userDto.getPassword())){
             throw new BadRequestException("密码错误");
         }
-        verificationCodeService.validated(CodeEnum.EMAIL_RESET_EMAIL_CODE.getKey() + user.getEmail(), code);
+        verifyService.validated(CacheKey.EMAIL_RESET_EMAIL_CODE + user.getEmail(), code);
         userService.updateEmail(userDto.getUsername(),user.getEmail());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      * 如果当前用户的角色级别低于创建用户的角色级别，则抛出权限不足的错误
-     * @param resources /
      */
     private void checkLevel(User resources) {
         Integer currentLevel =  Collections.min(roleService.findByUsersId(SecurityUtils.getCurrentUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
