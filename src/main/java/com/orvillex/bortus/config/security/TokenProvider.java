@@ -8,7 +8,6 @@ import com.orvillex.bortus.utils.RedisUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,7 +30,6 @@ import java.util.stream.Collectors;
  * @author y-z-f
  * @version 0.1
  */
-@Slf4j
 @Component
 public class TokenProvider implements InitializingBean {
     private final SecurityProperties properties;

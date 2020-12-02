@@ -5,7 +5,6 @@ import com.orvillex.bortus.modules.log.service.LogService;
 import com.orvillex.bortus.utils.SecurityUtils;
 import com.orvillex.bortus.utils.StringUtils;
 import com.orvillex.bortus.utils.ThrowableUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -26,7 +25,6 @@ import java.util.Objects;
  */
 @Component
 @Aspect
-@Slf4j
 public class LogAspect {
 
     private final LogService logService;

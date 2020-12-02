@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 @Data
 @Table(name = "sys_quartz_log")
 public class QuartzLog implements Serializable {
+    private static final long serialVersionUID = 4934329880461811209L;
 
     @Id
     @Column(name = "log_id")

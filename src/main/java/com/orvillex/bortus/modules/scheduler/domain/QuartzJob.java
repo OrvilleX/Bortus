@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * 调度任务模型
@@ -19,7 +18,8 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "sys_quartz_job")
-public class QuartzJob extends BaseEntity implements Serializable {
+public class QuartzJob extends BaseEntity {
+    private static final long serialVersionUID = 3199386249250249753L;
 
     public static final String JOB_KEY = "JOB_KEY";
 

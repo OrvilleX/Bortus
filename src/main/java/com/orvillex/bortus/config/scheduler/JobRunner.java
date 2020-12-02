@@ -5,7 +5,6 @@ import com.orvillex.bortus.modules.scheduler.repository.QuartzJobRepository;
 import com.orvillex.bortus.utils.scheduler.QuartzManage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
