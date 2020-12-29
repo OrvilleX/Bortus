@@ -10,6 +10,10 @@
     </parent>
     <artifactId>bortus-manager</artifactId>
     <packaging>jar</packaging>
+    
+    <name>Web管理平台</name>
+	<description>ds</description>
+	<url>https://orvillex.com</url>
 
     <dependencyManagement>
 		<dependencies>
