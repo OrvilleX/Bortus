@@ -9,6 +9,8 @@ import lombok.Setter;
 
 /**
  * 清除任务参数
+ * @author y-z-f
+ * @version 0.1
  */
 @NoArgsConstructor
 @AllArgsConstructor

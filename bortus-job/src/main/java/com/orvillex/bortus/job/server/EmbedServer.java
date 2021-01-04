@@ -39,6 +39,11 @@ import com.orvillex.bortus.job.thread.ExecutorRegistryThread;
 import com.orvillex.bortus.job.util.JobRemotingUtil;
 import com.orvillex.bortus.job.util.ThrowableUtil;
 
+/**
+ * 任务执行器内嵌服务端，由于接收管理端的请求
+ * @author y-z-f
+ * @version 0.1
+ */
 public class EmbedServer {
     private static final Logger logger = LoggerFactory.getLogger(EmbedServer.class);
 

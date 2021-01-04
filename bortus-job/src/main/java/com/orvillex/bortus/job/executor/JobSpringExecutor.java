@@ -36,7 +36,6 @@ public class JobSpringExecutor extends JobExecutor
         }
     }
 
-    // destroy
     @Override
     public void destroy() {
         super.destroy();
@@ -46,7 +45,6 @@ public class JobSpringExecutor extends JobExecutor
         if (applicationContext == null) {
             return;
         }
-        // init job handler from method
         String[] beanDefinitionNames = applicationContext.getBeanNamesForType(Object.class, false, true);
         for (String beanDefinitionName : beanDefinitionNames) {
             Object bean = applicationContext.getBean(beanDefinitionName);
