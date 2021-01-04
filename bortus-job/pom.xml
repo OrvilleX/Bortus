@@ -53,5 +53,10 @@
 			<version>1.18.2</version>
             <optional>true</optional>
         </dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy</artifactId>
+			<version>${groovy.version}</version>
+		</dependency>
 	</dependencies>
 </project>
