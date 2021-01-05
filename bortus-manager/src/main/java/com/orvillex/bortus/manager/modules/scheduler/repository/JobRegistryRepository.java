@@ -7,6 +7,7 @@ import com.orvillex.bortus.manager.modules.scheduler.domain.JobRegistry;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 /**
@@ -22,6 +23,7 @@ public interface JobRegistryRepository extends JpaRepository<JobRegistry, Long>,
     @Query(value = "SELECT m.* FROM sys_job_registry AS m WHERE m.update_time < DATE_ADD(?2, INTERVAL - ?1 SECOND)", nativeQuery = true)
     List<JobRegistry> findAll(int timeout, Date nowTime);
 
+    @Modifying
     @Query(value = "DELETE FROM sys_job_registry WHERE registry_group = ?1 AND registry_key = ?2 AND registry_value = ?3", nativeQuery = true)
     void delete(String registryGroup, String registryKey, String registryValue);
 }
