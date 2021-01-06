@@ -1,4 +1,4 @@
-package com.orvillex.bortus.manager.modules.scheduler.service;
+package com.orvillex.bortus.manager.modules.scheduler.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +14,7 @@ import com.orvillex.bortus.manager.modules.scheduler.enums.RegistryConfig;
 import com.orvillex.bortus.manager.modules.scheduler.repository.JobGroupRepository;
 import com.orvillex.bortus.manager.modules.scheduler.repository.JobInfoRepository;
 import com.orvillex.bortus.manager.modules.scheduler.repository.JobRegistryRepository;
+import com.orvillex.bortus.manager.modules.scheduler.service.JobGroupService;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobGroupCriteria;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobInfoCriteria;
 import com.orvillex.bortus.manager.utils.PageUtil;

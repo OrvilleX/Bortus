@@ -42,4 +42,8 @@ public interface JobLogRepository extends JpaRepository<JobLog, Long>, JpaSpecif
     @Query(value = "SELECT m.log_id FROM sys_job_log AS m WHERE m.trigger_code = 200 AND m.handle_code = 0 " + 
     "AND m.trigger_time <= ?1 AND m.executor_address NOT IN (SELECT t.registry_value FROM sys_job_registry AS t)", nativeQuery = true)
     List<Long> findLostJobIds(Date losedTime);
+
+    @Query(value = "UPDATE sys_job_log SET alarm_status = ?3 WHERE log_id = ?1 AND alarm_status = ?2", nativeQuery = true)
+    @Modifying
+    void updateAlarmStatus(Long id, Integer oldAlarmStatus, Integer newAlarmStatus);
 }
