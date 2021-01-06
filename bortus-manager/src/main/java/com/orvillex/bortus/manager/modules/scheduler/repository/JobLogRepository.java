@@ -1,6 +1,7 @@
 package com.orvillex.bortus.manager.modules.scheduler.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobLog;
 
@@ -33,4 +34,12 @@ public interface JobLogRepository extends JpaRepository<JobLog, Long>, JpaSpecif
     "SUM(CASE WHEN handle_code = 200 then 1 else 0 end) as triggerDayCountSuc " + 
     "FROM sys_job_log WHERE trigger_time BETWEEN ?1 AND ?2", nativeQuery = true)
     Object[] findLogReport(Date from, Date to);
+
+    @Query(value = "SELECT log_id FROM sys_job_log WHERE !((trigger_code in (0, 200) AND handle_code = 0) OR (handle_code = 200)) " + 
+    "AND `alarm_status` = 0 ORDER BY log_id ASC LIMIT ?1", nativeQuery = true)
+    List<Long> findFailJobLogIds(Long pagesize);
+
+    @Query(value = "SELECT m.log_id FROM sys_job_log AS m WHERE m.trigger_code = 200 AND m.handle_code = 0 " + 
+    "AND m.trigger_time <= ?1 AND m.executor_address NOT IN (SELECT t.registry_value FROM sys_job_registry AS t)", nativeQuery = true)
+    List<Long> findLostJobIds(Date losedTime);
 }
