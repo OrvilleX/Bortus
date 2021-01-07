@@ -18,10 +18,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface JobRegistryRepository extends JpaRepository<JobRegistry, Long>, JpaSpecificationExecutor<JobRegistry> {
     
     @Query(value = "SELECT m.registry_id FROM sys_job_registry AS m WHERE m.update_time < DATE_ADD(?2, INTERVAL - ?1 SECOND)", nativeQuery = true)
-    List<Long> findDead(int timeout, Date nowTime);
+    List<Long> findDead(Integer timeout, Date nowTime);
 
     @Query(value = "SELECT m.* FROM sys_job_registry AS m WHERE m.update_time < DATE_ADD(?2, INTERVAL - ?1 SECOND)", nativeQuery = true)
-    List<JobRegistry> findAll(int timeout, Date nowTime);
+    List<JobRegistry> findAll(Integer timeout, Date nowTime);
 
     @Modifying
     @Query(value = "DELETE FROM sys_job_registry WHERE registry_group = ?1 AND registry_key = ?2 AND registry_value = ?3", nativeQuery = true)
