@@ -15,12 +15,12 @@ import com.orvillex.bortus.job.util.ShardingUtil;
  * @version 0.1
  */
 public class ScriptJobHandler extends IJobHandler {
-    private int jobId;
+    private Long jobId;
     private long glueUpdatetime;
     private String gluesource;
     private GlueTypeEnum glueType;
 
-    public ScriptJobHandler(int jobId, long glueUpdatetime, String gluesource, GlueTypeEnum glueType){
+    public ScriptJobHandler(Long jobId, long glueUpdatetime, String gluesource, GlueTypeEnum glueType){
         this.jobId = jobId;
         this.glueUpdatetime = glueUpdatetime;
         this.gluesource = gluesource;

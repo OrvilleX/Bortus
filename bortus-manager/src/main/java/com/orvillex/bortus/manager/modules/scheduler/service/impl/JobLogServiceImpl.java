@@ -99,7 +99,12 @@ public class JobLogServiceImpl implements JobLogService {
     }
 
     @Override
-    public void updateAlarmStatus(Long id, Integer oldAlarmStatus, Integer newAlarmStatus) {
-        jobLogRepository.updateAlarmStatus(id, oldAlarmStatus, newAlarmStatus);
+    public Integer updateAlarmStatus(Long id, Integer oldAlarmStatus, Integer newAlarmStatus) {
+        return jobLogRepository.updateAlarmStatus(id, oldAlarmStatus, newAlarmStatus);
+    }
+
+    @Override
+    public List<Long> findFailJobLogIds(Long pagesize) {
+        return jobLogRepository.findFailJobLogIds(pagesize);
     }
 }

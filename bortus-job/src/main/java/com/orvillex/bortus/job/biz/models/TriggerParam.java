@@ -15,22 +15,22 @@ import lombok.Setter;
 public class TriggerParam implements Serializable{
     private static final long serialVersionUID = 42L;
 
-    private int jobId;
+    private Long jobId;
 
     private String executorHandler;
     private String executorParams;
     private String executorBlockStrategy;
     private int executorTimeout;
 
-    private long logId;
-    private long logDateTime;
+    private Long logId;
+    private Long logDateTime;
 
     private String glueType;
     private String glueSource;
-    private long glueUpdatetime;
+    private Long glueUpdatetime;
 
-    private int broadcastIndex;
-    private int broadcastTotal;
+    private Integer broadcastIndex;
+    private Integer broadcastTotal;
 
     @Override
     public String toString() {

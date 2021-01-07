@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public class JobThread extends Thread {
 	private static Logger logger = LoggerFactory.getLogger(JobThread.class);
 
-	private int jobId;
+	private Long jobId;
 	private IJobHandler handler;
 	private LinkedBlockingQueue<TriggerParam> triggerQueue;
 	private Set<Long> triggerLogIdSet;
@@ -41,7 +41,7 @@ public class JobThread extends Thread {
 	private boolean running = false;
 	private int idleTimes = 0;
 
-	public JobThread(int jobId, IJobHandler handler) {
+	public JobThread(Long jobId, IJobHandler handler) {
 		this.jobId = jobId;
 		this.handler = handler;
 		this.triggerQueue = new LinkedBlockingQueue<TriggerParam>();

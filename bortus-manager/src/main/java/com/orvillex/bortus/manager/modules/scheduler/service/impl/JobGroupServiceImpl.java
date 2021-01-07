@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import com.orvillex.bortus.job.enums.RegistryConfig;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobGroup;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobRegistry;
-import com.orvillex.bortus.manager.modules.scheduler.enums.RegistryConfig;
 import com.orvillex.bortus.manager.modules.scheduler.repository.JobGroupRepository;
 import com.orvillex.bortus.manager.modules.scheduler.repository.JobInfoRepository;
 import com.orvillex.bortus.manager.modules.scheduler.repository.JobRegistryRepository;

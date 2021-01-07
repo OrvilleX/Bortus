@@ -21,7 +21,7 @@ public interface JobLogReportRepository extends JpaRepository<JobLogReport, Long
     @Query(value = "UPDATE JobLogReport SET runningCount = :#{#joblogreport.runningCount}," + 
     "sucCount = :#{#joblogreport.sucCount}, failCount = :#{#joblogreport.failCount} WHERE triggerDay = :#{#joblogreport.triggerDay}")
     @Modifying
-    void updateByTriggerDay(@Param("joblogreport") JobLogReport jobLogReport);
+    Integer updateByTriggerDay(@Param("joblogreport") JobLogReport jobLogReport);
 
     @Query(value = "SELECT m.* FROM sys_job_logreport AS m WHERE m.trigger_day between ?1 AND ?2 ORDER BY m.trigger_day ASC", nativeQuery = true)
     List<JobLogReport> queryLogReport(Date triggerDayFrom,Date triggerDayTo);

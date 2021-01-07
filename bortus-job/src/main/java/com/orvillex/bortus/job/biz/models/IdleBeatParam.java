@@ -19,5 +19,5 @@ import lombok.Setter;
 public class IdleBeatParam implements Serializable {
     private static final long serialVersionUID = 42L;
 
-    private int jobId;
+    private Long jobId;
 }

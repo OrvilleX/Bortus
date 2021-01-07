@@ -22,8 +22,8 @@ public class JobLogReportServiceImpl implements JobLogReportService {
     }
 
     @Override
-    public void updateByTriggerDay(JobLogReport jobLogReport) {
-        jobLogReportRepository.updateByTriggerDay(jobLogReport);
+    public Integer updateByTriggerDay(JobLogReport jobLogReport) {
+        return jobLogReportRepository.updateByTriggerDay(jobLogReport);
     }
 
     @Override

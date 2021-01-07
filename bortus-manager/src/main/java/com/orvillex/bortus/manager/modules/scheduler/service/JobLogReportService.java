@@ -15,7 +15,7 @@ public interface JobLogReportService {
     /**
      * 更新
      */
-    void updateByTriggerDay(JobLogReport jobLogReport);
+    Integer updateByTriggerDay(JobLogReport jobLogReport);
 
     /**
      * 查询指定时间范围内的报表

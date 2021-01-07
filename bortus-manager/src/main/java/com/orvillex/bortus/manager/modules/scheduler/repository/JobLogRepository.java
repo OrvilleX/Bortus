@@ -45,5 +45,5 @@ public interface JobLogRepository extends JpaRepository<JobLog, Long>, JpaSpecif
 
     @Query(value = "UPDATE sys_job_log SET alarm_status = ?3 WHERE log_id = ?1 AND alarm_status = ?2", nativeQuery = true)
     @Modifying
-    void updateAlarmStatus(Long id, Integer oldAlarmStatus, Integer newAlarmStatus);
+    Integer updateAlarmStatus(Long id, Integer oldAlarmStatus, Integer newAlarmStatus);
 }

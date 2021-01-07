@@ -47,7 +47,7 @@ public class JobExecutor {
         stopEmbedServer();
 
         if (jobThreadRepository.size() > 0) {
-            for (Map.Entry<Integer, JobThread> item: jobThreadRepository.entrySet()) {
+            for (Map.Entry<Long, JobThread> item: jobThreadRepository.entrySet()) {
                 JobThread oldJobThread = removeJobThread(item.getKey(), "web container destroy and kill the job.");
                 if (oldJobThread != null) {
                     try {
@@ -120,9 +120,9 @@ public class JobExecutor {
         return jobHandlerRepository.get(name);
     }
 
-    private static ConcurrentMap<Integer, JobThread> jobThreadRepository = new ConcurrentHashMap<Integer, JobThread>();
+    private static ConcurrentMap<Long, JobThread> jobThreadRepository = new ConcurrentHashMap<Long, JobThread>();
     
-    public static JobThread registJobThread(int jobId, IJobHandler handler, String removeOldReason){
+    public static JobThread registJobThread(Long jobId, IJobHandler handler, String removeOldReason){
         JobThread newJobThread = new JobThread(jobId, handler);
         newJobThread.start();
         logger.info(">>>>>>>>>>> xxl-job regist JobThread success, jobId:{}, handler:{}", new Object[]{jobId, handler});
@@ -136,7 +136,7 @@ public class JobExecutor {
         return newJobThread;
     }
 
-    public static JobThread removeJobThread(int jobId, String removeOldReason){
+    public static JobThread removeJobThread(Long jobId, String removeOldReason){
         JobThread oldJobThread = jobThreadRepository.remove(jobId);
         if (oldJobThread != null) {
             oldJobThread.toStop(removeOldReason);
@@ -147,7 +147,7 @@ public class JobExecutor {
         return null;
     }
 
-    public static JobThread loadJobThread(int jobId){
+    public static JobThread loadJobThread(Long jobId){
         JobThread jobThread = jobThreadRepository.get(jobId);
         return jobThread;
     }

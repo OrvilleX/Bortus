@@ -58,7 +58,12 @@ public interface JobLogService {
     List<Long> findLostJobIds(Date losedTime);
 
     /**
+     * 获取失败日志编号
+     */
+    List<Long> findFailJobLogIds(Long pagesize);
+
+    /**
      * 更新告警状态
      */
-    void updateAlarmStatus(Long id, Integer oldAlarmStatus, Integer newAlarmStatus);
+    Integer updateAlarmStatus(Long id, Integer oldAlarmStatus, Integer newAlarmStatus);
 }
