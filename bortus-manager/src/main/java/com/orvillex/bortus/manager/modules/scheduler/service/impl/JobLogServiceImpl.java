@@ -2,7 +2,10 @@ package com.orvillex.bortus.manager.modules.scheduler.service.impl;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.criteria.Predicate;
@@ -29,25 +32,24 @@ public class JobLogServiceImpl implements JobLogService {
 
     @Override
     public Object queryAll(JobLogCriteria criteria, Pageable pageable) {
-        return PageUtil.toPage(jobLogRepository.findAll(
-            (root, criteriaQuery, criteriaBuilder) -> {
-                Predicate autoPredicate = QueryHelp.getPredicate(root, criteria, criteriaBuilder);
-                if (criteria.getLogStatus() == 1) {
-                    Predicate logStatus = criteriaBuilder.equal(root.get("handleCode").as(Integer.class), 200);
-                    return criteriaBuilder.and(autoPredicate, logStatus);
-                } else if (criteria.getLogStatus() == 2) {
-                    List<Long> notStatus = Arrays.asList(0L, 200L);
-                    Predicate triggerCode = criteriaBuilder.not(root.get("triggerCode").in(notStatus));
-                    Predicate handleCode = criteriaBuilder.not(root.get("handleCode").in(notStatus));
-                    Predicate triggerOrHandle = criteriaBuilder.or(triggerCode, handleCode);
-                    return criteriaBuilder.and(autoPredicate, triggerOrHandle);
-                } else if (criteria.getLogStatus() == 3) {
-                    Predicate triggerCode = criteriaBuilder.equal(root.get("triggerCode").as(Integer.class), 200L);
-                    Predicate handleCode = criteriaBuilder.equal(root.get("handleCode").as(Integer.class), 0L);
-                    return criteriaBuilder.and(autoPredicate, triggerCode, handleCode);
-                }
-                return autoPredicate;
-            }, pageable));
+        return PageUtil.toPage(jobLogRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            Predicate autoPredicate = QueryHelp.getPredicate(root, criteria, criteriaBuilder);
+            if (criteria.getLogStatus() == 1) {
+                Predicate logStatus = criteriaBuilder.equal(root.get("handleCode").as(Integer.class), 200);
+                return criteriaBuilder.and(autoPredicate, logStatus);
+            } else if (criteria.getLogStatus() == 2) {
+                List<Long> notStatus = Arrays.asList(0L, 200L);
+                Predicate triggerCode = criteriaBuilder.not(root.get("triggerCode").in(notStatus));
+                Predicate handleCode = criteriaBuilder.not(root.get("handleCode").in(notStatus));
+                Predicate triggerOrHandle = criteriaBuilder.or(triggerCode, handleCode);
+                return criteriaBuilder.and(autoPredicate, triggerOrHandle);
+            } else if (criteria.getLogStatus() == 3) {
+                Predicate triggerCode = criteriaBuilder.equal(root.get("triggerCode").as(Integer.class), 200L);
+                Predicate handleCode = criteriaBuilder.equal(root.get("handleCode").as(Integer.class), 0L);
+                return criteriaBuilder.and(autoPredicate, triggerCode, handleCode);
+            }
+            return autoPredicate;
+        }, pageable));
     }
 
     @Override
@@ -76,15 +78,16 @@ public class JobLogServiceImpl implements JobLogService {
 
     @Override
     public void updateTriggerInfo(JobLog xxlJobLog) {
-        jobLogRepository.updateTriggerInfo(xxlJobLog.getId(), xxlJobLog.getTriggerTime(), xxlJobLog.getTriggerCode(), 
-        xxlJobLog.getTriggerMsg(), xxlJobLog.getExecutorAddress(), xxlJobLog.getExecutorHandler(), 
-        xxlJobLog.getExecutorParam(), xxlJobLog.getExecutorShardingParam(), xxlJobLog.getExecutorFailRetryCount());
+        jobLogRepository.updateTriggerInfo(xxlJobLog.getId(), xxlJobLog.getTriggerTime(), xxlJobLog.getTriggerCode(),
+                xxlJobLog.getTriggerMsg(), xxlJobLog.getExecutorAddress(), xxlJobLog.getExecutorHandler(),
+                xxlJobLog.getExecutorParam(), xxlJobLog.getExecutorShardingParam(),
+                xxlJobLog.getExecutorFailRetryCount());
     }
 
     @Override
     public void updateHandleInfo(JobLog xxlJobLog) {
-        jobLogRepository.updateHandleInfo(xxlJobLog.getId(), xxlJobLog.getHandleTime(), xxlJobLog.getHandleCode(), 
-        xxlJobLog.getHandleMsg());
+        jobLogRepository.updateHandleInfo(xxlJobLog.getId(), xxlJobLog.getHandleTime(), xxlJobLog.getHandleCode(),
+                xxlJobLog.getHandleMsg());
     }
 
     @Override

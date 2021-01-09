@@ -70,4 +70,9 @@ public class JobInfoServiceImpl implements JobInfoService {
     public void scheduleUpdate(Long id, Long triggerLastTime, Long triggerNextTime, Integer triggerStatus) {
         jobInfoRepository.scheduleUpdate(id, triggerLastTime, triggerNextTime, triggerStatus);
     }
+
+    @Override
+    public Long findAllCount() {
+        return jobInfoRepository.count();
+    }
 }

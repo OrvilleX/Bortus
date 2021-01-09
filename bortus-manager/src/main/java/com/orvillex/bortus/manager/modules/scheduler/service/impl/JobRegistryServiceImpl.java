@@ -48,4 +48,14 @@ public class JobRegistryServiceImpl implements JobRegistryService {
     public void update(JobRegistry jobRegistry) {
         jobRegistryRepository.save(jobRegistry);
     }
+
+    @Override
+    public Integer registryUpdate(String registryGroup, String registryKey, String registryValue, Date updateTime) {
+        return jobRegistryRepository.registryUpdate(registryGroup, registryKey, registryValue, updateTime);
+    }
+
+    @Override
+    public void registrySave(String registryGroup, String registryKey, String registryValue, Date updateTime) {
+        jobRegistryRepository.registrySave(registryGroup, registryKey, registryValue, updateTime);
+    }
 }

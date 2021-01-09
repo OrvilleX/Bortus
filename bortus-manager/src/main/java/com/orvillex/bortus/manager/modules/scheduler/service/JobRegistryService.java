@@ -39,4 +39,8 @@ public interface JobRegistryService {
     void save(JobRegistry jobRegistry);
 
     void update(JobRegistry jobRegistry);
+
+    Integer registryUpdate(String registryGroup, String registryKey, String registryValue, Date updateTime);
+
+    void registrySave(String registryGroup, String registryKey, String registryValue, Date updateTime);
 }

@@ -53,4 +53,6 @@ public interface JobInfoService {
      * 更新触发事件和状态
      */
     void scheduleUpdate(Long id, Long triggerLastTime, Long triggerNextTime, Integer triggerStatus);
+
+    Long findAllCount();
 }
