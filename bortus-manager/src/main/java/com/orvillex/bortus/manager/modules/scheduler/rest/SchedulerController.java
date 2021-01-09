@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/scheduler")
+@RequestMapping("/scheduler/base")
 public class SchedulerController {
     private final JobService jobService;
 

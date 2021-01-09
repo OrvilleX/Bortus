@@ -57,7 +57,7 @@ public class JobInfoServiceImpl implements JobInfoService {
     }
 
     @Override
-    public List<JobInfo> findByJobGroup(Integer jobGroup) {
+    public List<JobInfo> findByJobGroup(Long jobGroup) {
         return jobInfoRepository.findByJobGroup(jobGroup);
     }
 

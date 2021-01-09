@@ -42,7 +42,7 @@ public interface JobInfoService {
     /**
      * 根据任务组查询
      */
-    List<JobInfo> findByJobGroup(Integer jobGroup);
+    List<JobInfo> findByJobGroup(Long jobGroup);
 
     /**
      * 根据执行时间查询
