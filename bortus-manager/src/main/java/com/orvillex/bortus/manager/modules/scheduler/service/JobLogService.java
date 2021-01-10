@@ -2,9 +2,9 @@ package com.orvillex.bortus.manager.modules.scheduler.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobLog;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobLogCriteria;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.LogReportDto;
@@ -16,7 +16,7 @@ public interface JobLogService {
     /**
      * 分页查询
      */
-    Object queryAll(JobLogCriteria criteria, Pageable pageable);
+    BasePage<JobLog> queryAll(JobLogCriteria criteria, Pageable pageable);
 
     /**
      * 创建

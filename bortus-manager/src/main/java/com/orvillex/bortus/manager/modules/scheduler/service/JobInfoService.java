@@ -2,6 +2,7 @@ package com.orvillex.bortus.manager.modules.scheduler.service;
 
 import java.util.List;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobInfo;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobInfoCriteria;
 
@@ -12,7 +13,7 @@ public interface JobInfoService {
     /**
      * 分页查询
      */
-    Object queryAll(JobInfoCriteria criteria, Pageable pageable);
+    BasePage<JobInfo> queryAll(JobInfoCriteria criteria, Pageable pageable);
 
     /**
      * 查询全部

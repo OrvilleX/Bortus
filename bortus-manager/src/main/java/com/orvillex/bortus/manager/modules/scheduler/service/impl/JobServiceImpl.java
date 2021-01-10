@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.orvillex.bortus.job.biz.models.ReturnT;
 import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.job.util.DateUtil;
 import com.orvillex.bortus.manager.daemon.scheduler.JobScheduleRun;
+import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.scheduler.core.cron.CronExpression;
 import com.orvillex.bortus.manager.modules.scheduler.core.route.ExecutorBlockStrategyType;
 import com.orvillex.bortus.manager.modules.scheduler.core.route.ExecutorRouteStrategyType;
@@ -86,7 +86,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
+    public Map<String, Object> chartInfo(Date startDate, Date endDate) {
         List<String> triggerDayList = new ArrayList<String>();
         List<Long> triggerDayCountRunningList = new ArrayList<Long>();
         List<Long> triggerDayCountSucList = new ArrayList<Long>();
@@ -132,11 +132,11 @@ public class JobServiceImpl implements JobService {
         result.put("triggerCountSucTotal", triggerCountSucTotal);
         result.put("triggerCountFailTotal", triggerCountFailTotal);
 
-        return new ReturnT<Map<String, Object>>(result);
+        return result;
     }
 
     @Override
-    public ReturnT<String> stop(Long id) {
+    public void stop(Long id) {
         JobInfo jobInfo = jobInfoService.findById(id);
 
         jobInfo.setTriggerStatus(0);
@@ -144,11 +144,10 @@ public class JobServiceImpl implements JobService {
         jobInfo.setTriggerNextTime(0);
 
         jobInfoService.update(jobInfo);
-        return ReturnT.SUCCESS;
     }
 
     @Override
-    public ReturnT<String> start(Long id) {
+    public void start(Long id) {
         JobInfo jobInfo = jobInfoService.findById(id);
 
         long nextTriggerTime = 0;
@@ -156,13 +155,12 @@ public class JobServiceImpl implements JobService {
             Date nextValidTime = new CronExpression(jobInfo.getJobCron())
                     .getNextValidTimeAfter(new Date(System.currentTimeMillis() + JobScheduleRun.PRE_READ_MS));
             if (nextValidTime == null) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_never_fire"));
+                throw new BadRequestException(I18nUtil.getString("jobinfo_field_cron_never_fire"));
             }
             nextTriggerTime = nextValidTime.getTime();
         } catch (ParseException e) {
             log.error(e.getMessage(), e);
-            return new ReturnT<String>(ReturnT.FAIL_CODE,
-                    I18nUtil.getString("jobinfo_field_cron_unvalid") + " | " + e.getMessage());
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_cron_unvalid") + " | " + e.getMessage());
         }
 
         jobInfo.setTriggerStatus(1);
@@ -170,14 +168,13 @@ public class JobServiceImpl implements JobService {
         jobInfo.setTriggerNextTime(nextTriggerTime);
 
         jobInfoService.update(jobInfo);
-        return ReturnT.SUCCESS;
     }
 
     @Override
-    public ReturnT<String> remove(Long id) {
+    public void remove(Long id) {
         JobInfo jobInfo = jobInfoService.findById(id);
         if (jobInfo == null) {
-            return ReturnT.SUCCESS;
+            return;
         }
 
         jobInfoService.delete(id);
@@ -187,29 +184,24 @@ public class JobServiceImpl implements JobService {
             }
         });
         jobLogGlueService.deleteByJobId(id);
-        return ReturnT.SUCCESS;
     }
 
     @Override
-    public ReturnT<String> update(JobInfo jobInfo) {
+    public void update(JobInfo jobInfo) {
         if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid"));
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_cron_unvalid"));
         }
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE,
-                    (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
+            throw new BadRequestException(I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc"));
         }
         if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE,
-                    (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
+            throw new BadRequestException(I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author"));
         }
         if (ExecutorRouteStrategyType.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE,
-                    (I18nUtil.getString("jobinfo_field_executorRouteStrategy") + I18nUtil.getString("system_unvalid")));
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_executorRouteStrategy") + I18nUtil.getString("system_unvalid"));
         }
         if (ExecutorBlockStrategyType.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE,
-                    (I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_unvalid")));
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_unvalid"));
         }
 
         if (jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
@@ -218,14 +210,12 @@ public class JobServiceImpl implements JobService {
                 if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
                     JobInfo childJobInfo = jobInfoService.findById(Long.parseLong(childJobIdItem));
                     if (childJobInfo == null) {
-                        return new ReturnT<String>(ReturnT.FAIL_CODE,
-                                MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})"
-                                        + I18nUtil.getString("system_not_found")), childJobIdItem));
+                        throw new BadRequestException(MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})"
+                        + I18nUtil.getString("system_not_found")), childJobIdItem));
                     }
                 } else {
-                    return new ReturnT<String>(ReturnT.FAIL_CODE,
-                            MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})"
-                                    + I18nUtil.getString("system_unvalid")), childJobIdItem));
+                    throw new BadRequestException(MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})"
+                    + I18nUtil.getString("system_unvalid")), childJobIdItem));
                 }
             }
 
@@ -240,14 +230,12 @@ public class JobServiceImpl implements JobService {
 
         JobGroup jobGroup = jobGroupService.findById(jobInfo.getJobGroup());
         if (jobGroup == null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE,
-                    (I18nUtil.getString("jobinfo_field_jobgroup") + I18nUtil.getString("system_unvalid")));
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_jobgroup") + I18nUtil.getString("system_unvalid"));
         }
 
         JobInfo exists_jobInfo = jobInfoService.findById(jobInfo.getId());
         if (exists_jobInfo == null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE,
-                    (I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_not_found")));
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_not_found"));
         }
 
         long nextTriggerTime = exists_jobInfo.getTriggerNextTime();
@@ -256,13 +244,12 @@ public class JobServiceImpl implements JobService {
                 Date nextValidTime = new CronExpression(jobInfo.getJobCron())
                         .getNextValidTimeAfter(new Date(System.currentTimeMillis() + JobScheduleRun.PRE_READ_MS));
                 if (nextValidTime == null) {
-                    return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_never_fire"));
+                    throw new BadRequestException(I18nUtil.getString("jobinfo_field_cron_never_fire"));
                 }
                 nextTriggerTime = nextValidTime.getTime();
             } catch (ParseException e) {
                 log.error(e.getMessage(), e);
-                return new ReturnT<String>(ReturnT.FAIL_CODE,
-                        I18nUtil.getString("jobinfo_field_cron_unvalid") + " | " + e.getMessage());
+                throw new BadRequestException(I18nUtil.getString("jobinfo_field_cron_unvalid") + " | " + e.getMessage());
             }
         }
 
@@ -281,36 +268,34 @@ public class JobServiceImpl implements JobService {
         exists_jobInfo.setTriggerNextTime(nextTriggerTime);
 
         jobInfoService.update(exists_jobInfo);
-
-        return ReturnT.SUCCESS;
     }
 
     @Override
-    public ReturnT<String> add(JobInfo jobInfo) {
+    public void add(JobInfo jobInfo) {
 		JobGroup group = jobGroupService.findById(jobInfo.getJobGroup());
 		if (group == null) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_choose")+I18nUtil.getString("jobinfo_field_jobgroup")) );
+            throw new BadRequestException(I18nUtil.getString("system_please_choose")+I18nUtil.getString("jobinfo_field_jobgroup"));
 		}
 		if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_cron_unvalid"));
 		}
 		if (jobInfo.getJobDesc()==null || jobInfo.getJobDesc().trim().length()==0) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobdesc")) );
+            throw new BadRequestException(I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobdesc"));
 		}
 		if (jobInfo.getAuthor()==null || jobInfo.getAuthor().trim().length()==0) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_author")) );
+            throw new BadRequestException(I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_author"));
 		}
 		if (ExecutorRouteStrategyType.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorRouteStrategy")+I18nUtil.getString("system_unvalid")) );
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_executorRouteStrategy")+I18nUtil.getString("system_unvalid"));
 		}
 		if (ExecutorBlockStrategyType.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy")+I18nUtil.getString("system_unvalid")) );
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_executorBlockStrategy")+I18nUtil.getString("system_unvalid"));
 		}
 		if (GlueType.match(jobInfo.getGlueType()) == null) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_gluetype")+I18nUtil.getString("system_unvalid")) );
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_gluetype")+I18nUtil.getString("system_unvalid"));
 		}
 		if (GlueType.BEAN==GlueType.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler()==null || jobInfo.getExecutorHandler().trim().length()==0) ) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+"JobHandler") );
+            throw new BadRequestException(I18nUtil.getString("system_please_input")+"JobHandler");
 		}
 
 		if (GlueType.GLUE_SHELL==GlueType.match(jobInfo.getGlueType()) && jobInfo.getGlueSource()!=null) {
@@ -323,12 +308,10 @@ public class JobServiceImpl implements JobService {
 				if (childJobIdItem!=null && childJobIdItem.trim().length()>0 && isNumeric(childJobIdItem)) {
 					JobInfo childJobInfo = jobInfoService.findById(Long.parseLong(childJobIdItem));
 					if (childJobInfo==null) {
-						return new ReturnT<String>(ReturnT.FAIL_CODE,
-								MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId")+"({0})"+I18nUtil.getString("system_not_found")), childJobIdItem));
+                        throw new BadRequestException(I18nUtil.getString("jobinfo_field_childJobId")+"({0})"+I18nUtil.getString("system_not_found"));
 					}
 				} else {
-					return new ReturnT<String>(ReturnT.FAIL_CODE,
-							MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId")+"({0})"+I18nUtil.getString("system_unvalid")), childJobIdItem));
+                    throw new BadRequestException(I18nUtil.getString("jobinfo_field_childJobId")+"({0})"+I18nUtil.getString("system_unvalid"));
 				}
 			}
 
@@ -343,9 +326,7 @@ public class JobServiceImpl implements JobService {
 		jobInfo.setGlueUpdatetime(new Date());
 		jobInfoService.create(jobInfo);
 		if (jobInfo.getId() < 1) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_add")+I18nUtil.getString("system_fail")) );
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_add")+I18nUtil.getString("system_fail"));
 		}
-
-		return new ReturnT<String>(String.valueOf(jobInfo.getId()));
     }
 }

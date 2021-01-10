@@ -2,6 +2,7 @@ package com.orvillex.bortus.manager.modules.scheduler.service.impl;
 
 import java.util.List;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobInfo;
 import com.orvillex.bortus.manager.modules.scheduler.repository.JobInfoRepository;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobInfoService;
@@ -21,7 +22,7 @@ public class JobInfoServiceImpl implements JobInfoService {
     private final JobInfoRepository jobInfoRepository;
 
     @Override
-    public Object queryAll(JobInfoCriteria criteria, Pageable pageable) {
+    public BasePage<JobInfo> queryAll(JobInfoCriteria criteria, Pageable pageable) {
         return PageUtil.toPage(jobInfoRepository.findAll(
             (root, criteriaQuery, criteriaBuilder) -> 
             QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable));

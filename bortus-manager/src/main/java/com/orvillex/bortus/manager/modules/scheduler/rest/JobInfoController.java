@@ -7,10 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.orvillex.bortus.job.biz.models.ReturnT;
 import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.job.util.DateUtil;
 import com.orvillex.bortus.manager.annotation.Log;
+import com.orvillex.bortus.manager.entity.BasePage;
+import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.scheduler.core.cron.CronExpression;
 import com.orvillex.bortus.manager.modules.scheduler.core.route.ExecutorBlockStrategyType;
 import com.orvillex.bortus.manager.modules.scheduler.core.route.ExecutorRouteStrategyType;
@@ -37,6 +38,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 任务信息API
+ * 
+ * @author y-z-f
+ * @version 0.1
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/info")
@@ -46,7 +53,7 @@ public class JobInfoController {
     private JobService jobService;
     private JobTriggerPool jobTriggerPool;
 
-    @Log("任务基础信息")
+    @Log("获取条件参数")
     @GetMapping("/")
     public ResponseEntity<Object> index(Long jobGroup) {
         Map<String, Object> retMap = new HashMap<>();
@@ -55,7 +62,6 @@ public class JobInfoController {
         retMap.put("GlueTypeEnum", GlueType.values());
         retMap.put("ExecutorBlockStrategyEnum", ExecutorBlockStrategyType.values());
 
-        // 执行器列表
         List<JobGroup> jobGroupList_all = jobGroupService.queryAll(new JobGroupCriteria());
 
         retMap.put("JobGroupList", jobGroupList_all);
@@ -66,49 +72,59 @@ public class JobInfoController {
 
     @Log("任务列表")
     @GetMapping("/pageList")
-    public ResponseEntity<Object> pageList(JobInfoCriteria criteria, Pageable pageable) {
-        return new ResponseEntity<Object>(jobInfoService.queryAll(criteria, pageable), HttpStatus.OK);
+    public ResponseEntity<BasePage<JobInfo>> pageList(JobInfoCriteria criteria, Pageable pageable) {
+        return new ResponseEntity<>(jobInfoService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 
     @Log("添加任务")
     @PostMapping("/add")
-    public ReturnT<String> add(JobInfo jobInfo) {
-        return jobService.add(jobInfo);
+    public ResponseEntity<Object> add(JobInfo jobInfo) {
+        jobService.add(jobInfo);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Log("更新")
+    @Log("更新任务")
     @PutMapping("/update")
-    public ReturnT<String> update(JobInfo jobInfo) {
-        return jobService.update(jobInfo);
+    public ResponseEntity<Object> update(JobInfo jobInfo) {
+        jobService.update(jobInfo);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Log("删除任务")
     @DeleteMapping("/remove")
-    public ReturnT<String> remove(Long id) {
-        return jobService.remove(id);
+    public ResponseEntity<Object> remove(Long id) {
+        jobService.remove(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Log("停止任务")
     @PutMapping("/stop")
-    public ReturnT<String> pause(Long id) {
-        return jobService.stop(id);
+    public ResponseEntity<Object> pause(Long id) {
+        jobService.stop(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Log("启动任务")
     @PutMapping("/start")
-    public ReturnT<String> start(Long id) {
-        return jobService.start(id);
+    public ResponseEntity<Object> start(Long id) {
+        jobService.start(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Log("触发任务")
     @GetMapping("/trigger")
-    public ReturnT<String> triggerJob(Long id, String executorParam, String addressList) {
+    public ResponseEntity<Object> triggerJob(Long id, String executorParam, String addressList) {
         if (executorParam == null) {
             executorParam = "";
         }
 
         jobTriggerPool.trigger(id, TriggerTypeEnum.MANUAL, -1, null, executorParam, addressList);
-        return ReturnT.SUCCESS;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/nextTriggerTime")
-    public ReturnT<List<String>> nextTriggerTime(String cron) {
+    public ResponseEntity<List<String>> nextTriggerTime(String cron) {
         List<String> result = new ArrayList<>();
         try {
             CronExpression cronExpression = new CronExpression(cron);
@@ -122,8 +138,8 @@ public class JobInfoController {
                 }
             }
         } catch (ParseException e) {
-            return new ReturnT<List<String>>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid"));
+            throw new BadRequestException(I18nUtil.getString("jobinfo_field_cron_unvalid"));
         }
-        return new ReturnT<List<String>>(result);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

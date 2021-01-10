@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.criteria.Predicate;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobLog;
 import com.orvillex.bortus.manager.modules.scheduler.repository.JobLogRepository;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobLogService;
@@ -28,7 +29,7 @@ public class JobLogServiceImpl implements JobLogService {
     private final JobLogRepository jobLogRepository;
 
     @Override
-    public Object queryAll(JobLogCriteria criteria, Pageable pageable) {
+    public BasePage<JobLog> queryAll(JobLogCriteria criteria, Pageable pageable) {
         return PageUtil.toPage(jobLogRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             Predicate autoPredicate = QueryHelp.getPredicate(root, criteria, criteriaBuilder);
             if (criteria.getLogStatus() == 1) {

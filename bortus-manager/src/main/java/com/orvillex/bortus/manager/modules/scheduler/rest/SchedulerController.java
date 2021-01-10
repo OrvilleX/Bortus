@@ -3,7 +3,6 @@ package com.orvillex.bortus.manager.modules.scheduler.rest;
 import java.util.Date;
 import java.util.Map;
 
-import com.orvillex.bortus.job.biz.models.ReturnT;
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobService;
 
@@ -36,7 +35,7 @@ public class SchedulerController {
     @Log("图表数据")
     @GetMapping(value = "/chartInfo")
     public ResponseEntity<Object> chartInfo(Date startDate, Date endDate) {
-        ReturnT<Map<String, Object>> chartInfo = jobService.chartInfo(startDate, endDate);
+        Map<String, Object> chartInfo = jobService.chartInfo(startDate, endDate);
         return new ResponseEntity<>(chartInfo, HttpStatus.OK);
     }
 }

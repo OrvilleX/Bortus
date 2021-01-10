@@ -22,6 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 执行器RPC
+ * @author y-z-f
+ * @version 0.1
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/job")

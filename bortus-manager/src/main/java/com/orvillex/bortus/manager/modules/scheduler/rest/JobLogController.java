@@ -10,6 +10,9 @@ import com.orvillex.bortus.job.biz.models.KillParam;
 import com.orvillex.bortus.job.biz.models.LogParam;
 import com.orvillex.bortus.job.biz.models.LogResult;
 import com.orvillex.bortus.job.biz.models.ReturnT;
+import com.orvillex.bortus.manager.annotation.Log;
+import com.orvillex.bortus.manager.entity.BasePage;
+import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobGroup;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobInfo;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobLog;
@@ -41,6 +44,7 @@ public class JobLogController {
     private JobInfoService jobInfoService;
     private JobLogService jobLogService;
 
+    @Log("任务日志列表")
     @GetMapping
     public ResponseEntity<Object> index(Long jobId) {
         List<JobGroup> jobGroupList_all = jobGroupService.queryAll(new JobGroupCriteria());
@@ -48,11 +52,10 @@ public class JobLogController {
 
         retMap.put("JobGroupList", jobGroupList_all);
 
-        // 任务
         if (jobId > 0) {
             JobInfo jobInfo = jobInfoService.findById(jobId);
             if (jobInfo == null) {
-                throw new RuntimeException(
+                throw new BadRequestException(
                         I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_unvalid"));
             }
             retMap.put("jobInfo", jobInfo);
@@ -61,31 +64,30 @@ public class JobLogController {
         return new ResponseEntity<>(retMap, HttpStatus.OK);
     }
 
+    @Log("根据执行器获取任务信息列表")
     @GetMapping("/getJobsByGroup")
-    public ReturnT<List<JobInfo>> getJobsByGroup(Long jobGroup) {
+    public ResponseEntity<List<JobInfo>> getJobsByGroup(Long jobGroup) {
         List<JobInfo> list = jobInfoService.findByJobGroup(jobGroup);
-        return new ReturnT<List<JobInfo>>(list);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @Log("获取任务日志")
     @GetMapping("/pageList")
-    public ResponseEntity<Object> pageList(JobLogCriteria criteria, Pageable pageable) {
-        return new ResponseEntity<Object>(jobLogService.queryAll(criteria, pageable), HttpStatus.OK);
+    public ResponseEntity<BasePage<JobLog>> pageList(JobLogCriteria criteria, Pageable pageable) {
+        return new ResponseEntity<>(jobLogService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 
+    @Log("任务日志详情")
     @GetMapping("/logDetailPage")
     public ResponseEntity<Object> logDetailPage(Long id) {
-
-        ReturnT<String> logStatue = ReturnT.SUCCESS;
         JobLog jobLog = jobLogService.findById(id);
-        if (jobLog == null) {
-            throw new RuntimeException(I18nUtil.getString("joblog_logid_unvalid"));
-        }
-
         return new ResponseEntity<Object>(jobLog, HttpStatus.OK);
     }
 
+    @Log("获取执行器上任务日志")
     @GetMapping("/logDetailCat")
-    public ReturnT<LogResult> logDetailCat(String executorAddress, long triggerTime, long logId, int fromLineNum) {
+    public ResponseEntity<LogResult> logDetailCat(String executorAddress, long triggerTime, long logId,
+            int fromLineNum) {
         try {
             ExecutorBiz executorBiz = JobSchedulerUtils.getExecutorBiz(executorAddress);
             ReturnT<LogResult> logResult = executorBiz.log(new LogParam(triggerTime, logId, fromLineNum));
@@ -98,20 +100,21 @@ public class JobLogController {
                 }
             }
 
-            return logResult;
+            return new ResponseEntity<>(logResult.getContent(), HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return new ReturnT<LogResult>(ReturnT.FAIL_CODE, e.getMessage());
+            throw new BadRequestException(e.getMessage());
         }
     }
 
+    @Log("删除日志")
     @DeleteMapping("/logKill")
-    public ReturnT<String> logKill(Long id) {
+    public ResponseEntity<Object> logKill(Long id) {
         JobLog joLog = jobLogService.findById(id);
         JobInfo jobInfo = jobInfoService.findById(joLog.getJobId());
 
         if (ReturnT.SUCCESS_CODE != joLog.getTriggerCode()) {
-            return new ReturnT<String>(500, I18nUtil.getString("joblog_kill_log_limit"));
+            throw new BadRequestException(I18nUtil.getString("joblog_kill_log_limit"));
         }
 
         ReturnT<String> runResult = null;
@@ -129,9 +132,9 @@ public class JobLogController {
                     + (runResult.getMsg() != null ? runResult.getMsg() : ""));
             joLog.setHandleTime(new Date());
             jobLogService.updateHandleInfo(joLog);
-            return new ReturnT<String>(runResult.getMsg());
+            return new ResponseEntity<Object>(runResult.getMsg(), HttpStatus.OK);
         } else {
-            return new ReturnT<String>(500, runResult.getMsg());
+            throw new BadRequestException(runResult.getMsg());
         }
     }
 }

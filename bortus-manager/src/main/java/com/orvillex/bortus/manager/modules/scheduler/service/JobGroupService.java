@@ -3,6 +3,7 @@ package com.orvillex.bortus.manager.modules.scheduler.service;
 import java.util.List;
 import java.util.Set;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobGroup;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobGroupCriteria;
 
@@ -13,7 +14,7 @@ public interface JobGroupService {
     /**
      * 分页查询
      */
-    Object queryAll(JobGroupCriteria criteria, Pageable pageable);
+    BasePage<JobGroup> queryAll(JobGroupCriteria criteria, Pageable pageable);
 
     /**
      * 查询全部
