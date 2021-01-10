@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.orvillex.bortus.job.biz.models.ReturnT;
-import com.orvillex.bortus.job.glue.GlueTypeEnum;
+import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.job.util.DateUtil;
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.modules.scheduler.core.cron.CronExpression;
@@ -52,7 +52,7 @@ public class JobInfoController {
         Map<String, Object> retMap = new HashMap<>();
 
         retMap.put("ExecutorRouteStrategyEnum", ExecutorRouteStrategyType.values());
-        retMap.put("GlueTypeEnum", GlueTypeEnum.values());
+        retMap.put("GlueTypeEnum", GlueType.values());
         retMap.put("ExecutorBlockStrategyEnum", ExecutorBlockStrategyType.values());
 
         // 执行器列表

@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.orvillex.bortus.job.biz.models.ReturnT;
-import com.orvillex.bortus.job.glue.GlueTypeEnum;
+import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.job.util.DateUtil;
 import com.orvillex.bortus.manager.daemon.scheduler.JobScheduleRun;
 import com.orvillex.bortus.manager.modules.scheduler.core.cron.CronExpression;
@@ -307,14 +307,14 @@ public class JobServiceImpl implements JobService {
 		if (ExecutorBlockStrategyType.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy")+I18nUtil.getString("system_unvalid")) );
 		}
-		if (GlueTypeEnum.match(jobInfo.getGlueType()) == null) {
+		if (GlueType.match(jobInfo.getGlueType()) == null) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_gluetype")+I18nUtil.getString("system_unvalid")) );
 		}
-		if (GlueTypeEnum.BEAN==GlueTypeEnum.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler()==null || jobInfo.getExecutorHandler().trim().length()==0) ) {
+		if (GlueType.BEAN==GlueType.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler()==null || jobInfo.getExecutorHandler().trim().length()==0) ) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+"JobHandler") );
 		}
 
-		if (GlueTypeEnum.GLUE_SHELL==GlueTypeEnum.match(jobInfo.getGlueType()) && jobInfo.getGlueSource()!=null) {
+		if (GlueType.GLUE_SHELL==GlueType.match(jobInfo.getGlueType()) && jobInfo.getGlueSource()!=null) {
 			jobInfo.setGlueSource(jobInfo.getGlueSource().replaceAll("\r", ""));
 		}
 

@@ -11,7 +11,7 @@ import com.orvillex.bortus.job.biz.models.TriggerParam;
 import com.orvillex.bortus.job.enums.ExecutorBlockStrategyEnum;
 import com.orvillex.bortus.job.executor.JobExecutor;
 import com.orvillex.bortus.job.glue.GlueFactory;
-import com.orvillex.bortus.job.glue.GlueTypeEnum;
+import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.job.handler.GlueJobHandler;
 import com.orvillex.bortus.job.handler.IJobHandler;
 import com.orvillex.bortus.job.handler.ScriptJobHandler;
@@ -49,8 +49,8 @@ public class DefaultExecutorBiz implements ExecutorBiz {
         IJobHandler jobHandler = jobThread!=null ? jobThread.getHandler():null;
         String removeOldReason = null;
 
-        GlueTypeEnum glueTypeEnum = GlueTypeEnum.match(triggerParam.getGlueType());
-        if (GlueTypeEnum.BEAN == glueTypeEnum) {
+        GlueType glueTypeEnum = GlueType.match(triggerParam.getGlueType());
+        if (GlueType.BEAN == glueTypeEnum) {
             IJobHandler newJobHandler = JobExecutor.loadJobHandler(triggerParam.getExecutorHandler());
 
             if (jobThread!=null && jobHandler != newJobHandler) {
@@ -67,7 +67,7 @@ public class DefaultExecutorBiz implements ExecutorBiz {
                 }
             }
 
-        } else if (GlueTypeEnum.GLUE_GROOVY == glueTypeEnum) {
+        } else if (GlueType.GLUE_GROOVY == glueTypeEnum) {
 
             if (jobThread != null &&
                     !(jobThread.getHandler() instanceof GlueJobHandler
@@ -100,7 +100,7 @@ public class DefaultExecutorBiz implements ExecutorBiz {
             }
 
             if (jobHandler == null) {
-                jobHandler = new ScriptJobHandler(triggerParam.getJobId(), triggerParam.getGlueUpdatetime(), triggerParam.getGlueSource(), GlueTypeEnum.match(triggerParam.getGlueType()));
+                jobHandler = new ScriptJobHandler(triggerParam.getJobId(), triggerParam.getGlueUpdatetime(), triggerParam.getGlueSource(), GlueType.match(triggerParam.getGlueType()));
             }
         } else {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "glueType[" + triggerParam.getGlueType() + "] is not valid.");

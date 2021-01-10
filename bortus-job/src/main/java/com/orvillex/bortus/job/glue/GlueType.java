@@ -1,9 +1,11 @@
 package com.orvillex.bortus.job.glue;
 
 /**
- * Job类型
+ * 任务模式
+ * @author y-z-f
+ * @version 0.1
  */
-public enum GlueTypeEnum {
+public enum GlueType {
     BEAN("BEAN", false, null, null),
     GLUE_GROOVY("GLUE(Java)", false, null, null),
     GLUE_SHELL("GLUE(Shell)", true, "bash", ".sh"),
@@ -17,7 +19,7 @@ public enum GlueTypeEnum {
     private String cmd;
     private String suffix;
 
-    private GlueTypeEnum(String desc, boolean isScript, String cmd, String suffix) {
+    private GlueType(String desc, boolean isScript, String cmd, String suffix) {
         this.desc = desc;
         this.isScript = isScript;
         this.cmd = cmd;
@@ -40,8 +42,8 @@ public enum GlueTypeEnum {
         return suffix;
     }
 
-    public static GlueTypeEnum match(String name){
-        for (GlueTypeEnum item: GlueTypeEnum.values()) {
+    public static GlueType match(String name){
+        for (GlueType item: GlueType.values()) {
             if (item.name().equals(name)) {
                 return item;
             }

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.orvillex.bortus.job.biz.models.ReturnT;
-import com.orvillex.bortus.job.glue.GlueTypeEnum;
+import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobInfo;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobLogGlue;
@@ -38,13 +38,13 @@ public class JobCodeController {
         if (jobInfo == null) {
             throw new RuntimeException(I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
         }
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType())) {
+        if (GlueType.BEAN == GlueType.match(jobInfo.getGlueType())) {
             throw new RuntimeException(I18nUtil.getString("jobinfo_glue_gluetype_unvalid"));
         }
 
         Map<String, Object> ret = new HashMap<>();
 
-        ret.put("GlueTypeEnum", GlueTypeEnum.values());
+        ret.put("GlueTypeEnum", GlueType.values());
         ret.put("jobInfo", jobInfo);
         ret.put("jobLogGlues", jobLogGlues);
 

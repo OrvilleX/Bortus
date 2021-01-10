@@ -3,7 +3,7 @@ package com.orvillex.bortus.job.handler;
 import java.io.File;
 
 import com.orvillex.bortus.job.biz.models.ReturnT;
-import com.orvillex.bortus.job.glue.GlueTypeEnum;
+import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.job.log.JobFileAppender;
 import com.orvillex.bortus.job.log.JobLogger;
 import com.orvillex.bortus.job.util.ScriptUtil;
@@ -18,9 +18,9 @@ public class ScriptJobHandler extends IJobHandler {
     private Long jobId;
     private long glueUpdatetime;
     private String gluesource;
-    private GlueTypeEnum glueType;
+    private GlueType glueType;
 
-    public ScriptJobHandler(Long jobId, long glueUpdatetime, String gluesource, GlueTypeEnum glueType){
+    public ScriptJobHandler(Long jobId, long glueUpdatetime, String gluesource, GlueType glueType){
         this.jobId = jobId;
         this.glueUpdatetime = glueUpdatetime;
         this.gluesource = gluesource;
