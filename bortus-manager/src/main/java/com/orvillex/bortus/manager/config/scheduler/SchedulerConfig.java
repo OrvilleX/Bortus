@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class SchedulerConfig {
     
     @Bean
-    @ConfigurationProperties(prefix = "schduler", ignoreUnknownFields = true)
+    @ConfigurationProperties(prefix = "scheduler", ignoreUnknownFields = true)
     public SchedulerProperties schedulerProperties() {
         return new SchedulerProperties();
     }

@@ -34,20 +34,20 @@ import java.util.*;
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/group")
 public class JobGroupController {
-	private JobInfoService jobInfoService;
-	private JobGroupService jobGroupService;
-	private JobRegistryService jobRegistryService;
+	private final JobInfoService jobInfoService;
+	private final JobGroupService jobGroupService;
+	private final JobRegistryService jobRegistryService;
 
 	@Log("执行器列表")
-	@GetMapping("/pageList")
+	@GetMapping
 	public ResponseEntity<BasePage<JobGroup>> pageList(JobGroupCriteria criteria, Pageable pageable) {
 		return new ResponseEntity<>(jobGroupService.queryAll(criteria, pageable), HttpStatus.OK);
 	}
 
 	@Log("创建执行器")
-	@PostMapping("/save")
+	@PostMapping
 	public ResponseEntity<Object> save(@Validated JobGroup jobGroup) {
-		if (jobGroup.getAppname().length() < 4 || jobGroup.getAppname().length() > 64) {
+		if (jobGroup.getAppName().length() < 4 || jobGroup.getAppName().length() > 64) {
 			throw new BadRequestException(I18nUtil.getString("jobgroup_field_appname_length"));
 		}
 		if (jobGroup.getAddressType() != 0) {
@@ -67,13 +67,13 @@ public class JobGroupController {
 	}
 
 	@Log("更新执行器")
-	@PutMapping("/update")
+	@PutMapping
 	public ResponseEntity<Object> update(@Validated JobGroup jobGroup) {
-		if (jobGroup.getAppname().length() < 4 || jobGroup.getAppname().length() > 64) {
+		if (jobGroup.getAppName().length() < 4 || jobGroup.getAppName().length() > 64) {
 			throw new BadRequestException(I18nUtil.getString("jobgroup_field_appname_length"));
 		}
 		if (jobGroup.getAddressType() == 0) {
-			List<String> registryList = findRegistryByAppName(jobGroup.getAppname());
+			List<String> registryList = findRegistryByAppName(jobGroup.getAppName());
 			String addressListStr = null;
 			if (registryList != null && !registryList.isEmpty()) {
 				Collections.sort(registryList);
@@ -123,7 +123,7 @@ public class JobGroupController {
 	}
 
 	@Log("删除执行器")
-	@DeleteMapping("/remove")
+	@DeleteMapping
 	public ResponseEntity<Object> remove(Long id) {
 
 		JobInfoCriteria criteria = new JobInfoCriteria();

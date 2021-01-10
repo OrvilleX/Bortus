@@ -29,7 +29,7 @@ import java.util.*;
  * @version 0.1
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
-    private static final String DB_PATH = "ip2region/ipregion.db";
+    private static final String DB_PATH = "ip2region/ip2region.db";
     private static final String FILE_NAME = "ip2region.db";
 
     private static final Logger log = LoggerFactory.getLogger(StringUtil.class);

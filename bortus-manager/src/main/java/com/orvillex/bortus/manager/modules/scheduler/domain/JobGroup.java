@@ -30,7 +30,7 @@ public class JobGroup extends BaseEntity {
     private Long id;
 
     @NotBlank
-    private String appname;
+    private String appName;
     
     @NotBlank
     private String title;
@@ -45,6 +45,7 @@ public class JobGroup extends BaseEntity {
      */
     private String addressList;
 
+    @Transient
     private List<String> registryList;
     public List<String> getRegistryList() {
         if (addressList!=null && addressList.trim().length()>0) {

@@ -1,6 +1,6 @@
 package com.orvillex.bortus.manager.modules.system.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.orvillex.bortus.manager.entity.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,11 +30,11 @@ public class UserDto extends BaseDTO implements Serializable {
     private String avatarName;
     private String avatarPath;
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     private String password;
     private Boolean enabled;
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     private Boolean isAdmin = false;
     private Date pwdResetTime;
 }

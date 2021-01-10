@@ -1,12 +1,27 @@
 #配置数据源
 spring:
+  h2:
+    console:
+      enabled: true
+      path: /console
+      settings:
+        web-allow-others: true
+        trace: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
   datasource:
+    platform: h2
+    url: jdbc:h2:mem:bortus;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+    username: sa
+    password:
+    type: com.alibaba.druid.pool.DruidDataSource
+    schema:
+      - classpath:db/schema.sql
+    data:
+      - classpath:db/data.sql
     druid:
-      db-type: com.alibaba.druid.pool.DruidDataSource
-      driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      url: jdbc:log4jdbc:mysql://localhost:3306/eladmin?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
-      username: root
-      password: 123456
       # 初始连接数
       initial-size: 5
       # 最小连接数
@@ -33,8 +48,6 @@ spring:
         enabled: true
         url-pattern: /druid/*
         reset-enable: false
-        login-username: admin
-        login-password: 123456
       filter:
         stat:
           enabled: true
@@ -64,7 +77,7 @@ login:
     heigth: 36
     # 内容长度
     length: 2
-    # 字体名称，为空则使用默认字体，如遇到线上乱码，设置其他字体即可
+    # 字体名称，为空则使用默认字体
     font-name:
     # 字体大小
     font-size: 25
@@ -76,20 +89,20 @@ jwt:
   token-start-with: Bearer
   # 必须使用最少88位的Base64对该令牌进行编码
   base64-secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
-  # 令牌过期时间 此处单位/毫秒 ，默认2小时，可在此网站生成 https://www.convertworld.com/zh-hans/time/milliseconds.html
-  token-validity-in-seconds: 7200000
+  # 令牌过期时间 此处单位/毫秒 ，默认4小时，可在此网站生成 https://www.convertworld.com/zh-hans/time/milliseconds.html
+  token-validity-in-seconds: 14400000
   # 在线用户key
   online-key: online-token-
   # 验证码
   code-key: code-key-
-  # token 续期检查时间范围（默认30分钟，单位默认毫秒），在token即将过期的一段时间内用户操作了，则给用户的token续期
+  # token 续期检查时间范围（默认30分钟，单位毫秒），在token即将过期的一段时间内用户操作了，则给用户的token续期
   detect: 1800000
-  # 续期时间范围，默认 1小时，这里单位毫秒
+  # 续期时间范围，默认1小时，单位毫秒
   renew: 3600000
 
 # IP 本地解析
 ip:
-  local-parsing: false
+  local-parsing: true
 
 # 文件存储路径
 file:

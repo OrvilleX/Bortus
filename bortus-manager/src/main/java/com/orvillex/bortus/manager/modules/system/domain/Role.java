@@ -1,6 +1,6 @@
 package com.orvillex.bortus.manager.modules.system.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.orvillex.bortus.manager.enums.DataScopeType;
 import com.orvillex.bortus.manager.entity.BaseEntity;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class Role extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
@@ -40,6 +40,7 @@ public class Role extends BaseEntity implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "menu_id", referencedColumnName = "menu_id")})
     private Set<Menu> menus;
 
+    @ManyToMany
     @JoinTable(name = "sys_roles_depts",
             joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")},
             inverseJoinColumns = {@JoinColumn(name = "dept_id", referencedColumnName = "dept_id")})

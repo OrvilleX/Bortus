@@ -62,7 +62,7 @@ public class JobRegistryMonitorRun implements Runnable {
                     }
 
                     for (JobGroup group : groupList) {
-                        List<String> registryList = appAddressMap.get(group.getAppname());
+                        List<String> registryList = appAddressMap.get(group.getAppName());
                         String addressListStr = null;
                         if (registryList != null && !registryList.isEmpty()) {
                             Collections.sort(registryList);

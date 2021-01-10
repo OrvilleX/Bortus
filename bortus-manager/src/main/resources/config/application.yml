@@ -12,6 +12,20 @@ spring:
     redis:
       repositories:
         enabled: false
+  mail:
+    host: smtp.qq.com
+    port: 25
+    username: xxx@qq.com
+    password: xxx
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
 
   #配置 Jpa
   jpa:
@@ -40,11 +54,6 @@ task:
     keep-alive-seconds: 60
     # 队列容量
     queue-capacity: 50
-
-#七牛云
-qiniu:
-  # 文件大小 /M
-  max-size: 15
 
 #邮箱验证码有效时间/秒
 code:

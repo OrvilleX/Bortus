@@ -4,6 +4,7 @@ import com.orvillex.bortus.manager.config.thread.AsyncTaskProperties;
 import com.orvillex.bortus.manager.config.thread.ThreadFactoryName;
 import com.orvillex.bortus.manager.handler.SpringContextHolder;
 
+
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -15,8 +16,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadPoolExecutorUtil {
 
-    public static ThreadPoolExecutor getPoll() {
-        AsyncTaskProperties properties = SpringContextHolder.getBean(AsyncTaskProperties.class);
+    public static ThreadPoolExecutor getPoll(AsyncTaskProperties asyncTaskProperties) {
+        AsyncTaskProperties properties = asyncTaskProperties == null ? SpringContextHolder.getBean(AsyncTaskProperties.class) : asyncTaskProperties;
         return new ThreadPoolExecutor(
           properties.getCorePoolSize(),
           properties.getMaxPoolSize(),

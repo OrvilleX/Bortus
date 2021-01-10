@@ -32,6 +32,6 @@ public interface JobRegistryRepository extends JpaRepository<JobRegistry, Long>,
     Integer registryUpdate(String registryGroup, String registryKey, String registryValue, Date updateTime);
 
     @Modifying
-    @Query(value = "INSERT INTO xxl_job_registry( `registry_group` , `registry_key` , `registry_value`, `update_time`) VALUES(?1 ,?2 ,?3 , ?4)", nativeQuery = true)
+    @Query(value = "INSERT INTO sys_job_registry( `registry_group` , `registry_key` , `registry_value`, `update_time`) VALUES(?1 ,?2 ,?3 , ?4)", nativeQuery = true)
     void registrySave(String registryGroup, String registryKey, String registryValue, Date updateTime);
 }

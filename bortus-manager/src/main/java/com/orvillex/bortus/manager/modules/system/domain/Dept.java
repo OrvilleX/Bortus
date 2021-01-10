@@ -1,6 +1,6 @@
 package com.orvillex.bortus.manager.modules.system.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.orvillex.bortus.manager.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +29,7 @@ public class Dept extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     @ManyToMany(mappedBy = "depts")
     private Set<Role> roles;
 

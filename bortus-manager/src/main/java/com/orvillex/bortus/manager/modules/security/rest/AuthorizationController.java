@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
  * @version 0.1
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthorizationController {
     private final SecurityProperties properties;

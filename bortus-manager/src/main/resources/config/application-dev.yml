@@ -44,6 +44,12 @@ spring:
           config:
             multi-statement-allow: true
 
+scheduler:
+  accessToken: 
+  triggerPoolFastMax: 200
+  triggerPoolSlowMax: 100
+  logretentiondays: 30
+
 # 登录相关配置
 login:
   # 登录缓存

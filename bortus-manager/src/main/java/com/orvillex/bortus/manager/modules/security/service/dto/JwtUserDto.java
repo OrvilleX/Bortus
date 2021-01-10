@@ -1,6 +1,6 @@
 package com.orvillex.bortus.manager.modules.security.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.orvillex.bortus.manager.modules.system.service.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class JwtUserDto implements UserDetails {
 
     private final List<Long> dataScopes;
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     private final List<GrantedAuthority> authorities;
 
     public Set<String> getRoles() {
@@ -32,37 +32,37 @@ public class JwtUserDto implements UserDetails {
     }
 
     @Override
-    @JsonIgnore
+    @JSONField(serialize = false)
     public String getPassword() {
         return user.getPassword();
     }
 
     @Override
-    @JsonIgnore
+    @JSONField(serialize = false)
     public String getUsername() {
         return user.getUsername();
     }
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    @JsonIgnore
+    @JSONField(serialize = false)
     public boolean isEnabled() {
         return user.getEnabled();
     }

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.criteria.Predicate;
+
 import com.orvillex.bortus.job.enums.RegistryConfig;
 import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
@@ -22,6 +24,7 @@ import com.orvillex.bortus.manager.utils.PageUtil;
 import com.orvillex.bortus.manager.utils.QueryHelp;
 import com.orvillex.bortus.manager.utils.ValidationUtil;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +74,7 @@ public class JobGroupServiceImpl implements JobGroupService {
     @Override
     public void update(JobGroup resources) {
         if (resources.getAddressType() == 0) {
-            List<String> registryList = findRegistryByAppName(resources.getAppname());
+            List<String> registryList = findRegistryByAppName(resources.getAppName());
             String addressListStr = null;
             if (registryList != null && !registryList.isEmpty()) {
                 Collections.sort(registryList);
