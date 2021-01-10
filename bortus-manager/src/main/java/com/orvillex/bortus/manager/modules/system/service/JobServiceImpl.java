@@ -1,6 +1,7 @@
 package com.orvillex.bortus.manager.modules.system.service;
 
 import com.orvillex.bortus.manager.modules.system.domain.Job;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.exception.EntityExistException;
 import com.orvillex.bortus.manager.modules.system.repository.JobRepository;
@@ -76,7 +77,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Map<String, Object> queryAll(JobQueryCriteria criteria, Pageable pageable) {
+    public BasePage<JobDto> queryAll(JobQueryCriteria criteria, Pageable pageable) {
         Page<Job> page = jobRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, criteria, cb), pageable);
         return PageUtil.toPage(page.map(jobMapper::toDto));
     }

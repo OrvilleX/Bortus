@@ -1,12 +1,12 @@
 package com.orvillex.bortus.manager.modules.system.service;
 
 import com.orvillex.bortus.manager.modules.system.service.dto.DictDetailDto;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.DictDetail;
 import com.orvillex.bortus.manager.modules.system.service.dto.DictDetailQueryCriteria;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 字典明细服务
@@ -33,7 +33,7 @@ public interface DictDetailService {
     /**
      * 分页查询
      */
-    Map<String,Object> queryAll(DictDetailQueryCriteria criteria, Pageable pageable);
+    BasePage<DictDetailDto> queryAll(DictDetailQueryCriteria criteria, Pageable pageable);
 
     /**
      * 根据字典名称获取字典详情

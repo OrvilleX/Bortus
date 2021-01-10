@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.orvillex.bortus.job.enums.RegistryConfig;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobGroup;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobRegistry;
@@ -40,7 +41,7 @@ public class JobGroupServiceImpl implements JobGroupService {
     private final JobRegistryRepository jobRegistryRepository;
 
     @Override
-    public Object queryAll(JobGroupCriteria criteria, Pageable pageable) {
+    public BasePage<JobGroup> queryAll(JobGroupCriteria criteria, Pageable pageable) {
         return PageUtil.toPage(jobGroupRepository.findAll(
             (root, criteriaQuery, criteriaBuilder) -> 
             QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable));

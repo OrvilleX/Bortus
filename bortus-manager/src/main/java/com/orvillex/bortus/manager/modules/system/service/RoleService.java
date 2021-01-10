@@ -1,5 +1,6 @@
 package com.orvillex.bortus.manager.modules.system.service;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Role;
 import com.orvillex.bortus.manager.modules.system.service.dto.RoleDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.RoleQueryCriteria;
@@ -68,7 +69,7 @@ public interface RoleService {
     /**
      * 待条件分页查询
      */
-    Object queryAll(RoleQueryCriteria criteria, Pageable pageable);
+    BasePage<RoleDto> queryAll(RoleQueryCriteria criteria, Pageable pageable);
 
     /**
      * 查询全部

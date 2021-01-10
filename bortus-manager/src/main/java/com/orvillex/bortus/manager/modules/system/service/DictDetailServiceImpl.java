@@ -1,5 +1,6 @@
 package com.orvillex.bortus.manager.modules.system.service;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Dict;
 import com.orvillex.bortus.manager.modules.system.repository.DictRepository;
 import com.orvillex.bortus.manager.modules.system.service.automap.DictDetailMapper;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 字典明细服务实现
@@ -62,7 +62,7 @@ public class DictDetailServiceImpl implements DictDetailService {
     }
 
     @Override
-    public Map<String, Object> queryAll(DictDetailQueryCriteria criteria, Pageable pageable) {
+    public BasePage<DictDetailDto> queryAll(DictDetailQueryCriteria criteria, Pageable pageable) {
         Page<DictDetail> page = dictDetailRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
         return PageUtil.toPage(page.map(dictDetailMapper::toDto));
     }

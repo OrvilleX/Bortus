@@ -1,5 +1,6 @@
 package com.orvillex.bortus.manager.modules.system.service;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Dict;
 import com.orvillex.bortus.manager.modules.system.service.dto.DictDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.DictQueryCriteria;
@@ -16,7 +17,7 @@ public interface DictService {
     /**
      * 分页查询
      */
-    Map<String,Object> queryAll(DictQueryCriteria criteria, Pageable pageable);
+    BasePage<DictDto> queryAll(DictQueryCriteria criteria, Pageable pageable);
 
     /**
      */

@@ -1,5 +1,6 @@
 package com.orvillex.bortus.manager.modules.system.service;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Job;
 import com.orvillex.bortus.manager.modules.system.service.dto.JobDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.JobQueryCriteria;
@@ -41,7 +42,7 @@ public interface JobService {
     /**
      * 分页查询
      */
-    Map<String,Object> queryAll(JobQueryCriteria criteria, Pageable pageable);
+    BasePage<JobDto> queryAll(JobQueryCriteria criteria, Pageable pageable);
 
     /**
      * 查询全部数据

@@ -7,6 +7,7 @@ import com.orvillex.bortus.manager.modules.system.domain.User;
 import com.orvillex.bortus.manager.modules.system.repository.RoleRepository;
 import com.orvillex.bortus.manager.modules.system.service.dto.RoleSmallDto;
 import com.orvillex.bortus.manager.utils.*;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.exception.EntityExistException;
 import com.orvillex.bortus.manager.modules.system.domain.Role;
@@ -130,7 +131,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Object queryAll(RoleQueryCriteria criteria, Pageable pageable) {
+    public BasePage<RoleDto> queryAll(RoleQueryCriteria criteria, Pageable pageable) {
         Page<Role> page = roleRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, criteria, cb), pageable);
         return PageUtil.toPage(page.map(roleMapper::toDto));
     }

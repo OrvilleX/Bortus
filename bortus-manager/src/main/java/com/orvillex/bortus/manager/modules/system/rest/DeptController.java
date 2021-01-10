@@ -2,6 +2,7 @@ package com.orvillex.bortus.manager.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.orvillex.bortus.manager.annotation.Log;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.system.domain.Dept;
 import com.orvillex.bortus.manager.modules.system.service.DeptService;
@@ -39,9 +40,9 @@ public class DeptController {
     @Log("查询部门")
     @GetMapping
     @PreAuthorize("@x.check('user:list','dept:list')")
-    public ResponseEntity<Object> query(DeptQueryCriteria criteria) throws Exception {
+    public ResponseEntity<BasePage<DeptDto>> query(DeptQueryCriteria criteria) throws Exception {
         List<DeptDto> deptDtos = deptService.queryAll(criteria, true);
-        return new ResponseEntity<>(PageUtil.toPage(deptDtos, deptDtos.size()), HttpStatus.OK);
+        return new ResponseEntity<>(PageUtil.toPage(deptDtos, (long)deptDtos.size()), HttpStatus.OK);
     }
 
     @Log("查询部门")

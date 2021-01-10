@@ -1,6 +1,7 @@
 package com.orvillex.bortus.manager.modules.system.rest;
 
 import com.orvillex.bortus.manager.annotation.Log;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.system.domain.DictDetail;
 import com.orvillex.bortus.manager.modules.system.service.DictDetailService;
@@ -33,7 +34,7 @@ public class DictDetailController {
 
     @Log("查询字典详情")
     @GetMapping
-    public ResponseEntity<Object> query(DictDetailQueryCriteria criteria,
+    public ResponseEntity<BasePage<DictDetailDto>> query(DictDetailQueryCriteria criteria,
                                         @PageableDefault(sort = {"dictSort"}, direction = Sort.Direction.ASC) Pageable pageable){
         return new ResponseEntity<>(dictDetailService.queryAll(criteria,pageable), HttpStatus.OK);
     }

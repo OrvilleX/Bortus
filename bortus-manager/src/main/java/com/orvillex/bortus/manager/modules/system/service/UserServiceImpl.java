@@ -8,6 +8,7 @@ import com.orvillex.bortus.manager.modules.system.service.dto.JobSmallDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.RoleSmallDto;
 import com.orvillex.bortus.manager.utils.*;
 import com.orvillex.bortus.manager.config.FileProperties;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.EntityExistException;
 import com.orvillex.bortus.manager.modules.security.service.OnlineUserService;
 import com.orvillex.bortus.manager.modules.system.repository.UserRepository;
@@ -163,7 +164,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object queryAll(UserQueryCriteria criteria, Pageable pageable) {
+    public BasePage<UserDto> queryAll(UserQueryCriteria criteria, Pageable pageable) {
         Page<User> page = userRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
         return PageUtil.toPage(page.map(userMapper::toDto));
     }

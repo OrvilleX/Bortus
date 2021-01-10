@@ -3,6 +3,7 @@ package com.orvillex.bortus.manager.modules.system.rest;
 import cn.hutool.core.collection.CollectionUtil;
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.config.RsaProperties;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.User;
 import com.orvillex.bortus.manager.modules.system.service.*;
 import com.orvillex.bortus.manager.utils.SecurityUtils;
@@ -59,7 +60,7 @@ public class UserController {
     @Log("查询用户")
     @GetMapping
     @PreAuthorize("@x.check('user:list')")
-    public ResponseEntity<Object> query(UserQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<BasePage<UserDto>> query(UserQueryCriteria criteria, Pageable pageable){
         if (!ObjectUtils.isEmpty(criteria.getDeptId())) {
             criteria.getDeptIds().add(criteria.getDeptId());
             criteria.getDeptIds().addAll(deptService.getDeptChildren(criteria.getDeptId(),
@@ -75,7 +76,7 @@ public class UserController {
             criteria.getDeptIds().addAll(dataScopes);
             return new ResponseEntity<>(userService.queryAll(criteria,pageable),HttpStatus.OK);
         }
-        return new ResponseEntity<>(PageUtil.toPage(null,0),HttpStatus.OK);
+        return new ResponseEntity<>(PageUtil.toPage(null,0l),HttpStatus.OK);
     }
 
     @Log("新增用户")

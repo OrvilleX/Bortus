@@ -2,8 +2,10 @@ package com.orvillex.bortus.manager.modules.system.rest;
 
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.entity.BaseEntity;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Dict;
 import com.orvillex.bortus.manager.modules.system.service.DictService;
+import com.orvillex.bortus.manager.modules.system.service.dto.DictDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.DictQueryCriteria;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,14 +42,14 @@ public class DictController {
     @Log("查询字典")
     @GetMapping(value = "/all")
     @PreAuthorize("@x.check('dict:list')")
-    public ResponseEntity<Object> queryAll(){
+    public ResponseEntity<List<DictDto>> queryAll(){
         return new ResponseEntity<>(dictService.queryAll(new DictQueryCriteria()), HttpStatus.OK);
     }
 
     @Log("查询字典")
     @GetMapping
     @PreAuthorize("@x.check('dict:list')")
-    public ResponseEntity<Object> query(DictQueryCriteria resources, Pageable pageable){
+    public ResponseEntity<BasePage<DictDto>> query(DictQueryCriteria resources, Pageable pageable){
         return new ResponseEntity<>(dictService.queryAll(resources,pageable),HttpStatus.OK);
     }
 

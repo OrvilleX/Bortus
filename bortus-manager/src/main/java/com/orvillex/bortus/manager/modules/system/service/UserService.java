@@ -1,5 +1,6 @@
 package com.orvillex.bortus.manager.modules.system.service;
 
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.User;
 import com.orvillex.bortus.manager.modules.system.service.dto.UserQueryCriteria;
 import com.orvillex.bortus.manager.modules.system.service.dto.UserDto;
@@ -62,7 +63,7 @@ public interface UserService {
     /**
      * 查询全部
      */
-    Object queryAll(UserQueryCriteria criteria, Pageable pageable);
+    BasePage<UserDto> queryAll(UserQueryCriteria criteria, Pageable pageable);
 
     /**
      * 查询全部不分页

@@ -2,6 +2,7 @@ package com.orvillex.bortus.manager.modules.system.rest;
 
 import cn.hutool.core.lang.Dict;
 import com.orvillex.bortus.manager.annotation.Log;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.utils.SecurityUtils;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.system.domain.Role;
@@ -51,14 +52,14 @@ public class RoleController {
 
     @GetMapping(value = "/all")
     @PreAuthorize("@x.check('roles:list','user:add','user:edit')")
-    public ResponseEntity<Object> query(){
+    public ResponseEntity<List<RoleDto>> query(){
         return new ResponseEntity<>(roleService.queryAll(),HttpStatus.OK);
     }
 
     @Log("查询角色")
     @GetMapping
     @PreAuthorize("@x.check('roles:list')")
-    public ResponseEntity<Object> query(RoleQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<BasePage<RoleDto>> query(RoleQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(roleService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 

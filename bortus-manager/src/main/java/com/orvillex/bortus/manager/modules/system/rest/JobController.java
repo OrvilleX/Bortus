@@ -1,8 +1,10 @@
 package com.orvillex.bortus.manager.modules.system.rest;
 
 import com.orvillex.bortus.manager.annotation.Log;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Job;
 import com.orvillex.bortus.manager.modules.system.service.JobService;
+import com.orvillex.bortus.manager.modules.system.service.dto.JobDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.JobQueryCriteria;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +40,7 @@ public class JobController {
     @Log("查询岗位")
     @GetMapping
     @PreAuthorize("@x.check('job:list','user:list')")
-    public ResponseEntity<Object> query(JobQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<BasePage<JobDto>> query(JobQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(jobService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 

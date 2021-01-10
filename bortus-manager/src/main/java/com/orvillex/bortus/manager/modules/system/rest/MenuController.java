@@ -2,6 +2,7 @@ package com.orvillex.bortus.manager.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.orvillex.bortus.manager.annotation.Log;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Menu;
 import com.orvillex.bortus.manager.utils.SecurityUtils;
 import com.orvillex.bortus.manager.exception.BadRequestException;
@@ -48,16 +49,16 @@ public class MenuController {
 
     @GetMapping(value = "/lazy")
     @PreAuthorize("@x.check('menu:list','roles:list')")
-    public ResponseEntity<Object> query(@RequestParam Long pid){
+    public ResponseEntity<List<MenuDto>> query(@RequestParam Long pid){
         return new ResponseEntity<>(menuService.getMenus(pid),HttpStatus.OK);
     }
 
     @Log("查询菜单")
     @GetMapping
     @PreAuthorize("@x.check('menu:list')")
-    public ResponseEntity<Object> query(MenuQueryCriteria criteria) throws Exception {
+    public ResponseEntity<BasePage<MenuDto>> query(MenuQueryCriteria criteria) throws Exception {
         List<MenuDto> menuDtoList = menuService.queryAll(criteria, true);
-        return new ResponseEntity<>(PageUtil.toPage(menuDtoList, menuDtoList.size()),HttpStatus.OK);
+        return new ResponseEntity<>(PageUtil.toPage(menuDtoList, (long)menuDtoList.size()),HttpStatus.OK);
     }
 
     @Log("查询菜单")

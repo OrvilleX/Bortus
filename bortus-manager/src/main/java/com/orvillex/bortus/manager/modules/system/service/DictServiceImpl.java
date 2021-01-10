@@ -1,6 +1,8 @@
 package com.orvillex.bortus.manager.modules.system.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Dict;
 import com.orvillex.bortus.manager.modules.system.repository.DictRepository;
 import com.orvillex.bortus.manager.modules.system.service.dto.DictDetailDto;
@@ -33,7 +35,7 @@ public class DictServiceImpl implements DictService {
     private final RedisUtils redisUtils;
 
     @Override
-    public Map<String, Object> queryAll(DictQueryCriteria criteria, Pageable pageable) {
+    public BasePage<DictDto> queryAll(DictQueryCriteria criteria, Pageable pageable) {
         Page<Dict> page = dictRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, criteria, cb), pageable);
         return PageUtil.toPage(page.map(dictMapper::toDto));
     }

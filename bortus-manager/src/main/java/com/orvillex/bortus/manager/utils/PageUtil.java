@@ -3,6 +3,8 @@ package com.orvillex.bortus.manager.utils;
 import org.springframework.data.domain.Page;
 import java.util.*;
 
+import com.orvillex.bortus.manager.entity.BasePage;
+
 
 /**
  * 分页工具类
@@ -30,20 +32,20 @@ public class PageUtil extends cn.hutool.core.util.PageUtil {
     /**
      * Page 数据处理
      */
-    public static Map<String, Object> toPage(Page<?> page) {
-        Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", page.getContent());
-        map.put("totalElements", page.getTotalElements());
-        return map;
+    public static <T> BasePage<T> toPage(Page<T> page) {
+        BasePage<T> basePage = new BasePage<T>();
+        basePage.setContent(page.getContent());
+        basePage.setTotalElements(page.getTotalElements());
+        return basePage;
     }
 
     /**
      * 自定义分页
      */
-    public static Map<String, Object> toPage(Object object, Object totalElements) {
-        Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", object);
-        map.put("totalElements", totalElements);
-        return map;
+    public static <T> BasePage<T> toPage(List<T> content, Long totalElements) {
+        BasePage<T> basePage = new BasePage<T>();
+        basePage.setContent(content);
+        basePage.setTotalElements(totalElements);
+        return basePage;
     }
 }

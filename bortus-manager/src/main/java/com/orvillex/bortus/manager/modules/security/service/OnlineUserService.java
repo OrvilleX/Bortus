@@ -1,6 +1,7 @@
 package com.orvillex.bortus.manager.modules.security.service;
 
 import com.orvillex.bortus.manager.config.security.SecurityProperties;
+import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.security.service.dto.JwtUserDto;
 import com.orvillex.bortus.manager.modules.security.service.dto.OnlineUserDto;
 import com.orvillex.bortus.manager.utils.*;
@@ -48,11 +49,11 @@ public class OnlineUserService {
     /**
      * 查询全部数据
      */
-    public Map<String,Object> getAll(String filter, Pageable pageable){
+    public BasePage getAll(String filter, Pageable pageable){
         List<OnlineUserDto> onlineUserDtos = getAll(filter);
         return PageUtil.toPage(
-                PageUtil.toPage(pageable.getPageNumber(),pageable.getPageSize(), onlineUserDtos),
-                onlineUserDtos.size()
+                PageUtil.toPage(pageable.getPageNumber(), pageable.getPageSize(), onlineUserDtos),
+                (long)onlineUserDtos.size()
         );
     }
 
