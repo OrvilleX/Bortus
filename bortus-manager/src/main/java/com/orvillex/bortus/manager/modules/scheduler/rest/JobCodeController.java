@@ -1,17 +1,16 @@
 package com.orvillex.bortus.manager.modules.scheduler.rest;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.orvillex.bortus.job.biz.models.ReturnT;
 import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.manager.annotation.Log;
+import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobInfo;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobLogGlue;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobInfoService;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobLogGlueService;
+import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobLogGlueDto;
 import com.orvillex.bortus.manager.utils.I18nUtil;
 
 import org.springframework.http.HttpStatus;
@@ -22,6 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 提供以源码方式运行的任务详情与编辑
+ * 
+ * @author y-z-f
+ * @version 0.1
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/code")
@@ -29,48 +34,37 @@ public class JobCodeController {
     private JobInfoService jobInfoService;
     private JobLogGlueService jobLogGlueService;
 
-    @Log("主页")
+    @Log("获取任务")
     @RequestMapping("/")
-    public ResponseEntity<Object> index(Long jobId) {
+    public ResponseEntity<JobLogGlueDto> detail(Long jobId) {
         JobInfo jobInfo = jobInfoService.findById(jobId);
         List<JobLogGlue> jobLogGlues = jobLogGlueService.findByJobId(jobId);
 
-        if (jobInfo == null) {
-            throw new RuntimeException(I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
-        }
         if (GlueType.BEAN == GlueType.match(jobInfo.getGlueType())) {
-            throw new RuntimeException(I18nUtil.getString("jobinfo_glue_gluetype_unvalid"));
+            throw new BadRequestException(I18nUtil.getString("jobinfo_glue_gluetype_unvalid"));
         }
 
-        Map<String, Object> ret = new HashMap<>();
+        JobLogGlueDto retDto = new JobLogGlueDto();
 
-        ret.put("GlueTypeEnum", GlueType.values());
-        ret.put("jobInfo", jobInfo);
-        ret.put("jobLogGlues", jobLogGlues);
+        retDto.setGlueType(GlueType.values());
+        retDto.setJobInfo(jobInfo);
+        retDto.setJobLogGlues(jobLogGlues);
 
-        return new ResponseEntity<>(ret, HttpStatus.OK);
+        return new ResponseEntity<>(retDto, HttpStatus.OK);
     }
 
-    @Log("保存")
+    @Log("编辑任务")
     @PutMapping("/save")
-    public ResponseEntity<ReturnT<String>> save(Long id, String glueSource, String glueRemark) {
-        ReturnT<String> result = null;
+    public ResponseEntity<Object> save(Long id, String glueSource, String glueRemark) {
         if (glueRemark == null) {
-            result = new ReturnT<String>(500,
-                    (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark")));
+            throw new BadRequestException(
+                    I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark"));
         }
         if (glueRemark.length() < 4 || glueRemark.length() > 100) {
-            result = new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_remark_limit"));
+            throw new BadRequestException(I18nUtil.getString("jobinfo_glue_remark_limit"));
         }
+
         JobInfo exists_jobInfo = jobInfoService.findById(id);
-        if (exists_jobInfo == null) {
-            result = new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
-        }
-
-        if (result != null) {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
-
         exists_jobInfo.setGlueSource(glueSource);
         exists_jobInfo.setGlueRemark(glueRemark);
         exists_jobInfo.setGlueUpdatetime(new Date());
@@ -81,11 +75,10 @@ public class JobCodeController {
         jobLogGlue.setGlueType(exists_jobInfo.getGlueType());
         jobLogGlue.setGlueSource(glueSource);
         jobLogGlue.setGlueRemark(glueRemark);
-
         jobLogGlueService.create(jobLogGlue);
 
         jobLogGlueService.removeOld(exists_jobInfo.getId(), 30);
 
-        return new ResponseEntity<ReturnT<String>>(ReturnT.SUCCESS, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

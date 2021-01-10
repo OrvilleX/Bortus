@@ -109,9 +109,7 @@ public class JobLogController {
     public ReturnT<String> logKill(Long id) {
         JobLog joLog = jobLogService.findById(id);
         JobInfo jobInfo = jobInfoService.findById(joLog.getJobId());
-        if (jobInfo == null) {
-            return new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
-        }
+
         if (ReturnT.SUCCESS_CODE != joLog.getTriggerCode()) {
             return new ReturnT<String>(500, I18nUtil.getString("joblog_kill_log_limit"));
         }
