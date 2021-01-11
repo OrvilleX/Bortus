@@ -267,7 +267,7 @@ CREATE TABLE `sys_job_info` (
   `glue_source` mediumtext COMMENT 'GLUE源代码',
   `glue_remark` varchar(128) DEFAULT NULL COMMENT 'GLUE备注',
   `glue_updatetime` datetime DEFAULT NULL COMMENT 'GLUE更新时间',
-  `child_jobid` varchar(255) DEFAULT NULL COMMENT '子任务ID，多个逗号分隔',
+  `child_job_id` varchar(255) DEFAULT NULL COMMENT '子任务ID，多个逗号分隔',
   `trigger_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '调度状态：0-停止，1-运行',
   `trigger_last_time` bigint(13) NOT NULL DEFAULT '0' COMMENT '上次调度时间',
   `trigger_next_time` bigint(13) NOT NULL DEFAULT '0' COMMENT '下次调度时间',

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 任务信息仓储接口
@@ -22,6 +23,7 @@ public interface JobInfoRepository extends JpaRepository<JobInfo, Long>, JpaSpec
     List<JobInfo> scheduleJobQuery(Long maxNextTime, Integer pageSize);
 
     @Modifying
+    @Transactional
     @Query(value = "UPDATE sys_job_info SET trigger_last_time = ?2, trigger_next_time = ?3, trigger_status = ?4 WHERE info_id = ?1", nativeQuery = true)
     void scheduleUpdate(Long id, Long triggerLastTime, Long triggerNextTime, Integer triggerStatus);
 }

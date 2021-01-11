@@ -218,12 +218,14 @@ COMMIT;
 -- Records of sys_job_group
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_job_group`(`group_id`, `app_name`, `title`, `address_type`, `address_list`) VALUES (1, 'xxl-job-executor-sample', '示例执行器', 0, NULL);
+INSERT INTO `sys_job_group`(`group_id`, `app_name`, `title`, `address_type`, `address_list`) VALUES (1, 'job-executor-sample1', '示例执行器1', 0, NULL);
+INSERT INTO `sys_job_group`(`group_id`, `app_name`, `title`, `address_type`, `address_list`) VALUES (2, 'job-executor-sample2', '示例执行器2', 0, NULL);
 COMMIT;
 
 -- ----------------------------
 -- Records of sys_job_info
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_job_info`(`info_id`, `job_group`, `job_cron`, `job_desc`, `create_time`, `update_time`, `author`, `alarm_email`, `executor_route_strategy`, `executor_handler`, `executor_param`, `executor_block_strategy`, `executor_timeout`, `executor_fail_retry_count`, `glue_type`, `glue_source`, `glue_remark`, `glue_updatetime`, `child_jobid`) VALUES (1, 1, '0 0 0 * * ? *', '测试任务1', '2018-11-03 22:21:31', '2018-11-03 22:21:31', 'XXL', '', 'FIRST', 'demoJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2018-11-03 22:21:31', '');
+INSERT INTO `sys_job_info`(`info_id`, `job_group`, `job_cron`, `job_desc`, `create_time`, `update_time`, `author`, `alarm_email`, `executor_route_strategy`, `executor_handler`, `executor_param`, `executor_block_strategy`, `executor_timeout`, `executor_fail_retry_count`, `glue_type`, `glue_source`, `glue_remark`, `glue_updatetime`, `child_job_id`) VALUES (1, 1, '0 0 0 * * ? *', '测试任务1', '2018-11-03 22:21:31', '2018-11-03 22:21:31', 'admin', '', 'FIRST', 'demoJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2018-11-03 22:21:31', '');
+INSERT INTO `sys_job_info`(`info_id`, `job_group`, `job_cron`, `job_desc`, `create_time`, `update_time`, `author`, `alarm_email`, `executor_route_strategy`, `executor_handler`, `executor_param`, `executor_block_strategy`, `executor_timeout`, `executor_fail_retry_count`, `glue_type`, `glue_source`, `glue_remark`, `glue_updatetime`, `child_job_id`) VALUES (2, 1, '0 0 0 * * ? *', '测试任务2', '2018-11-03 22:21:31', '2018-11-03 22:21:31', 'admin', '', 'FIRST', 'demoJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'GLUE(Java)', '', 'GLUE代码初始化', '2018-11-03 22:21:31', '');
 COMMIT;

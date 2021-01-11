@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 调度日志报表仓储接口
@@ -21,6 +22,7 @@ public interface JobLogReportRepository extends JpaRepository<JobLogReport, Long
     @Query(value = "UPDATE JobLogReport SET runningCount = :#{#joblogreport.runningCount}," + 
     "sucCount = :#{#joblogreport.sucCount}, failCount = :#{#joblogreport.failCount} WHERE triggerDay = :#{#joblogreport.triggerDay}")
     @Modifying
+    @Transactional
     Integer updateByTriggerDay(@Param("joblogreport") JobLogReport jobLogReport);
 
     @Query(value = "SELECT m.* FROM sys_job_logreport AS m WHERE m.trigger_day between ?1 AND ?2 ORDER BY m.trigger_day ASC", nativeQuery = true)

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -38,6 +39,7 @@ public interface DeptRepository extends JpaRepository<Dept, Long>, JpaSpecificat
      * 根据ID更新sub_count
      */
     @Modifying
+    @Transactional
     @Query(value = "UPDATE sys_dept SET sub_count = ?1 WHERE dept_id = ?2", nativeQuery = true)
     void updateSubCntById(Integer count, Long id);
 }

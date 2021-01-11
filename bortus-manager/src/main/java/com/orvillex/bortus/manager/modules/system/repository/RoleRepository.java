@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ public interface RoleRepository extends JpaRepository<Role, Long>, JpaSpecificat
      * 解绑角色菜单
      */
     @Modifying
+    @Transactional
     @Query(value = "DELETE FROM sys_roles_menus WHERE menu_id = ?1", nativeQuery = true)
     void untiedMenu(Long id);
 

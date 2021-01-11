@@ -7,12 +7,12 @@ import com.orvillex.bortus.manager.modules.scheduler.domain.JobGroup;
 import com.orvillex.bortus.manager.modules.scheduler.rest.JobGroupController;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobGroupCriteria;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 
 
 
@@ -24,7 +24,7 @@ public class JobGroupControllerTest extends AbstractSpringMvcTest {
     @Test
     public void testPageList() throws Exception {
         ResponseEntity<BasePage<JobGroup>> result = jobGroupController.pageList(new JobGroupCriteria(), PageRequest.of(0, 10));
-        Assert.notEmpty(result.getBody().getContent(), "执行器空");
+        Assert.assertNotNull(result.getBody().getContent());
     }
 
     @Test
@@ -35,13 +35,48 @@ public class JobGroupControllerTest extends AbstractSpringMvcTest {
         jobGroup.setAddressType(1);
         jobGroup.setAddressList("192.168.1.1,192.168.1.2");
         ResponseEntity<Object> result = jobGroupController.create(jobGroup);
-        Assert.isTrue(result.getStatusCode() == HttpStatus.CREATED, "执行器创建失败");
+        Assert.assertEquals(result.getStatusCode(), HttpStatus.CREATED);
     }
 
     @Test(expected = BadRequestException.class)
-    public void testSaveAppNameError() {
+    public void testCreateAppNameError() {
         JobGroup jobGroup = new JobGroup();
         jobGroup.setAppName("low");
         jobGroupController.create(jobGroup);
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testCreateAddressListError() {
+        JobGroup jobGroup = new JobGroup();
+        jobGroup.setAppName("test");
+        jobGroup.setAddressType(1);
+        jobGroup.setAddressList("192, , ");
+        jobGroupController.create(jobGroup);
+    }
+
+    @Test
+    public void testUpdate() {
+        JobGroup jobGroup = new JobGroup();
+        jobGroup.setId(1l);
+        jobGroup.setAppName("bortus-job-test");
+        jobGroup.setTitle("bortus-job-title");
+        jobGroup.setAddressType(1);
+        jobGroup.setAddressList("192.168.1.5,165.15.12.1");
+        jobGroupController.update(jobGroup);
+    }
+
+    @Test
+    public void testRemove() {
+        jobGroupController.remove(2l);
+    }
+
+    @Test
+    public void testloadById() {
+        ResponseEntity<JobGroup> result = jobGroupController.loadById(1l);
+        JobGroup jobGroup = result.getBody();
+        Assert.assertNotNull(jobGroup);
+        Assert.assertEquals(jobGroup.getId(), Long.valueOf(1));
+        Assert.assertEquals(jobGroup.getAppName(), "job-executor-sample1");
+        Assert.assertEquals(jobGroup.getTitle(), "示例执行器1");
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -49,6 +50,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, JpaSpecificat
      * 更新节点数目
      */
     @Modifying
+    @Transactional
     @Query(value = "UPDATE sys_menu SET sub_count = ?1 WHERE menu_id = ?2", nativeQuery = true)
     void updateSubCntById(int count, Long menuId);
 }

@@ -5,6 +5,7 @@ import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobGroup;
+import com.orvillex.bortus.manager.modules.scheduler.domain.JobInfo;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobRegistry;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobGroupService;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobInfoService;
@@ -118,9 +119,9 @@ public class JobGroupController {
 		JobInfoCriteria criteria = new JobInfoCriteria();
 		criteria.setJobGroup(id);
 		criteria.setTriggerStatus(-1);
-		Map<String, Object> jobInfoList = (Map<String, Object>) jobInfoService.queryAll(criteria,
+		BasePage<JobInfo> jobInfoList = jobInfoService.queryAll(criteria,
 				PageRequest.of(0, 10));
-		Long count = (Long) jobInfoList.get("totalElement");
+		Long count = jobInfoList.getTotalElements();
 
 		if (count > 0) {
 			throw new BadRequestException(I18nUtil.getString("jobgroup_del_limit_0"));

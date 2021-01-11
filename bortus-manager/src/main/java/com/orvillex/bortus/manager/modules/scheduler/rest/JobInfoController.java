@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.orvillex.bortus.job.enums.ExecutorBlockStrategyType;
 import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.job.util.DateUtil;
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.modules.scheduler.core.cron.CronExpression;
-import com.orvillex.bortus.manager.modules.scheduler.core.route.ExecutorBlockStrategyType;
 import com.orvillex.bortus.manager.modules.scheduler.core.route.ExecutorRouteStrategyType;
 import com.orvillex.bortus.manager.modules.scheduler.core.trigger.JobTriggerPool;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobGroup;
@@ -24,6 +24,7 @@ import com.orvillex.bortus.manager.modules.scheduler.service.JobInfoService;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobService;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobGroupCriteria;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobInfoCriteria;
+import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobInfoDto;
 import com.orvillex.bortus.manager.utils.I18nUtil;
 
 import org.springframework.data.domain.Pageable;
@@ -48,36 +49,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/info")
 public class JobInfoController {
-    private JobGroupService jobGroupService;
-    private JobInfoService jobInfoService;
-    private JobService jobService;
-    private JobTriggerPool jobTriggerPool;
+    private final JobGroupService jobGroupService;
+    private final JobInfoService jobInfoService;
+    private final JobService jobService;
+    private final JobTriggerPool jobTriggerPool;
 
     @Log("获取条件参数")
     @GetMapping("/")
-    public ResponseEntity<Object> index(Long jobGroup) {
-        Map<String, Object> retMap = new HashMap<>();
-
-        retMap.put("ExecutorRouteStrategyEnum", ExecutorRouteStrategyType.values());
-        retMap.put("GlueTypeEnum", GlueType.values());
-        retMap.put("ExecutorBlockStrategyEnum", ExecutorBlockStrategyType.values());
+    public ResponseEntity<JobInfoDto> index() {
+        JobInfoDto retDto = new JobInfoDto();
+        retDto.setRoutes(ExecutorRouteStrategyType.values());
+        retDto.setGlues(GlueType.values());
+        retDto.setBlocks(ExecutorBlockStrategyType.values());
 
         List<JobGroup> jobGroupList_all = jobGroupService.queryAll(new JobGroupCriteria());
 
-        retMap.put("JobGroupList", jobGroupList_all);
-        retMap.put("jobGroup", jobGroup);
+        retDto.setJobGroupList(jobGroupList_all);
 
-        return new ResponseEntity<Object>(retMap, HttpStatus.OK);
+        return new ResponseEntity<JobInfoDto>(retDto, HttpStatus.OK);
     }
 
     @Log("任务列表")
-    @GetMapping("/pageList")
+    @GetMapping("/list")
     public ResponseEntity<BasePage<JobInfo>> pageList(JobInfoCriteria criteria, Pageable pageable) {
         return new ResponseEntity<>(jobInfoService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 
     @Log("添加任务")
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<Object> add(JobInfo jobInfo) {
         jobService.add(jobInfo);
 
@@ -85,14 +84,14 @@ public class JobInfoController {
     }
 
     @Log("更新任务")
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<Object> update(JobInfo jobInfo) {
         jobService.update(jobInfo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除任务")
-    @DeleteMapping("/remove")
+    @DeleteMapping("/")
     public ResponseEntity<Object> remove(Long id) {
         jobService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);

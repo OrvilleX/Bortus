@@ -8,7 +8,7 @@ import com.orvillex.bortus.job.biz.models.LogParam;
 import com.orvillex.bortus.job.biz.models.LogResult;
 import com.orvillex.bortus.job.biz.models.ReturnT;
 import com.orvillex.bortus.job.biz.models.TriggerParam;
-import com.orvillex.bortus.job.enums.ExecutorBlockStrategyEnum;
+import com.orvillex.bortus.job.enums.ExecutorBlockStrategyType;
 import com.orvillex.bortus.job.executor.JobExecutor;
 import com.orvillex.bortus.job.glue.GlueFactory;
 import com.orvillex.bortus.job.glue.GlueType;
@@ -108,14 +108,14 @@ public class DefaultExecutorBiz implements ExecutorBiz {
 
         // executor block strategy
         if (jobThread != null) {
-            ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(triggerParam.getExecutorBlockStrategy(), null);
-            if (ExecutorBlockStrategyEnum.DISCARD_LATER == blockStrategy) {
+            ExecutorBlockStrategyType blockStrategy = ExecutorBlockStrategyType.match(triggerParam.getExecutorBlockStrategy(), null);
+            if (ExecutorBlockStrategyType.DISCARD_LATER == blockStrategy) {
                 if (jobThread.isRunningOrHasQueue()) {
-                    return new ReturnT<String>(ReturnT.FAIL_CODE, "block strategy effect："+ExecutorBlockStrategyEnum.DISCARD_LATER.getTitle());
+                    return new ReturnT<String>(ReturnT.FAIL_CODE, "block strategy effect："+ExecutorBlockStrategyType.DISCARD_LATER.getTitle());
                 }
-            } else if (ExecutorBlockStrategyEnum.COVER_EARLY == blockStrategy) {
+            } else if (ExecutorBlockStrategyType.COVER_EARLY == blockStrategy) {
                 if (jobThread.isRunningOrHasQueue()) {
-                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategyEnum.COVER_EARLY.getTitle();
+                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategyType.COVER_EARLY.getTitle();
 
                     jobThread = null;
                 }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
      * 修改密码
      */
     @Modifying
+    @Transactional
     @Query(value = "UPDATE sys_user SET password = ?2, pwd_reset_time = ?3 WHERE username = ?1", nativeQuery = true)
     void updatePass(String username, String pass, Date lastPasswordResetTime);
 
@@ -38,6 +40,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
      * 修改邮箱
      */
     @Modifying
+    @Transactional
     @Query(value = "UPDATE sys_user SET email = ?2 WHERE username = ?1", nativeQuery = true)
     void updateEmail(String username, String email);
 

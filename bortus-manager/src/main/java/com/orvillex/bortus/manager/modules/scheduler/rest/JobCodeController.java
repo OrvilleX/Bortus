@@ -15,6 +15,7 @@ import com.orvillex.bortus.manager.utils.I18nUtil;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,11 +32,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/code")
 public class JobCodeController {
-    private JobInfoService jobInfoService;
-    private JobLogGlueService jobLogGlueService;
+    private final JobInfoService jobInfoService;
+    private final JobLogGlueService jobLogGlueService;
 
     @Log("获取任务")
-    @RequestMapping("/")
+    @GetMapping("/")
     public ResponseEntity<JobLogGlueDto> detail(Long jobId) {
         JobInfo jobInfo = jobInfoService.findById(jobId);
         List<JobLogGlue> jobLogGlues = jobLogGlueService.findByJobId(jobId);
@@ -54,8 +55,8 @@ public class JobCodeController {
     }
 
     @Log("编辑任务")
-    @PutMapping("/save")
-    public ResponseEntity<Object> save(Long id, String glueSource, String glueRemark) {
+    @PutMapping("/")
+    public ResponseEntity<Object> create(Long id, String glueSource, String glueRemark) {
         if (glueRemark == null) {
             throw new BadRequestException(
                     I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark"));
