@@ -50,17 +50,6 @@ public class JobGroupController {
 		if (jobGroup.getAppName().length() < 4 || jobGroup.getAppName().length() > 64) {
 			throw new BadRequestException(I18nUtil.getString("jobgroup_field_appname_length"));
 		}
-		if (jobGroup.getAddressType() != 0) {
-			if (jobGroup.getAddressList() == null || jobGroup.getAddressList().trim().length() == 0) {
-				throw new BadRequestException(I18nUtil.getString("jobgroup_field_addressType_limit"));
-			}
-			String[] addresss = jobGroup.getAddressList().split(",");
-			for (String item : addresss) {
-				if (item == null || item.trim().length() == 0) {
-					throw new BadRequestException(I18nUtil.getString("jobgroup_field_registryList_unvalid"));
-				}
-			}
-		}
 
 		jobGroupService.create(jobGroup);
 		return new ResponseEntity<>(HttpStatus.CREATED);

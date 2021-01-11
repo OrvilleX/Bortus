@@ -20,6 +20,7 @@ import com.orvillex.bortus.manager.modules.scheduler.repository.JobRegistryRepos
 import com.orvillex.bortus.manager.modules.scheduler.service.JobGroupService;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobGroupCriteria;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobInfoCriteria;
+import com.orvillex.bortus.manager.utils.I18nUtil;
 import com.orvillex.bortus.manager.utils.PageUtil;
 import com.orvillex.bortus.manager.utils.QueryHelp;
 import com.orvillex.bortus.manager.utils.ValidationUtil;
@@ -116,12 +117,12 @@ public class JobGroupServiceImpl implements JobGroupService {
     private void validAddressList(String addressList) {
         if (addressList == null ||
         addressList.trim().length() == 0) {
-            throw new BadRequestException("手动录入方式机器地址不能为空");
+            throw new BadRequestException(I18nUtil.getString("jobgroup_field_addressType_limit"));
         }
         String[] address = addressList.split(",");
         for (String item : address) {
             if (item == null || item.trim().length() == 0) {
-                throw new BadRequestException("机器地址格式错误");
+                throw new BadRequestException(I18nUtil.getString("jobgroup_field_registryList_unvalid"));
             }
         }
     }
