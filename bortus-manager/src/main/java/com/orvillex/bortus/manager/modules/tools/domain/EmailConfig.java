@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Data
 @Table(name = "tool_email_config")
 public class EmailConfig implements Serializable {
+    private static final long serialVersionUID = -5258202738083512355L;
 
     @Id
     @Column(name = "config_id")

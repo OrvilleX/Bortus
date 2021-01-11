@@ -5,7 +5,6 @@ import com.orvillex.bortus.manager.entity.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -16,7 +15,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-public class UserDto extends BaseDTO implements Serializable {
+public class UserDto extends BaseDTO {
     private Long id;
     private Set<RoleSmallDto> roles;
     private Set<JobSmallDto> jobs;

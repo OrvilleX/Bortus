@@ -16,6 +16,7 @@ import java.util.Set;
  */
 @Data
 public class UserQueryCriteria implements Serializable {
+    private static final long serialVersionUID = 4237327331152665267L;
 
     @Query
     private Long id;

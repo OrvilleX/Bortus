@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "sys_dict")
-public class Dict extends BaseEntity implements Serializable {
+public class Dict extends BaseEntity {
 
     @Id
     @Column(name = "dict_id")

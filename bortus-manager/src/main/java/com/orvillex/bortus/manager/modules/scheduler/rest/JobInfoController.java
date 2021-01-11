@@ -3,9 +3,7 @@ package com.orvillex.bortus.manager.modules.scheduler.rest;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.orvillex.bortus.job.enums.ExecutorBlockStrategyType;
 import com.orvillex.bortus.job.glue.GlueType;

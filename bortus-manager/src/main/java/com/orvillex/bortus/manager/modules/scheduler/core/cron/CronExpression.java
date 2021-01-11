@@ -1206,7 +1206,7 @@ public final class CronExpression implements Serializable, Cloneable {
                     continue;
                 }
             } else if (dayOfWSpec && !dayOfMSpec) { // get day by day of week rule
-                if (lastdayOfWeek) { // are we looking for the last XXX day of
+                if (lastdayOfWeek) {
                     // the month?
                     int dow = daysOfWeek.first(); // desired
                     // d-o-w
@@ -1250,8 +1250,7 @@ public final class CronExpression implements Serializable, Cloneable {
                     }
 
                 } else if (nthdayOfWeek != 0) {
-                    // are we looking for the Nth XXX day in the month?
-                    int dow = daysOfWeek.first(); // desired
+                    int dow = daysOfWeek.first();
                     // d-o-w
                     int cDow = cl.get(Calendar.DAY_OF_WEEK); // current d-o-w
                     int daysToAdd = 0;
