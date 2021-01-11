@@ -46,7 +46,7 @@ public class JobGroupController {
 
 	@Log("创建执行器")
 	@PostMapping
-	public ResponseEntity<Object> save(@Validated JobGroup jobGroup) {
+	public ResponseEntity<Object> create(@Validated JobGroup jobGroup) {
 		if (jobGroup.getAppName().length() < 4 || jobGroup.getAppName().length() > 64) {
 			throw new BadRequestException(I18nUtil.getString("jobgroup_field_appname_length"));
 		}
