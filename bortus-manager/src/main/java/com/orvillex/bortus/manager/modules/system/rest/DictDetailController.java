@@ -36,7 +36,8 @@ public class DictDetailController {
     @GetMapping
     public ResponseEntity<BasePage<DictDetailDto>> query(DictDetailQueryCriteria criteria,
                                         @PageableDefault(sort = {"dictSort"}, direction = Sort.Direction.ASC) Pageable pageable){
-        return new ResponseEntity<>(dictDetailService.queryAll(criteria,pageable), HttpStatus.OK);
+        BasePage<DictDetailDto> result = dictDetailService.queryAll(criteria,pageable);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @Log("查询多个字典详情")

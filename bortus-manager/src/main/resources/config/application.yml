@@ -44,6 +44,12 @@ spring:
     #连接超时时间
     timeout: 5000
 
+scheduler:
+  accessToken: 
+  triggerPoolFastMax: 200
+  triggerPoolSlowMax: 100
+  logretentiondays: 30
+
 task:
   pool:
     # 核心线程池大小

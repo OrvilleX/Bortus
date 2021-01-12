@@ -21,7 +21,7 @@ import java.util.Set;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/online")
+@RequestMapping("/auth/online")
 public class OnlineController {
     private final OnlineUserService onlineUserService;
 

@@ -31,8 +31,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/job")
 public class JobApiController {
-    private AdminBiz adminBiz;
-    private SchedulerProperties schedulerProperties;
+    private final AdminBiz adminBiz;
+    private final SchedulerProperties schedulerProperties;
 
     @Log("管理RPC")
     @RequestMapping("/{uri}")

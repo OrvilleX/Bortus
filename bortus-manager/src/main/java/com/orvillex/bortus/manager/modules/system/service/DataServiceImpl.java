@@ -24,7 +24,7 @@ public class DataServiceImpl  implements DataService {
     private final DeptService deptService;
 
     @Override
-    @Cacheable(key = "'user': + #p0.id")
+    @Cacheable(key = "'user:' + #p0.id")
     public List<Long> getDeptIds(UserDto user) {
         Set<Long> deptIds = new HashSet<>();
         List<RoleSmallDto> roleSet = roleService.findByUsersId(user.getId());

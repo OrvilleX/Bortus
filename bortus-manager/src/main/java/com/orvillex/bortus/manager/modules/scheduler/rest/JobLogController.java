@@ -40,9 +40,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/log")
 public class JobLogController {
-    private JobGroupService jobGroupService;
-    private JobInfoService jobInfoService;
-    private JobLogService jobLogService;
+    private final JobGroupService jobGroupService;
+    private final JobInfoService jobInfoService;
+    private final JobLogService jobLogService;
 
     @Log("任务日志列表")
     @GetMapping

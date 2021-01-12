@@ -24,7 +24,6 @@ import java.util.Objects;
  * @author y-z-f
  * @version 0.1
  */
-@Profile("dev & prod")
 @Component
 @Aspect
 public class LogAspect {

@@ -70,7 +70,7 @@ public class RoleController {
 
     @Log("新增角色")
     @PostMapping
-    @PreAuthorize("@el.check('roles:add')")
+    @PreAuthorize("@x.check('roles:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Role resources){
         if (resources.getId() != null) {
             throw new BadRequestException("不能携带ID");

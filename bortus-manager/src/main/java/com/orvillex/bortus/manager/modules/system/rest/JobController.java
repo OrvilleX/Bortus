@@ -46,7 +46,7 @@ public class JobController {
 
     @Log("新增岗位")
     @PostMapping
-    @PreAuthorize("@el.check('job:add')")
+    @PreAuthorize("@x.check('job:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Job resources){
         if (resources.getId() != null) {
             throw new BadRequestException("不能携带ID");

@@ -4,8 +4,6 @@ import com.orvillex.bortus.manager.entity.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 /**
  * 字典明细DTO
  * @author y-z-f
@@ -13,10 +11,14 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class DictDetailDto extends BaseDTO implements Serializable {
+public class DictDetailDto extends BaseDTO {
     private Long id;
+
     private DictSmallDto dict;
+
     private String label;
+
     private String value;
+
     private Integer dictSort;
 }

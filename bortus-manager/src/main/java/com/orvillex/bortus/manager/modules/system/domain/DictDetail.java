@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Table(name = "sys_dict_detail")
-public class DictDetail extends BaseEntity implements Serializable {
+public class DictDetail extends BaseEntity {
 
     @Id
     @Column(name = "detail_id")
@@ -29,7 +29,7 @@ public class DictDetail extends BaseEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Dict dict;
 
-    private String labal;
+    private String label;
 
     private String value;
 
