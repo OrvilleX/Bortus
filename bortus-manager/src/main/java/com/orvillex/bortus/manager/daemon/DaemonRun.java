@@ -9,7 +9,6 @@ import com.orvillex.bortus.manager.config.thread.AsyncTaskProperties;
 import com.orvillex.bortus.manager.utils.JobSchedulerUtils;
 import com.orvillex.bortus.manager.utils.ThreadPoolExecutorUtil;
 
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;

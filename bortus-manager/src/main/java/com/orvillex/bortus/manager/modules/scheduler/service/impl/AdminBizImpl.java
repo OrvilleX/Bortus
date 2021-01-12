@@ -13,7 +13,6 @@ import com.orvillex.bortus.manager.modules.scheduler.core.trigger.JobTriggerPool
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobInfo;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobLog;
 import com.orvillex.bortus.manager.modules.scheduler.enums.TriggerTypeEnum;
-import com.orvillex.bortus.manager.modules.scheduler.service.JobGroupService;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobInfoService;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobLogService;
 import com.orvillex.bortus.manager.modules.scheduler.service.JobRegistryService;
@@ -97,7 +96,7 @@ public class AdminBizImpl implements AdminBiz {
         }
 
         if (handleMsg.length() > 15000) {
-            handleMsg = new StringBuffer(handleMsg.substring(0, 15000)); // text最大64kb 避免长度过长
+            handleMsg = new StringBuffer(handleMsg.substring(0, 15000));
         }
 
         log.setHandleTime(new Date());
