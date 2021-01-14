@@ -39,6 +39,7 @@ public class JobScheduleRun {
         triggerPoolSlowMax = poolSlowMax;
         jobInfoService = infoService;
         jobTriggerPool = triggerPool;
+        jobTriggerPool.start();
     }
 
     public Runnable getScheduleRun() {
@@ -113,7 +114,7 @@ public class JobScheduleRun {
 
                 } catch (Exception e) {
                     if (!scheduleThreadToStop) {
-                        log.error(">>>>>>>>>>> xxl-job, JobScheduleHelper#scheduleThread error:{}", e);
+                        log.error("bortus, JobScheduleHelper#scheduleThread error:{}", e);
                     }
                 } finally {
 
@@ -242,6 +243,7 @@ public class JobScheduleRun {
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
         }
+        this.jobTriggerPool.stop();
 
         log.info("bortus, JobScheduleHelper stop");
     }

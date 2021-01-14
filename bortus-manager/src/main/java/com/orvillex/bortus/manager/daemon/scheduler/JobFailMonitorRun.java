@@ -14,6 +14,11 @@ import com.orvillex.bortus.manager.utils.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 进行任务告警以及重试
+ * @author y-z-f
+ * @version 0.1
+ */
 public class JobFailMonitorRun implements Runnable {
     private static Logger log = LoggerFactory.getLogger(JobFailMonitorRun.class);
 
@@ -30,6 +35,7 @@ public class JobFailMonitorRun implements Runnable {
         jobInfoService = infoService;
         jobAlarm = alarm;
         jobTriggerPool = triggerPool;
+        jobTriggerPool.start();
     }
 
     @Override
@@ -78,5 +84,6 @@ public class JobFailMonitorRun implements Runnable {
 
     public void toStop() {
         toStop = true;
+        jobTriggerPool.stop();
     }
 }

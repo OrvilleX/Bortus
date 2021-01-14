@@ -35,13 +35,13 @@ public class JobCodeControllerTest extends AbstractSpringMvcTest {
 
     @Test
     public void testCreate() {
-        jobCodeController.create(2l, "import", "i14564");
+        jobCodeController.update(2l, "import", "i14564");
         ResponseEntity<JobLogGlueDto> result = jobCodeController.detail(2l);
         Assert.assertEquals(result.getBody().getJobLogGlues().size(), 1);
     }
 
     @Test(expected = BadRequestException.class)
     public void testCreateNoGlueRemark() {
-        jobCodeController.create(2l, "import", "1");
+        jobCodeController.update(2l, "import", "1");
     }
 }

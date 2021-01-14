@@ -56,7 +56,7 @@ public class JobCodeController {
 
     @Log("编辑任务")
     @PutMapping("/")
-    public ResponseEntity<Object> create(Long id, String glueSource, String glueRemark) {
+    public ResponseEntity<Object> update(Long id, String glueSource, String glueRemark) {
         if (glueRemark == null) {
             throw new BadRequestException(
                     I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark"));

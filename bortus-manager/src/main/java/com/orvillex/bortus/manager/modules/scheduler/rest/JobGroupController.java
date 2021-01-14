@@ -47,7 +47,7 @@ public class JobGroupController {
 
 	@Log("创建执行器")
 	@PostMapping
-	public ResponseEntity<Object> create(@Validated JobGroup jobGroup) {
+	public ResponseEntity<Object> create(@Validated @RequestBody JobGroup jobGroup) {
 		if (jobGroup.getAppName().length() < 4 || jobGroup.getAppName().length() > 64) {
 			throw new BadRequestException(I18nUtil.getString("jobgroup_field_appname_length"));
 		}
@@ -58,7 +58,7 @@ public class JobGroupController {
 
 	@Log("更新执行器")
 	@PutMapping
-	public ResponseEntity<Object> update(@Validated JobGroup jobGroup) {
+	public ResponseEntity<Object> update(@Validated @RequestBody JobGroup jobGroup) {
 		if (jobGroup.getAppName().length() < 4 || jobGroup.getAppName().length() > 64) {
 			throw new BadRequestException(I18nUtil.getString("jobgroup_field_appname_length"));
 		}
@@ -114,35 +114,31 @@ public class JobGroupController {
 
 	@Log("删除执行器")
 	@DeleteMapping
-	public ResponseEntity<Object> remove(Long id) {
+	public ResponseEntity<Object> remove(@RequestBody Set<Long> ids) {
+		for (Long id : ids) {
+			JobInfoCriteria criteria = new JobInfoCriteria();
+			criteria.setJobGroup(id);
+			criteria.setTriggerStatus(-1);
+			BasePage<JobInfo> jobInfoList = jobInfoService.queryAll(criteria, PageRequest.of(0, 10));
+			Long count = jobInfoList.getTotalElements();
 
-		JobInfoCriteria criteria = new JobInfoCriteria();
-		criteria.setJobGroup(id);
-		criteria.setTriggerStatus(-1);
-		BasePage<JobInfo> jobInfoList = jobInfoService.queryAll(criteria,
-				PageRequest.of(0, 10));
-		Long count = jobInfoList.getTotalElements();
-
-		if (count > 0) {
-			throw new BadRequestException(I18nUtil.getString("jobgroup_del_limit_0"));
-		}
-
-		List<JobGroup> allList = jobGroupService.queryAll(new JobGroupCriteria());
-		if (allList.size() == 1) {
-			throw new BadRequestException(I18nUtil.getString("jobgroup_del_limit_1"));
-		}
-
-		jobGroupService.delete(new HashSet<Long>() {
-			{
-				add(id);
+			if (count > 0) {
+				throw new BadRequestException(I18nUtil.getString("jobgroup_del_limit_0"));
 			}
-		});
+
+			List<JobGroup> allList = jobGroupService.queryAll(new JobGroupCriteria());
+			if (allList.size() == 1) {
+				throw new BadRequestException(I18nUtil.getString("jobgroup_del_limit_1"));
+			}
+		}
+		jobGroupService.delete(ids);
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@Log("获取执行器明细")
-	@GetMapping("/loadById")
-	public ResponseEntity<JobGroup> loadById(Long id) {
+	@GetMapping("/{id}")
+	public ResponseEntity<JobGroup> loadById(@PathVariable Long id) {
 		JobGroup jobGroup = jobGroupService.findById(id);
 		return new ResponseEntity<>(jobGroup, HttpStatus.OK);
 	}

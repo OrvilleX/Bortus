@@ -40,9 +40,6 @@ public class AppRun {
         return fa;
     }
 
-    /**
-     * 访问首页提示
-     */
     @AnonymousGetMapping("/")
     public String index() {
         return "Backend service started successfully";

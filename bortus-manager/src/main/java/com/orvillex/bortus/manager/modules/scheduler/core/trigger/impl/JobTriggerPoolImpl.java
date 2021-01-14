@@ -41,6 +41,7 @@ public class JobTriggerPoolImpl implements JobTriggerPool {
     private ThreadPoolExecutor fastTriggerPool = null;
     private ThreadPoolExecutor slowTriggerPool = null;
 
+    private volatile boolean isStart = false;
     private volatile long minTim = System.currentTimeMillis() / 60000;
     private volatile ConcurrentMap<Long, AtomicInteger> jobTimeoutCountMap = new ConcurrentHashMap<>();
 
@@ -94,28 +95,34 @@ public class JobTriggerPoolImpl implements JobTriggerPool {
 
     @Override
     public void start() {
-        fastTriggerPool = new ThreadPoolExecutor(10, schedulerProperties.getTriggerPoolFastMax(), 60L, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(1000), new ThreadFactory() {
-                    @Override
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, "bortus, JobTriggerPoolImpl-fastTriggerPool-" + r.hashCode());
-                    }
-                });
+        if (!isStart) {
+            isStart = true;
+            fastTriggerPool = new ThreadPoolExecutor(10, schedulerProperties.getTriggerPoolFastMax(), 60L,
+                    TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(1000), new ThreadFactory() {
+                        @Override
+                        public Thread newThread(Runnable r) {
+                            return new Thread(r, "bortus, JobTriggerPoolImpl-fastTriggerPool-" + r.hashCode());
+                        }
+                    });
 
-        slowTriggerPool = new ThreadPoolExecutor(10, schedulerProperties.getTriggerPoolSlowMax(), 60L, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(2000), new ThreadFactory() {
-                    @Override
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, "bortus, JobTriggerPoolImpl-slowTriggerPool-" + r.hashCode());
-                    }
-                });
+            slowTriggerPool = new ThreadPoolExecutor(10, schedulerProperties.getTriggerPoolSlowMax(), 60L,
+                    TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(2000), new ThreadFactory() {
+                        @Override
+                        public Thread newThread(Runnable r) {
+                            return new Thread(r, "bortus, JobTriggerPoolImpl-slowTriggerPool-" + r.hashCode());
+                        }
+                    });
+        }
     }
 
     @Override
     public void stop() {
-        fastTriggerPool.shutdownNow();
-        slowTriggerPool.shutdownNow();
-        log.info("bortus trigger thread pool shutdown success.");
+        if (isStart) {
+            isStart = false;
+            fastTriggerPool.shutdownNow();
+            slowTriggerPool.shutdownNow();
+            log.info("bortus trigger thread pool shutdown success.");
+        }
     }
 
     public void trigger(Long jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam,
