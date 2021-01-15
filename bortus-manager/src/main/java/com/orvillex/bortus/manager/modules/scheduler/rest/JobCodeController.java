@@ -46,8 +46,7 @@ public class JobCodeController {
         }
 
         JobLogGlueDto retDto = new JobLogGlueDto();
-
-        retDto.setGlueType(GlueType.values());
+        
         retDto.setJobInfo(jobInfo);
         retDto.setJobLogGlues(jobLogGlues);
 

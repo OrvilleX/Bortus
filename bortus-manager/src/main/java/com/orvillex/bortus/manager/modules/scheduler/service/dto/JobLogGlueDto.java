@@ -3,7 +3,6 @@ package com.orvillex.bortus.manager.modules.scheduler.service.dto;
 import java.io.Serializable;
 import java.util.List;
 
-import com.orvillex.bortus.job.glue.GlueType;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobInfo;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobLogGlue;
 
@@ -19,8 +18,7 @@ import lombok.Setter;
 @Setter
 public class JobLogGlueDto implements Serializable {
     private static final long serialVersionUID = -1463968244169141567L;
-    
-    private GlueType[] glueType;
+
     private JobInfo jobInfo;
     private List<JobLogGlue> jobLogGlues;
 }
