@@ -1,5 +1,7 @@
 package com.orvillex.bortus.scheduler;
 
+import java.util.HashSet;
+
 import com.orvillex.bortus.base.AbstractSpringMvcTest;
 import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
@@ -67,7 +69,9 @@ public class JobGroupControllerTest extends AbstractSpringMvcTest {
 
     @Test
     public void testRemove() {
-        jobGroupController.remove(2l);
+        jobGroupController.remove(new HashSet<Long>() {{
+            add(2l);
+        }});
     }
 
     @Test

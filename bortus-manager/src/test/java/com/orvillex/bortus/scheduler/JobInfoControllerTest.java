@@ -19,14 +19,6 @@ public class JobInfoControllerTest extends AbstractSpringMvcTest {
     private JobInfoController jobInfoController;
 
     @Test
-    public void testIndex() {
-        ResponseEntity<JobInfoDto> result = jobInfoController.index();
-        JobInfoDto jobInfoDto = result.getBody();
-        Assert.assertNotNull(jobInfoDto);
-        Assert.assertEquals(jobInfoDto.getJobGroupList().size(), 2);
-    }
-
-    @Test
     public void testPageList() {
         ResponseEntity<BasePage<JobInfo>> result = jobInfoController.pageList(new JobInfoCriteria(), PageRequest.of(0, 10));
         BasePage<JobInfo> jobinfos = result.getBody();
