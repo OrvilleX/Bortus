@@ -15,6 +15,7 @@
     <modules>
 		<module>bortus-manager</module>
 		<module>bortus-job</module>
+		<module>bortus-datapump</module>
     </modules>
 
     <properties>

@@ -1,0 +1,18 @@
+server:
+  port: 8000
+
+logging:
+  config=classpath: logback.xml
+
+bortus: 
+  job:
+    accessToken: 
+    admin:
+      addresses: http://127.0.0.1:8080/xxl-job-admin
+    executor:
+      appname: datapump-job-executor
+      address: 
+      ip: 
+      port: 9999
+      logpath: /data/applogs/bortus/jobhandler
+      logretentiondays: 30

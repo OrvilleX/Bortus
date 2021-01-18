@@ -12,7 +12,7 @@ import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 
 public class JobLogger {
-    private static Logger logger = LoggerFactory.getLogger("xxl-job logger");
+    private static Logger logger = LoggerFactory.getLogger("bortus logger");
 
     /**
      * 追加日志
