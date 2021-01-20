@@ -1,6 +1,5 @@
-package com.orvillex.bortus.datapump.executor;
+package com.orvillex.bortus.datapump.core.task;
 
-import com.orvillex.bortus.datapump.config.TransportProperties;
 import com.orvillex.bortus.datapump.core.collector.LogFilePluginCollector;
 import com.orvillex.bortus.datapump.core.collector.TaskCollector;
 import com.orvillex.bortus.datapump.core.element.RecordSender;
@@ -10,11 +9,7 @@ import com.orvillex.bortus.datapump.core.runner.AbstractRunner;
 import com.orvillex.bortus.datapump.core.runner.ReaderRunner;
 import com.orvillex.bortus.datapump.core.runner.WriterRunner;
 import com.orvillex.bortus.datapump.core.statistics.Communication;
-import com.orvillex.bortus.datapump.core.task.AbstractTask;
-import com.orvillex.bortus.datapump.core.task.ReaderTask;
-import com.orvillex.bortus.datapump.core.task.WriterTask;
 import com.orvillex.bortus.datapump.core.transport.channel.Channel;
-import com.orvillex.bortus.datapump.core.transport.channel.memory.MemoryChannel;
 import com.orvillex.bortus.datapump.core.transport.exchanger.BufferedRecordExchanger;
 import com.orvillex.bortus.datapump.exception.DataPumpException;
 import com.orvillex.bortus.datapump.utils.I18nUtil;
@@ -23,7 +18,6 @@ import org.apache.commons.lang3.Validate;
 
 public class TaskExecutor {
     private int taskId;
-    private int attemptCount;
     private Channel channel;
     private Thread readerThread;
     private Thread writerThread;
@@ -31,14 +25,12 @@ public class TaskExecutor {
     private WriterRunner writerRunner;
     private Communication taskCommunication;
     private String appName;
+    private int attemptCount = 1;
 
-    public TaskExecutor(int attemptCount, TransportProperties properties, ReaderTask readerTask,
-            WriterTask writerTask) {
-        this.attemptCount = attemptCount;
+    public TaskExecutor(Channel channel, ReaderTask readerTask, WriterTask writerTask) {
         this.taskCommunication = new Communication();
         Validate.notNull(this.taskCommunication, String.format("taskId[%d]的Communication没有注册过", taskId));
-        this.channel = new MemoryChannel(properties);
-        this.channel.setCommunication(this.taskCommunication);
+        this.channel = channel;
 
         writerRunner = (WriterRunner) generateRunner(TaskType.WRITER, writerTask);
         this.writerThread = new Thread(writerRunner, String.format("%d--writer", appName));
@@ -91,7 +83,7 @@ public class TaskExecutor {
         return newRunner;
     }
 
-    private boolean isTaskFinished() {
+    public boolean isTaskFinished() {
         if (readerThread.isAlive() || writerThread.isAlive()) {
             return false;
         }
@@ -105,19 +97,23 @@ public class TaskExecutor {
         return taskId;
     }
 
-    private long getTimeStamp() {
+    public long getTimeStamp() {
         return taskCommunication.getTimestamp();
     }
 
-    private int getAttemptCount() {
-        return attemptCount;
-    }
-
-    private boolean supportFailOver() {
+    public boolean supportFailOver() {
         return writerRunner.supportFailOver();
     }
 
-    private void shutdown() {
+    public int getAttemptCount() {
+        return this.attemptCount;
+    }
+
+    public void setAttemptCount(int count) {
+        this.attemptCount = count;
+    }
+
+    public void shutdown() {
         writerRunner.shutdown();
         readerRunner.shutdown();
         if (writerThread.isAlive()) {
@@ -128,7 +124,7 @@ public class TaskExecutor {
         }
     }
 
-    private boolean isShutdown() {
+    public boolean isShutdown() {
         return !readerThread.isAlive() && !writerThread.isAlive();
     }
 }

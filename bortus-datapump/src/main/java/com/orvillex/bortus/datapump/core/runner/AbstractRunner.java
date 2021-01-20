@@ -2,7 +2,6 @@ package com.orvillex.bortus.datapump.core.runner;
 
 import com.orvillex.bortus.datapump.core.enums.State;
 import com.orvillex.bortus.datapump.core.statistics.Communication;
-import com.orvillex.bortus.datapump.core.statistics.CommunicationTool;
 import com.orvillex.bortus.datapump.core.task.AbstractTask;
 
 import org.apache.commons.lang3.Validate;
@@ -50,10 +49,6 @@ public abstract class AbstractRunner {
 
     private void mark(State state) {
         this.runnerCommunication.setState(state);
-        if (state == State.SUCCEEDED) {
-            this.runnerCommunication.setLongCounter(CommunicationTool.STAGE,
-                    this.runnerCommunication.getLongCounter(CommunicationTool.STAGE) + 1);
-        }
     }
 
     public void markRun() {
