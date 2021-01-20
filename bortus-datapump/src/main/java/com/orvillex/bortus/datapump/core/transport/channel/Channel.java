@@ -11,6 +11,11 @@ import com.orvillex.bortus.job.log.JobLogger;
 
 import org.apache.commons.lang3.Validate;
 
+/**
+ * 数据通道
+ * @author y-z-f
+ * @version 0.1
+ */
 public abstract class Channel {
     protected int capacity;
     protected int byteCapacity;
@@ -43,7 +48,6 @@ public abstract class Channel {
                 isFirstPrint = false;
             }
         }
-
         this.capacity = capacity;
         this.byteSpeed = byteSpeed;
         this.recordSpeed = recordSpeed;
@@ -163,12 +167,10 @@ public abstract class Channel {
                 long currentRecordSpeed = (CommunicationTool.getTotalReadRecords(currentCommunication)
                         - CommunicationTool.getTotalReadRecords(lastCommunication)) * 1000 / interval;
                 if (currentRecordSpeed > this.recordSpeed) {
-                    // 计算根据recordLimit得到的休眠时间
                     recordLimitSleepTime = currentRecordSpeed * interval / this.recordSpeed - interval;
                 }
             }
 
-            // 休眠时间取较大值
             long sleepTime = byteLimitSleepTime < recordLimitSleepTime ? recordLimitSleepTime : byteLimitSleepTime;
             if (sleepTime > 0) {
                 try {

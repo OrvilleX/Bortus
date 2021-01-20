@@ -14,9 +14,14 @@ import com.orvillex.bortus.datapump.core.transport.channel.Channel;
 import com.orvillex.bortus.datapump.exception.DataPumpException;
 import com.orvillex.bortus.datapump.utils.I18nUtil;
 
+import org.springframework.stereotype.Component;
+
 /**
- * 内存Channel的具体实现，底层其实是一个ArrayBlockingQueue
+ * 内存Channel的具体实现
+ * @author y-z-f
+ * @version 0.1
  */
+@Component
 public class MemoryChannel extends Channel {
     private int bufferSize = 0;
     private AtomicInteger memoryBytes = new AtomicInteger(0);

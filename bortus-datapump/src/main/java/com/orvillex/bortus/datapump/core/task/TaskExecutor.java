@@ -17,7 +17,6 @@ import com.orvillex.bortus.datapump.utils.I18nUtil;
 import org.apache.commons.lang3.Validate;
 
 public class TaskExecutor {
-    private int taskId;
     private Channel channel;
     private Thread readerThread;
     private Thread writerThread;
@@ -29,7 +28,7 @@ public class TaskExecutor {
 
     public TaskExecutor(Channel channel, ReaderTask readerTask, WriterTask writerTask) {
         this.taskCommunication = new Communication();
-        Validate.notNull(this.taskCommunication, String.format("taskId[%d]的Communication没有注册过", taskId));
+        Validate.notNull(this.taskCommunication, String.format("Communication没有注册过"));
         this.channel = channel;
 
         writerRunner = (WriterRunner) generateRunner(TaskType.WRITER, writerTask);
@@ -91,10 +90,6 @@ public class TaskExecutor {
             return false;
         }
         return true;
-    }
-
-    private int getTaskId() {
-        return taskId;
     }
 
     public long getTimeStamp() {

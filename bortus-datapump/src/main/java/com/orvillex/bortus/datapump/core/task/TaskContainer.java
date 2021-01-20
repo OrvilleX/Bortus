@@ -13,7 +13,12 @@ import com.orvillex.bortus.datapump.utils.I18nUtil;
 import com.orvillex.bortus.datapump.utils.VMInfo;
 import com.orvillex.bortus.job.log.JobLogger;
 
-public class JobContainer {
+/**
+ * 任务执行容器
+ * @author y-z-f
+ * @version 0.1
+ */
+public class TaskContainer {
     private int sleepIntervalInMillSec = 100;
     private long reportIntervalInMillSec = 10000;
     private int taskMaxRetryTimes = 1;
@@ -26,12 +31,15 @@ public class JobContainer {
     private WriterTask writerTask;
     private String appName;
 
-    public JobContainer(Channel channel, ReaderTask readerTask, WriterTask writerTask) {
+    public TaskContainer(Channel channel, ReaderTask readerTask, WriterTask writerTask) {
         this.taskChannel = channel;
         this.readerTask = readerTask;
         this.writerTask = writerTask;
     }
 
+    /**
+     * 设置自定义参数
+     */
     public void setTaskProperties(TaskProperties taskProperties) {
         this.sleepIntervalInMillSec = taskProperties.getSleepInterval();
         this.reportIntervalInMillSec = taskProperties.getReportInterval();
@@ -40,6 +48,9 @@ public class JobContainer {
         this.taskMaxWaitInMsec = taskProperties.getFailoverMaxWait();
     }
 
+    /**
+     * 执行任务
+     */
     public void start() {
         Communication lastTaskCommunication = new Communication();
         Communication nowTaskCommunication = new Communication();
@@ -92,17 +103,19 @@ public class JobContainer {
                         }
                     }
                 }
-                taskExecutor.doStart();
-                JobLogger.log("{} attemptCount[{}] is started", this.appName, taskExecutor.getAttemptCount());
-                if (taskExecutor.isTaskFinished() && nowTaskCommunication.getState() == State.SUCCEEDED) {
-                    lastTaskCommunication = reportTaskCommunication(nowTaskCommunication, lastTaskCommunication);
-                    JobLogger.log("{} completed it's tasks.", this.appName);
-                    break;
-                }
                 if (failedOrKilled) {
                     lastTaskCommunication = reportTaskCommunication(nowTaskCommunication, lastTaskCommunication);
                     throw new DataPumpException(I18nUtil.getString("RUNTIME_ERROR"),
                             lastTaskCommunication.getThrowable());
+                }
+
+                taskExecutor.doStart();
+                JobLogger.log("{} attemptCount[{}] is started", this.appName, taskExecutor.getAttemptCount());
+                
+                if (taskExecutor.isTaskFinished() && nowTaskCommunication.getState() == State.SUCCEEDED) {
+                    lastTaskCommunication = reportTaskCommunication(nowTaskCommunication, lastTaskCommunication);
+                    JobLogger.log("{} completed it's tasks.", this.appName);
+                    break;
                 }
                 long now = System.currentTimeMillis();
                 if (now - lastReportTimeStamp > reportIntervalInMillSec) {
@@ -142,7 +155,7 @@ public class JobContainer {
         return reportCommunication;
     }
 
-    public void reportVmInfo() {
+    private void reportVmInfo() {
         long now = System.currentTimeMillis();
         if (now - lastReportTime >= 300000) {
             if (vmInfo != null) {

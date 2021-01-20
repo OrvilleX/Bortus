@@ -9,7 +9,7 @@ public abstract class AbstractTask {
     /**
      * 标识当前操作的名称，如Read或Write
      */
-    private int runName;
+    private String runName;
     private TaskCollector taskCollector;
     private String triggerParam;
 

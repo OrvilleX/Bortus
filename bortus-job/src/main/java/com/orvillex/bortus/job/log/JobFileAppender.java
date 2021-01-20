@@ -19,13 +19,6 @@ public class JobFileAppender {
     private static Logger logger = LoggerFactory.getLogger(JobFileAppender.class);
     public static final InheritableThreadLocal<String> contextHolder = new InheritableThreadLocal<String>();
 
-    /**
-     * 日志基础地址
-     *
-     * 结构如: ---/ ---/gluesource/ ---/gluesource/10_1514171108000.js
-     * ---/gluesource/10_1514171108000.js ---/2017-12-25/ ---/2017-12-25/639.log
-     * ---/2017-12-25/821.log
-     */
     private static String logBasePath = "/data/applogs/xxl-job/jobhandler";
     private static String glueSrcPath = logBasePath.concat("/gluesource");
 
