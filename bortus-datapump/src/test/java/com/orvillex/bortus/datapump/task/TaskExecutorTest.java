@@ -9,15 +9,16 @@ import com.orvillex.bortus.datapump.executor.drds.DrdsWriter;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 public class TaskExecutorTest extends AbstractSpringMvcTest {
     @Autowired
     private Channel channel;
 
     @Test
-    private void taskExecutorBaseTest() {
+    public void taskExecutorBaseTest() {
         DrdsReader reader = new DrdsReader();
         DrdsWriter writer = new DrdsWriter();
-        TaskContainer container = new TaskContainer(channel, reader, writer);
+        TaskContainer container = new TaskContainer(channel, reader, writer, Thread.currentThread().getName());
         container.start();
     }
 }

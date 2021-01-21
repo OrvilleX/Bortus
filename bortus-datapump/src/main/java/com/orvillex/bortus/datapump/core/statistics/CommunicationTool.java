@@ -1,18 +1,12 @@
 package com.orvillex.bortus.datapump.core.statistics;
 
-import java.lang.management.ManagementFactory;
 import java.text.DecimalFormat;
-
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
 
 import com.orvillex.bortus.datapump.utils.StrUtil;
 
 import org.apache.commons.lang3.Validate;
 
 public final class CommunicationTool {
-    private static Metrics metrics = new Metrics();
-    public static int count = 0;
     public static final String BYTE_SPEED = "byteSpeed";
     public static final String RECORD_SPEED = "recordSpeed";
     public static final String PERCENTAGE = "percentage";
@@ -41,7 +35,9 @@ public final class CommunicationTool {
         return communication.getLongCounter(READ_SUCCEED_BYTES) + communication.getLongCounter(READ_FAILED_BYTES);
     }
 
-    public static Communication getReportCommunication(Communication now, Communication old) {
+    public static Communication getReportCommunication(Communication refCommunication, Communication old) {
+        Communication now = new Communication();
+        now.mergeFrom(refCommunication);
         Validate.isTrue(now != null && old != null, "为汇报准备的新旧metric不能为null");
         long totalReadRecords = getTotalReadRecords(now);
         long totalReadBytes = getTotalReadBytes(now);
@@ -101,32 +97,6 @@ public final class CommunicationTool {
             sb.append(" All Task WaitReaderTime ");
             sb.append(PerfTrace.unitTime(communication.getLongCounter(WAIT_READER_TIME)));
             sb.append(" | ");
-            try {
-                String speed = getSpeed(communication).split("KB/s")[0];
-                System.out.println("GG:" + speed);
-                if (speed.equals("0B/s, 0 records/s")) {
-                    speed = "0";
-                }
-                if (count == 0) {
-                    MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-                    ObjectName dataxSpeedName = new ObjectName("bortus.datapump.speed:type=RecordSpeed");
-                    ObjectName dataxPercentageName = new ObjectName("bortus.datapump.percentage:type=Percentage");
-                    ObjectName dataxRecordName = new ObjectName("bortus.datapump.record:type=WriteSpeed");
-                    server.registerMBean(metrics, dataxSpeedName);
-                    server.registerMBean(metrics, dataxPercentageName);
-                    server.registerMBean(metrics, dataxRecordName);
-
-                    count++;
-                }
-                metrics.setWriteSpeed(speed);
-                metrics.setPercentage(communication.getDoubleCounter(PERCENTAGE) * 100 + "");
-                metrics.setRecordSpeed(communication.getLongCounter(RECORD_SPEED) + "");
-
-                System.out.println("start.....");
-            } catch (Exception e) {
-                System.out.println("自己代码出错了");
-            }
-
             sb.append("Percentage ");
             sb.append(getPercentage(communication));
             return sb.toString();

@@ -81,7 +81,7 @@ public class PerfRecord implements Comparable<PerfRecord> {
     }
 
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", getInstId(), appName, phase, action,
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", getInstId(), appName, phase, action,
                 DateFormatUtils.format(startTime, datetimeFormat), elapsedTimeInNs, count, size);
     }
 

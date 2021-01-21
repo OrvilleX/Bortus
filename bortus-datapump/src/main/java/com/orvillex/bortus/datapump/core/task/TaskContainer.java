@@ -31,10 +31,11 @@ public class TaskContainer {
     private WriterTask writerTask;
     private String appName;
 
-    public TaskContainer(Channel channel, ReaderTask readerTask, WriterTask writerTask) {
+    public TaskContainer(Channel channel, ReaderTask readerTask, WriterTask writerTask, String appName) {
         this.taskChannel = channel;
         this.readerTask = readerTask;
         this.writerTask = writerTask;
+        this.appName = appName;
     }
 
     /**
@@ -56,9 +57,12 @@ public class TaskContainer {
         Communication nowTaskCommunication = new Communication();
         try {
             this.taskChannel.setCommunication(nowTaskCommunication);
-            TaskExecutor taskExecutor = new TaskExecutor(this.taskChannel, this.readerTask, this.writerTask);
+            TaskExecutor taskExecutor = new TaskExecutor(this.taskChannel, this.readerTask, this.writerTask, this.appName, nowTaskCommunication);
             Long taskStartTime = System.currentTimeMillis();
             long lastReportTimeStamp = 0;
+
+            taskExecutor.doStart();
+            JobLogger.log("{} attemptCount[{}] is started", this.appName, taskExecutor.getAttemptCount());
 
             while (true) {
                 boolean failedOrKilled = false;
@@ -108,9 +112,6 @@ public class TaskContainer {
                     throw new DataPumpException(I18nUtil.getString("RUNTIME_ERROR"),
                             lastTaskCommunication.getThrowable());
                 }
-
-                taskExecutor.doStart();
-                JobLogger.log("{} attemptCount[{}] is started", this.appName, taskExecutor.getAttemptCount());
                 
                 if (taskExecutor.isTaskFinished() && nowTaskCommunication.getState() == State.SUCCEEDED) {
                     lastTaskCommunication = reportTaskCommunication(nowTaskCommunication, lastTaskCommunication);

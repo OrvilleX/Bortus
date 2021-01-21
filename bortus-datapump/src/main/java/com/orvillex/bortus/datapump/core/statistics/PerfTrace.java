@@ -55,7 +55,7 @@ public class PerfTrace {
             JobLogger.log("PerfTrace instance not be init! must have some error! ");
             synchronized (lock) {
                 if (instance == null) {
-                    instance = new PerfTrace("default", 0, false);
+                    instance = new PerfTrace(Thread.currentThread().getName(), 0, true);
                 }
             }
         }

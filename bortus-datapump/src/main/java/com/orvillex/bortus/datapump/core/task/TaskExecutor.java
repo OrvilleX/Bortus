@@ -23,19 +23,20 @@ public class TaskExecutor {
     private ReaderRunner readerRunner;
     private WriterRunner writerRunner;
     private Communication taskCommunication;
-    private String appName;
     private int attemptCount = 1;
+    private String appName;
 
-    public TaskExecutor(Channel channel, ReaderTask readerTask, WriterTask writerTask) {
-        this.taskCommunication = new Communication();
+    public TaskExecutor(Channel channel, ReaderTask readerTask, WriterTask writerTask, String appName, Communication communication) {
+        this.appName = appName;
+        this.taskCommunication = communication;
         Validate.notNull(this.taskCommunication, String.format("Communication没有注册过"));
         this.channel = channel;
 
         writerRunner = (WriterRunner) generateRunner(TaskType.WRITER, writerTask);
-        this.writerThread = new Thread(writerRunner, String.format("%d--writer", appName));
+        this.writerThread = new Thread(writerRunner, String.format("%s--writer", appName));
 
         readerRunner = (ReaderRunner) generateRunner(TaskType.READER, readerTask);
-        this.readerThread = new Thread(readerRunner, String.format("%d--reader", appName));
+        this.readerThread = new Thread(readerRunner, String.format("%s--reader", appName));
     }
 
     public void doStart() {
