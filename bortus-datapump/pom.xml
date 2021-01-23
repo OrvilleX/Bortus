@@ -58,6 +58,31 @@
 			<artifactId>bortus-job</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+
+        <dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
+		</dependency>
+        <dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>16.0.1</version>
+		</dependency>
+
+        <!--Cassandra数据库-->
+        <dependency>
+			<groupId>com.datastax.cassandra</groupId>
+			<artifactId>cassandra-driver-core</artifactId>
+			<version>3.7.2</version>
+			<classifier>shaded</classifier>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
     </dependencies>
 
     <build>
