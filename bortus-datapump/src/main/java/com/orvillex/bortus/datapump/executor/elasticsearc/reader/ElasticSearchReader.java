@@ -1,4 +1,4 @@
-package com.orvillex.bortus.datapump.executor.elasticsearc;
+package com.orvillex.bortus.datapump.executor.elasticsearc.reader;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.orvillex.bortus.datapump.core.element.*;
 import com.orvillex.bortus.datapump.core.task.ReaderTask;
 import com.orvillex.bortus.datapump.exception.DataPumpException;
+import com.orvillex.bortus.datapump.executor.elasticsearc.ESClientHelper;
 import com.orvillex.bortus.job.log.JobLogger;
 
 import org.apache.commons.lang3.StringUtils;

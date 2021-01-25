@@ -1,4 +1,4 @@
-package com.orvillex.bortus.datapump.executor.elasticsearc;
+package com.orvillex.bortus.datapump.executor.elasticsearc.writer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +10,8 @@ import com.orvillex.bortus.datapump.core.element.Record;
 import com.orvillex.bortus.datapump.core.element.RecordReceiver;
 import com.orvillex.bortus.datapump.core.task.WriterTask;
 import com.orvillex.bortus.datapump.exception.DataPumpException;
+import com.orvillex.bortus.datapump.executor.elasticsearc.ESClientHelper;
+import com.orvillex.bortus.datapump.executor.elasticsearc.ESImport;
 
 /**
  * ElasticSearch写入

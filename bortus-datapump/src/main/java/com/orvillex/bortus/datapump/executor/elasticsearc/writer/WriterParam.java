@@ -1,6 +1,8 @@
-package com.orvillex.bortus.datapump.executor.elasticsearc;
+package com.orvillex.bortus.datapump.executor.elasticsearc.writer;
 
 import java.util.List;
+
+import com.orvillex.bortus.datapump.executor.elasticsearc.AbstractParam;
 
 import lombok.Data;
 
