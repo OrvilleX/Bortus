@@ -1,4 +1,4 @@
-package com.orvillex.bortus.datapump.executor.cassandra;
+package com.orvillex.bortus.datapump.executor.cassandra.reader;
 
 import com.alibaba.fastjson.JSON;
 import com.datastax.driver.core.Cluster;

@@ -95,6 +95,13 @@
              <artifactId>transport</artifactId>
              <version>5.5.3</version>
         </dependency>
+
+        <!--HBase数据库-->
+        <dependency>
+            <groupId>com.aliyun.phoenix</groupId>
+            <artifactId>ali-phoenix-shaded-thin-client</artifactId>
+            <version>5.1.0-HBase-2.0.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>

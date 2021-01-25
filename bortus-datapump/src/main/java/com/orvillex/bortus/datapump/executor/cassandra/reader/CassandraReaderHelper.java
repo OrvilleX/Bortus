@@ -1,4 +1,4 @@
-package com.orvillex.bortus.datapump.executor.cassandra;
+package com.orvillex.bortus.datapump.executor.cassandra.reader;
 
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
