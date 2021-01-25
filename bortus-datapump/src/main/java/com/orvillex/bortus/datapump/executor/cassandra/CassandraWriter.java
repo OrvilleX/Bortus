@@ -24,8 +24,6 @@ import com.orvillex.bortus.datapump.core.element.Record;
 import com.orvillex.bortus.datapump.core.element.RecordReceiver;
 import com.orvillex.bortus.datapump.core.task.WriterTask;
 import com.orvillex.bortus.datapump.exception.DataPumpException;
-import com.orvillex.bortus.datapump.executor.cassandra.params.WriterParam;
-import com.orvillex.bortus.datapump.executor.cassandra.utils.CassandraWriterHelper;
 import com.orvillex.bortus.job.log.JobLogger;
 
 /**

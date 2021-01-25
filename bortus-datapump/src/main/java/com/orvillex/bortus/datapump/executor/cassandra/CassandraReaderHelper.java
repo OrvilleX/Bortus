@@ -1,4 +1,4 @@
-package com.orvillex.bortus.datapump.executor.cassandra.utils;
+package com.orvillex.bortus.datapump.executor.cassandra;
 
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
@@ -29,7 +29,6 @@ import com.google.common.reflect.TypeToken;
 import com.orvillex.bortus.datapump.core.collector.TaskCollector;
 import com.orvillex.bortus.datapump.core.element.*;
 import com.orvillex.bortus.datapump.exception.DataPumpException;
-import com.orvillex.bortus.datapump.executor.cassandra.params.ReaderParam;
 import com.orvillex.bortus.job.log.JobLogger;
 
 import org.apache.commons.codec.binary.Base64;

@@ -10,8 +10,6 @@ import com.datastax.driver.core.SimpleStatement;
 import com.orvillex.bortus.datapump.core.element.Record;
 import com.orvillex.bortus.datapump.core.element.RecordSender;
 import com.orvillex.bortus.datapump.core.task.ReaderTask;
-import com.orvillex.bortus.datapump.executor.cassandra.params.ReaderParam;
-import com.orvillex.bortus.datapump.executor.cassandra.utils.CassandraReaderHelper;
 import com.orvillex.bortus.job.log.JobLogger;
 
 /**

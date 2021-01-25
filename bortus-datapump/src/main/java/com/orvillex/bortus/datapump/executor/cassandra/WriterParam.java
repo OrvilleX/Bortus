@@ -1,4 +1,4 @@
-package com.orvillex.bortus.datapump.executor.cassandra.params;
+package com.orvillex.bortus.datapump.executor.cassandra;
 
 import java.util.List;
 

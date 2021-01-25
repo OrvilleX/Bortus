@@ -1,4 +1,4 @@
-package com.orvillex.bortus.datapump.executor.cassandra.utils;
+package com.orvillex.bortus.datapump.executor.cassandra;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
