@@ -1,8 +1,9 @@
-package com.orvillex.bortus.datapump.executor.hbase.reader;
+package com.orvillex.bortus.datapump.executor.hbase;
 
-public class Constant {
+public final class Constant {
     public static final String PK_TYPE = "pkType";
     public static final Object PK_TYPE_STRING = "pkTypeString";
+    public static final String DEFAULT_NULL_MODE = "skip";
     public static final Object PK_TYPE_LONG = "pkTypeLong";
     public static final String DEFAULT_SERIALIZATION = "PROTOBUF";
     public static final String CONNECT_STRING_TEMPLATE = "jdbc:phoenix:thin:url=%s;serialization=%s";
@@ -13,4 +14,15 @@ public class Constant {
     public static String QUERY_MIN_MAX_TEMPLATE = "SELECT MIN(%s),MAX(%s) FROM %s";
     public static String QUERY_COLUMN_TYPE_TEMPLATE = "SELECT %s FROM %s LIMIT 1";
     public static String QUERY_SQL_PER_SPLIT = "querySqlPerSplit";
+
+    public static final int DEFAULT_BATCH_ROW_COUNT = 256;
+    public static final int TYPE_UNSIGNED_TINYINT = 11;
+    public static final int TYPE_UNSIGNED_SMALLINT = 13;
+    public static final int TYPE_UNSIGNED_INTEGER = 9;
+    public static final int TYPE_UNSIGNED_LONG = 10;
+    public static final int TYPE_UNSIGNED_FLOAT = 14;
+    public static final int TYPE_UNSIGNED_DOUBLE = 15;
+    public static final int TYPE_UNSIGNED_DATE = 19;
+    public static final int TYPE_UNSIGNED_TIME = 18;
+    public static final int TYPE_UNSIGNED_TIMESTAMP = 20;
 }

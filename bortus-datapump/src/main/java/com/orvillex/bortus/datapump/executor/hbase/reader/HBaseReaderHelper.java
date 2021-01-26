@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.orvillex.bortus.datapump.exception.DataPumpException;
+import com.orvillex.bortus.datapump.executor.hbase.Constant;
 import com.orvillex.bortus.job.log.JobLogger;
 
 import org.apache.commons.lang3.StringUtils;

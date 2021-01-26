@@ -92,6 +92,73 @@
 
 ### 2.1 配置示例  
 
-
+```json
+{
+    "batchSize": "100",
+    "column": [
+        "UID",
+        "TS",
+        "EVENTID",
+        "CONTENT"
+    ],
+    "queryServerAddress": "http://127.0.0.1:8765",
+    "nullMode": "skip",
+    "table": "目标hbase表名，大小写有关"
+}
+```
 
 ### 2.2 参数说明
+
+* **name**
+
+   * 描述：插件名字，必须是`hbase11xsqlwriter`
+   * 必选：是
+   * 默认值：无
+   
+* **schema**
+
+	* 描述：表所在的schema
+	
+	* 必选：否 <br />
+ 
+	* 默认值：无 <br />
+	
+* **table**
+
+   * 描述：要导入的表名，大小写敏感，通常phoenix表都是**大写**表名
+   * 必选：是
+   * 默认值：无
+
+* **column**
+
+   * 描述：列名，大小写敏感，通常phoenix的列名都是**大写**。
+       * 需要注意列的顺序，必须与reader输出的列的顺序一一对应。
+       * 不需要填写数据类型，会自动从phoenix获取列的元数据
+   * 必选：是
+   * 默认值：无
+
+* **queryServerAddress**
+
+   * 描述：Phoenix QueryServer地址，为必填项，格式：http://${hostName}:${ip}，如http://172.16.34.58:8765
+   * 必选：是
+   * 默认值：无
+   
+* **serialization**
+ 
+    * 描述：QueryServer使用的序列化协议
+	* 必选：否 
+	* 默认值：PROTOBUF
+	
+* **batchSize**
+
+   * 描述：批量写入的最大行数
+   * 必选：否
+   * 默认值：256
+
+* **nullMode**
+
+   * 描述：读取到的列值为null时，如何处理。目前有两种方式：
+      * skip：跳过这一列，即不插入这一列(如果该行的这一列之前已经存在，则会被删除)
+      * empty：插入空值，值类型的空值是0，varchar的空值是空字符串
+   * 必选：否
+   * 默认值：skip
