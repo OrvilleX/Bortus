@@ -15,6 +15,11 @@
 	<description>ds</description>
 	<url>https://orvillex.com</url>
 
+    <properties>
+        <hive.version>1.1.1</hive.version>
+        <hadoop.version>2.7.1</hadoop.version>
+    </properties>
+
     <dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -102,6 +107,13 @@
             <artifactId>ali-phoenix-shaded-thin-client</artifactId>
             <version>5.1.0-HBase-2.0.0.2</version>
         </dependency>
+
+        <!--mongodb数据库-->
+        <dependency>
+		  <groupId>org.mongodb</groupId>
+		  <artifactId>mongo-java-driver</artifactId>
+		  <version>3.2.2</version>
+		</dependency>
     </dependencies>
 
     <build>
