@@ -11,7 +11,7 @@
     <artifactId>bortus-manager</artifactId>
     <packaging>jar</packaging>
     
-    <name>Web管理平台</name>
+    <name>web manager</name>
 	<description>ds</description>
 	<url>https://orvillex.com</url>
 
@@ -216,6 +216,18 @@
 			<artifactId>bortus-job</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+
+        <!--微信小程序SDK-->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>4.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

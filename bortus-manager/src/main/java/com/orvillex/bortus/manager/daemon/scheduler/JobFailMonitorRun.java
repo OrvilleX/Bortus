@@ -1,6 +1,7 @@
 package com.orvillex.bortus.manager.daemon.scheduler;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.orvillex.bortus.manager.alarm.JobAlarmer;
 import com.orvillex.bortus.manager.modules.scheduler.core.trigger.JobTriggerPool;
@@ -42,15 +43,15 @@ public class JobFailMonitorRun implements Runnable {
     public void run() {
         while (!toStop) {
             try {
-                List<Long> failLogIds = jobLogService.findFailJobLogIds(1000L);
+                List<Integer> failLogIds = jobLogService.findFailJobLogIds(1000L);
                 if (failLogIds != null && !failLogIds.isEmpty()) {
-                    for (long failLogId : failLogIds) {
+                    for (Integer failLogId : failLogIds) {
 
-                        int lockRet = jobLogService.updateAlarmStatus(failLogId, 0, -1);
+                        int lockRet = jobLogService.updateAlarmStatus(Long.valueOf(failLogId), 0, -1);
                         if (lockRet < 1) {
                             continue;
                         }
-                        JobLog log = jobLogService.findById(failLogId);
+                        JobLog log = jobLogService.findById(Long.valueOf(failLogId));
                         JobInfo info = jobInfoService.findById(log.getJobId());
 
                         if (log.getExecutorFailRetryCount() > 0) {
@@ -71,12 +72,20 @@ public class JobFailMonitorRun implements Runnable {
                             newAlarmStatus = 1;
                         }
 
-                        jobLogService.updateAlarmStatus(failLogId, -1, newAlarmStatus);
+                        jobLogService.updateAlarmStatus(Long.valueOf(failLogId), -1, newAlarmStatus);
                     }
                 }
             } catch (Exception e) {
                 if (!toStop) {
                     log.error("job fail monitor thread error:{}", e);
+                }
+            }
+
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (Exception e) {
+                if (!toStop) {
+                    log.error(e.getMessage(), e);
                 }
             }
         }

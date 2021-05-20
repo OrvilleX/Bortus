@@ -29,13 +29,13 @@ public class JobLosedMonitorRun implements Runnable {
         while (!toStop) {
             try {
                 Date losedTime = DateUtil.addMinutes(new Date(), -10);
-                List<Long> losedJobIds = jobLogService.findLostJobIds(losedTime);
+                List<Integer> losedJobIds = jobLogService.findLostJobIds(losedTime);
 
                 if (losedJobIds != null && losedJobIds.size() > 0) {
-                    for (Long logId : losedJobIds) {
+                    for (Integer logId : losedJobIds) {
 
                         JobLog jobLog = new JobLog();
-                        jobLog.setId(logId);
+                        jobLog.setId(Long.valueOf(logId));
 
                         jobLog.setHandleTime(new Date());
                         jobLog.setHandleCode(ReturnT.FAIL_CODE);

@@ -126,8 +126,8 @@ CREATE TABLE `sys_menu` (
   `icon` varchar(255) DEFAULT NULL COMMENT '图标',
   `path` varchar(255) DEFAULT NULL COMMENT '链接地址',
   `i_frame` bit(1) DEFAULT NULL COMMENT '是否外链',
-  `cache` bit(1) DEFAULT '0' COMMENT '缓存',
-  `hidden` bit(1) DEFAULT '0' COMMENT '隐藏',
+  `cache` bit(1) DEFAULT b'0' COMMENT '缓存',
+  `hidden` bit(1) DEFAULT b'0' COMMENT '隐藏',
   `permission` varchar(255) DEFAULT NULL COMMENT '权限',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
   `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
@@ -195,7 +195,7 @@ CREATE TABLE `sys_user` (
   `avatar_name` varchar(255) DEFAULT NULL COMMENT '头像地址',
   `avatar_path` varchar(255) DEFAULT NULL COMMENT '头像真实路径',
   `password` varchar(255) DEFAULT NULL COMMENT '密码',
-  `is_admin` bit(1) DEFAULT '0' COMMENT '是否为admin账号',
+  `is_admin` bit(1) DEFAULT b'0' COMMENT '是否为admin账号',
   `enabled` bigint(20) DEFAULT NULL COMMENT '状态：1启用、0禁用',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
   `update_by` varchar(255) DEFAULT NULL COMMENT '更新着',
@@ -282,7 +282,7 @@ CREATE TABLE `sys_job_info` (
 -- Table structure for sys_job_log
 -- ----------------------------
 CREATE TABLE `sys_job_log` (
-  `log_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
   `job_group` int(11) NOT NULL COMMENT '执行器主键ID',
   `job_id` int(11) NOT NULL COMMENT '任务，主键ID',
   `executor_address` varchar(255) DEFAULT NULL COMMENT '执行器地址，本次执行的地址',
@@ -362,5 +362,6 @@ CREATE TABLE `sys_job_group` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
 
 SET FOREIGN_KEY_CHECKS = 1;

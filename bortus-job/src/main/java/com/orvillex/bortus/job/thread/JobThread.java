@@ -108,7 +108,7 @@ public class JobThread extends Thread {
 					ShardingUtil.setShardingVo(new ShardingUtil.ShardingVO(triggerParam.getBroadcastIndex(),
 							triggerParam.getBroadcastTotal()));
 
-					JobLogger.log("<br>----------- xxl-job job execute start -----------<br>----------- Param:"
+					JobLogger.log("<br>----------- bortus-job job execute start -----------<br>----------- Param:"
 							+ triggerParam.getExecutorParams());
 
 					if (triggerParam.getExecutorTimeout() > 0) {
@@ -128,7 +128,7 @@ public class JobThread extends Thread {
 							executeResult = futureTask.get(triggerParam.getExecutorTimeout(), TimeUnit.SECONDS);
 						} catch (TimeoutException e) {
 
-							JobLogger.log("<br>----------- xxl-job job execute timeout");
+							JobLogger.log("<br>----------- bortus-job job execute timeout");
 							JobLogger.log(e);
 
 							executeResult = new ReturnT<String>(IJobHandler.FAIL_TIMEOUT.getCode(),
@@ -149,7 +149,7 @@ public class JobThread extends Thread {
 										: executeResult.getMsg());
 						executeResult.setContent(null); // limit obj size
 					}
-					JobLogger.log("<br>----------- xxl-job job execute end(finish) -----------<br>----------- ReturnT:"
+					JobLogger.log("<br>----------- bortus-job job execute end(finish) -----------<br>----------- ReturnT:"
 							+ executeResult);
 
 				} else {
@@ -170,7 +170,7 @@ public class JobThread extends Thread {
 				executeResult = new ReturnT<String>(ReturnT.FAIL_CODE, errorMsg);
 
 				JobLogger.log("<br>----------- JobThread Exception:" + errorMsg
-						+ "<br>----------- xxl-job job execute end(error) -----------");
+						+ "<br>----------- bortus-job job execute end(error) -----------");
 			} finally {
 				if (triggerParam != null) {
 					if (!toStop) {
@@ -202,6 +202,6 @@ public class JobThread extends Thread {
 			logger.error(e.getMessage(), e);
 		}
 
-		logger.info(">>>>>>>>>>> xxl-job JobThread stoped, hashCode:{}", Thread.currentThread());
+		logger.info(">>>>>>>>>>> bortus-job JobThread stoped, hashCode:{}", Thread.currentThread());
 	}
 }

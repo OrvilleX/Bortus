@@ -81,7 +81,7 @@ public class EmailJobAlarm implements JobAlarm {
 
                     mailSender.send(mimeMessage);
                 } catch (Exception e) {
-                    log.error(">>>>>>>>>>> xxl-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
+                    log.error(">>>>>>>>>>> bortus-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
                     alarmResult = false;
                 }
             }

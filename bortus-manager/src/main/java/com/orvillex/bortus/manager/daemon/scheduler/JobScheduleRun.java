@@ -161,7 +161,7 @@ public class JobScheduleRun {
                     }
 
                     log.debug(
-                            ">>>>>>>>>>> xxl-job, time-ring beat : " + nowSecond + " = " + Arrays.asList(ringItemData));
+                            ">>>>>>>>>>> bortus-job, time-ring beat : " + nowSecond + " = " + Arrays.asList(ringItemData));
                     if (ringItemData.size() > 0) {
                         // do trigger
                         for (Long jobId : ringItemData) {

@@ -71,7 +71,7 @@ public class JobTriggerPoolImpl implements JobTriggerPool {
                 long start = System.currentTimeMillis();
 
                 try {
-                    trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+                    triggerSelf(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                 } finally {
@@ -125,7 +125,7 @@ public class JobTriggerPoolImpl implements JobTriggerPool {
         }
     }
 
-    public void trigger(Long jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam,
+    public void triggerSelf(Long jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam,
             String executorParam, String addressList) {
 
         JobInfo jobInfo = jobInfoService.findById(jobId);

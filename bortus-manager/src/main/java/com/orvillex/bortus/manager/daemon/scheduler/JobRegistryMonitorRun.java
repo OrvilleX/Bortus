@@ -37,7 +37,7 @@ public class JobRegistryMonitorRun implements Runnable {
                 List<JobGroup> groupList = jobGroupService.findByAddressType(0);
                 if (groupList != null && !groupList.isEmpty()) {
 
-                    List<Long> ids = jobRegistryService.findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
+                    List<Integer> ids = jobRegistryService.findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
                     if (ids != null && ids.size() > 0) {
                         jobRegistryService.delete(new HashSet<>(ids));
                     }

@@ -56,12 +56,12 @@ public interface JobLogService {
     /**
      * 获取丢失的编号
      */
-    List<Long> findLostJobIds(Date losedTime);
+    List<Integer> findLostJobIds(Date losedTime);
 
     /**
      * 获取失败日志编号
      */
-    List<Long> findFailJobLogIds(Long pagesize);
+    List<Integer> findFailJobLogIds(Long pagesize);
 
     /**
      * 更新告警状态

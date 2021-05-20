@@ -41,20 +41,20 @@ public class JobLogController {
     private final JobLogService jobLogService;
 
     @Log("获取日志列表")
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<BasePage<JobLog>> pageList(JobLogCriteria criteria, Pageable pageable) {
         return new ResponseEntity<>(jobLogService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 
     @Log("获取日志详情")
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Object> logDetailPage(@PathVariable Long id) {
         JobLog jobLog = jobLogService.findById(id);
         return new ResponseEntity<Object>(jobLog, HttpStatus.OK);
     }
 
     @Log("获取执行器上任务日志")
-    @GetMapping("/executor")
+    @GetMapping(value = "/executor")
     public ResponseEntity<LogResult> logDetailCat(String executorAddress, long triggerTime, long logId,
             int fromLineNum) {
         try {
@@ -77,7 +77,7 @@ public class JobLogController {
     }
 
     @Log("删除日志")
-    @DeleteMapping("/")
+    @DeleteMapping()
     public ResponseEntity<Object> logKill(@RequestBody Set<Long> ids) {
         for (Long id : ids) {
             JobLog joLog = jobLogService.findById(id);

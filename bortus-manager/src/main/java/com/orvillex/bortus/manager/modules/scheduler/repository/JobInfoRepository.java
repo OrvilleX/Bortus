@@ -19,7 +19,7 @@ public interface JobInfoRepository extends JpaRepository<JobInfo, Long>, JpaSpec
     
     List<JobInfo> findByJobGroup(Long jobGroup);
 
-    @Query(value = "SELECT m.* FROM sys_job_info AS m WHERE m.trigger_status = 1 AND t.trigger_next_time <= ?1 ORDER BY info_id ASC LIMIT ?2", nativeQuery = true)
+    @Query(value = "SELECT m.* FROM sys_job_info AS m WHERE m.trigger_status = 1 AND m.trigger_next_time <= ?1 ORDER BY info_id ASC LIMIT ?2", nativeQuery = true)
     List<JobInfo> scheduleJobQuery(Long maxNextTime, Integer pageSize);
 
     @Modifying

@@ -16,7 +16,7 @@ public interface JobRegistryService {
     /**
      * 查询过期注册ID
      */
-    List<Long> findDead(Integer timeout, Date nowTime);
+    List<Integer> findDead(Integer timeout, Date nowTime);
 
     /**
      * 查询过期注册
@@ -26,7 +26,7 @@ public interface JobRegistryService {
     /**
      * 根据ID删除
      */
-    void delete(Set<Long> ids);
+    void delete(Set<Integer> ids);
 
     /**
      * 删除

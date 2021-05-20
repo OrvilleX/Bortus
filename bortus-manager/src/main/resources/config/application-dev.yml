@@ -39,7 +39,7 @@ spring:
           # 记录慢SQL
           log-slow-sql: true
           slow-sql-millis: 1000
-          merge-sql: true
+          merge-sql: false
         wall:
           config:
             multi-statement-allow: true

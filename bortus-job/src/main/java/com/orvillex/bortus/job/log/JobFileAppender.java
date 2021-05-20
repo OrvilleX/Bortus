@@ -19,7 +19,7 @@ public class JobFileAppender {
     private static Logger logger = LoggerFactory.getLogger(JobFileAppender.class);
     public static final InheritableThreadLocal<String> contextHolder = new InheritableThreadLocal<String>();
 
-    private static String logBasePath = "/data/applogs/xxl-job/jobhandler";
+    private static String logBasePath = "/data/applogs/bortus-job/jobhandler";
     private static String glueSrcPath = logBasePath.concat("/gluesource");
 
     public static void initLogPath(String logPath) {

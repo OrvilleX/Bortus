@@ -74,7 +74,7 @@ public class EmbedServer {
                         new RejectedExecutionHandler() {
                             @Override
                             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                                throw new RuntimeException("xxl-job, EmbedServer bizThreadPool is EXHAUSTED!");
+                                throw new RuntimeException("bortus-job, EmbedServer bizThreadPool is EXHAUSTED!");
                             }
                         });
 
@@ -97,16 +97,16 @@ public class EmbedServer {
 
                     ChannelFuture future = bootstrap.bind(port).sync();
 
-                    logger.info(">>>>>>>>>>> xxl-job remoting server start success, nettype = {}, port = {}", EmbedServer.class, port);
+                    logger.info(">>>>>>>>>>> bortus-job remoting server start success, nettype = {}, port = {}", EmbedServer.class, port);
 
                     startRegistry(appname, address);
                     future.channel().closeFuture().sync();
 
                 } catch (InterruptedException e) {
                     if (e instanceof InterruptedException) {
-                        logger.info(">>>>>>>>>>> xxl-job remoting server stop.");
+                        logger.info(">>>>>>>>>>> bortus-job remoting server stop.");
                     } else {
-                        logger.error(">>>>>>>>>>> xxl-job remoting server error.", e);
+                        logger.error(">>>>>>>>>>> bortus-job remoting server error.", e);
                     }
                 } finally {
                     try {
@@ -128,7 +128,7 @@ public class EmbedServer {
         }
 
         stopRegistry();
-        logger.info(">>>>>>>>>>> xxl-job remoting server destroy success.");
+        logger.info(">>>>>>>>>>> bortus-job remoting server destroy success.");
     }
 
     // ---------------------- registry ----------------------
@@ -224,7 +224,7 @@ public class EmbedServer {
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-            logger.error(">>>>>>>>>>> xxl-job provider netty_http server caught exception", cause);
+            logger.error(">>>>>>>>>>> bortus-job provider netty_http server caught exception", cause);
             ctx.close();
         }
 
@@ -232,7 +232,7 @@ public class EmbedServer {
         public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
             if (evt instanceof IdleStateEvent) {
                 ctx.channel().close();
-                logger.debug(">>>>>>>>>>> xxl-job provider netty_http server close an idle channel.");
+                logger.debug(">>>>>>>>>>> bortus-job provider netty_http server close an idle channel.");
             } else {
                 super.userEventTriggered(ctx, evt);
             }

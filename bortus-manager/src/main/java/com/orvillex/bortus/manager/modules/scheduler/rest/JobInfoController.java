@@ -49,13 +49,13 @@ public class JobInfoController {
     private final JobTriggerPool jobTriggerPool;
 
     @Log("任务列表")
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<BasePage<JobInfo>> pageList(JobInfoCriteria criteria, Pageable pageable) {
         return new ResponseEntity<>(jobInfoService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 
     @Log("添加任务")
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Object> create(@Validated @RequestBody JobInfo jobInfo) {
         jobService.add(jobInfo);
 
@@ -63,14 +63,14 @@ public class JobInfoController {
     }
 
     @Log("更新任务")
-    @PutMapping("/")
+    @PutMapping()
     public ResponseEntity<Object> update(@Validated @RequestBody JobInfo jobInfo) {
         jobService.update(jobInfo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除任务")
-    @DeleteMapping("/")
+    @DeleteMapping()
     public ResponseEntity<Object> remove(@RequestBody Set<Long> ids) {
         for (Long id : ids) {
             jobService.remove(id);
@@ -79,28 +79,28 @@ public class JobInfoController {
     }
 
     @Log("根据执行器获取任务")
-    @GetMapping("/group/{id}")
+    @GetMapping(value = "/group/{id}")
     public ResponseEntity<List<JobInfo>> getJobsByGroup(@PathVariable Long jobGroup) {
         List<JobInfo> list = jobInfoService.findByJobGroup(jobGroup);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @Log("停止任务")
-    @PutMapping("/stop/{id}")
+    @PutMapping(value = "/stop/{id}")
     public ResponseEntity<Object> pause(@PathVariable Long id) {
         jobService.stop(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Log("启动任务")
-    @PutMapping("/start/{id}")
+    @PutMapping(value = "/start/{id}")
     public ResponseEntity<Object> start(@PathVariable Long id) {
         jobService.start(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Log("触发任务")
-    @PutMapping("/trigger")
+    @PutMapping(value = "/trigger")
     public ResponseEntity<Object> triggerJob(Long id, String executorParam, String addressList) {
         if (executorParam == null) {
             executorParam = "";

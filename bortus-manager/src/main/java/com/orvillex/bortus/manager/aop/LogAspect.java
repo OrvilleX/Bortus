@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -26,6 +27,8 @@ import java.util.Objects;
 @Component
 @Aspect
 public class LogAspect {
+    @Value(value = "${spring.logaspect}")
+    private boolean disabled = false;
 
     private final LogService logService;
 
@@ -42,6 +45,9 @@ public class LogAspect {
 
     @Around("logPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (disabled) {
+            return joinPoint.proceed();
+        }
         Object result;
         currentTime.set(System.currentTimeMillis());
         result = joinPoint.proceed();
@@ -57,6 +63,9 @@ public class LogAspect {
      */
     @AfterThrowing(pointcut = "logPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
+        if (disabled) {
+            return;
+        }
         Log log = new Log("ERROR", System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
         log.setExceptionDetail(ThrowableUtil.getStackTrace(e).getBytes());

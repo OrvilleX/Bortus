@@ -92,12 +92,12 @@ public class JobLogFileCleanThread {
                         }
                     }
                 }
-                logger.info(">>>>>>>>>>> xxl-job, executor JobLogFileCleanThread thread destory.");
+                logger.info(">>>>>>>>>>> bortus-job, executor JobLogFileCleanThread thread destory.");
 
             }
         });
         localThread.setDaemon(true);
-        localThread.setName("xxl-job, executor JobLogFileCleanThread");
+        localThread.setName("bortus-job, executor JobLogFileCleanThread");
         localThread.start();
     }
 

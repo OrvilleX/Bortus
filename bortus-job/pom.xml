@@ -9,7 +9,7 @@
     <artifactId>bortus-job</artifactId>
     <packaging>jar</packaging>
 
-	<name>分布式任务</name>
+	<name>job</name>
 	<description>ds</description>
 	<url>https://orvillex.com</url>
 

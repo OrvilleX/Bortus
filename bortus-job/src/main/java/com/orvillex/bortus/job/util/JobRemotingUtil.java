@@ -1,6 +1,8 @@
 package com.orvillex.bortus.job.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.orvillex.bortus.job.biz.models.LogResult;
 import com.orvillex.bortus.job.biz.models.ReturnT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,8 +106,11 @@ public class JobRemotingUtil {
             String resultJson = result.toString();
 
             try {
-                ReturnT returnT = JSON.parseObject(resultJson, ReturnT.class);
-                return returnT;
+                if (returnTargClassOfT == LogResult.class) {
+                    return JSON.parseObject(resultJson, new TypeReference<ReturnT<LogResult>>(){});
+                } else {
+                    return JSON.parseObject(resultJson, ReturnT.class);
+                }
             } catch (Exception e) {
                 logger.error("rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").", e);
                 return new ReturnT<String>(ReturnT.FAIL_CODE,

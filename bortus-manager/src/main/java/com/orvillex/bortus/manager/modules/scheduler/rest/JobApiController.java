@@ -11,6 +11,7 @@ import com.orvillex.bortus.job.biz.models.HandleCallbackParam;
 import com.orvillex.bortus.job.biz.models.RegistryParam;
 import com.orvillex.bortus.job.biz.models.ReturnT;
 import com.orvillex.bortus.job.util.JobRemotingUtil;
+import com.orvillex.bortus.manager.annotation.AnonymousPostMapping;
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.config.scheduler.SchedulerProperties;
 
@@ -35,7 +36,7 @@ public class JobApiController {
     private final SchedulerProperties schedulerProperties;
 
     @Log("管理RPC")
-    @RequestMapping("/{uri}")
+    @AnonymousPostMapping("/{uri}")
     @ResponseBody
     public ReturnT<String> api(HttpServletRequest request, @PathVariable("uri") String uri,
             @RequestBody(required = false) String data) {

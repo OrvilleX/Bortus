@@ -18,7 +18,7 @@ public class JobRegistryServiceImpl implements JobRegistryService {
     private final JobRegistryRepository jobRegistryRepository;
 
     @Override
-    public List<Long> findDead(Integer timeout, Date nowTime) {
+    public List<Integer> findDead(Integer timeout, Date nowTime) {
         return jobRegistryRepository.findDead(timeout, nowTime);
     }
 
@@ -28,9 +28,9 @@ public class JobRegistryServiceImpl implements JobRegistryService {
     }
 
     @Override
-    public void delete(Set<Long> ids) {
-        for(Long id : ids) {
-            jobRegistryRepository.deleteById(id);
+    public void delete(Set<Integer> ids) {
+        for(Integer id : ids) {
+            jobRegistryRepository.deleteById(Long.valueOf(id));
         }
     }
 

@@ -38,7 +38,7 @@ public class TriggerCallbackThread {
 
     public static void pushCallBack(HandleCallbackParam callback){
         getInstance().callBackQueue.add(callback);
-        logger.debug(">>>>>>>>>>> xxl-job, push callback request, logId:{}", callback.getLogId());
+        logger.debug(">>>>>>>>>>> bortus-job, push callback request, logId:{}", callback.getLogId());
     }
 
     /**
@@ -50,7 +50,7 @@ public class TriggerCallbackThread {
 
     public void start() {
         if (JobExecutor.getAdminBizList() == null) {
-            logger.warn(">>>>>>>>>>> xxl-job, executor callback config fail, adminAddresses is null.");
+            logger.warn(">>>>>>>>>>> bortus-job, executor callback config fail, adminAddresses is null.");
             return;
         }
         
@@ -93,12 +93,12 @@ public class TriggerCallbackThread {
                         logger.error(e.getMessage(), e);
                     }
                 }
-                logger.info(">>>>>>>>>>> xxl-job, executor callback thread destory.");
+                logger.info(">>>>>>>>>>> bortus-job, executor callback thread destory.");
 
             }
         });
         triggerCallbackThread.setDaemon(true);
-        triggerCallbackThread.setName("xxl-job, executor TriggerCallbackThread");
+        triggerCallbackThread.setName("bortus-job, executor TriggerCallbackThread");
         triggerCallbackThread.start();
 
 
@@ -123,7 +123,7 @@ public class TriggerCallbackThread {
                         }
                     }
                 }
-                logger.info(">>>>>>>>>>> xxl-job, executor retry callback thread destory.");
+                logger.info(">>>>>>>>>>> bortus-job, executor retry callback thread destory.");
             }
         });
         triggerRetryCallbackThread.setDaemon(true);
@@ -160,14 +160,14 @@ public class TriggerCallbackThread {
             try {
                 ReturnT<String> callbackResult = adminBiz.callback(callbackParamList);
                 if (callbackResult!=null && ReturnT.SUCCESS_CODE == callbackResult.getCode()) {
-                    callbackLog(callbackParamList, "<br>----------- xxl-job job callback finish.");
+                    callbackLog(callbackParamList, "<br>----------- bortus-job job callback finish.");
                     callbackRet = true;
                     break;
                 } else {
-                    callbackLog(callbackParamList, "<br>----------- xxl-job job callback fail, callbackResult:" + callbackResult);
+                    callbackLog(callbackParamList, "<br>----------- bortus-job job callback fail, callbackResult:" + callbackResult);
                 }
             } catch (Exception e) {
-                callbackLog(callbackParamList, "<br>----------- xxl-job job callback error, errorMsg:" + e.getMessage());
+                callbackLog(callbackParamList, "<br>----------- bortus-job job callback error, errorMsg:" + e.getMessage());
             }
         }
         if (!callbackRet) {
@@ -190,7 +190,7 @@ public class TriggerCallbackThread {
     // ---------------------- 回调失败文件 ----------------------
 
     private static String failCallbackFilePath = JobFileAppender.getLogPath().concat(File.separator).concat("callbacklog").concat(File.separator);
-    private static String failCallbackFileName = failCallbackFilePath.concat("xxl-job-callback-{x}").concat(".log");
+    private static String failCallbackFileName = failCallbackFilePath.concat("bortus-job-callback-{x}").concat(".log");
 
     private void appendFailCallbackFile(List<HandleCallbackParam> callbackParamList){
         if (callbackParamList==null || callbackParamList.size()==0) {

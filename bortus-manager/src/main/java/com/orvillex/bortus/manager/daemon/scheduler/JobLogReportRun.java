@@ -47,11 +47,11 @@ public class JobLogReportRun implements Runnable {
 
                     Date todayTo = itemDay.getTime();
 
-                    JobLogReport xxlJobLogReport = new JobLogReport();
-                    xxlJobLogReport.setTriggerDay(todayFrom);
-                    xxlJobLogReport.setRunningCount(0l);
-                    xxlJobLogReport.setSucCount(0l);
-                    xxlJobLogReport.setFailCount(0l);
+                    JobLogReport jobLogReport = new JobLogReport();
+                    jobLogReport.setTriggerDay(todayFrom);
+                    jobLogReport.setRunningCount(0l);
+                    jobLogReport.setSucCount(0l);
+                    jobLogReport.setFailCount(0l);
 
                     LogReportDto triggerCountMap = jobLogService.findLogReport(todayFrom, todayTo);
                     if (triggerCountMap!=null) {
@@ -60,14 +60,14 @@ public class JobLogReportRun implements Runnable {
                         Long triggerDayCountSuc = triggerCountMap.getTriggerDayCountSuc();
                         Long triggerDayCountFail = triggerDayCount - triggerDayCountRunning - triggerDayCountSuc;
 
-                        xxlJobLogReport.setRunningCount(triggerDayCountRunning);
-                        xxlJobLogReport.setSucCount(triggerDayCountSuc);
-                        xxlJobLogReport.setFailCount(triggerDayCountFail);
+                        jobLogReport.setRunningCount(triggerDayCountRunning);
+                        jobLogReport.setSucCount(triggerDayCountSuc);
+                        jobLogReport.setFailCount(triggerDayCountFail);
                     }
 
-                    int ret = jobLogReportService.updateByTriggerDay(xxlJobLogReport);
+                    int ret = jobLogReportService.updateByTriggerDay(jobLogReport);
                     if (ret < 1) {
-                        jobLogReportService.save(xxlJobLogReport);
+                        jobLogReportService.save(jobLogReport);
                     }
                 }
             } catch (Exception e) {

@@ -32,18 +32,18 @@ public class JobLog {
 	private String executorHandler;
 	private String executorParam;
 	private String executorShardingParam;
-	private Integer executorFailRetryCount;
+	private int executorFailRetryCount;
 	
 	// ---- 触发信息
 	private Date triggerTime;
-	private Integer triggerCode;
+	private int triggerCode;
 	private String triggerMsg;
 	
 	// ---- 处理器信息
 	private Date handleTime;
-	private Integer handleCode;
+	private int handleCode;
 	private String handleMsg;
 
 	// ---- 告警信息
-	private Integer alarmStatus;
+	private int alarmStatus;
 }

@@ -1,5 +1,6 @@
 #配置数据源
 spring:
+  logaspect: true
   h2:
     console:
       enabled: true
@@ -18,9 +19,9 @@ spring:
     password:
     type: com.alibaba.druid.pool.DruidDataSource
     schema:
-      - classpath:db/schema.sql
+      - classpath:db/h2/schema.sql
     data:
-      - classpath:db/data.sql
+      - classpath:db/h2/data.sql
     druid:
       # 初始连接数
       initial-size: 5

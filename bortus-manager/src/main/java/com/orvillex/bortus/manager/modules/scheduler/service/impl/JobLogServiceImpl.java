@@ -32,16 +32,16 @@ public class JobLogServiceImpl implements JobLogService {
     public BasePage<JobLog> queryAll(JobLogCriteria criteria, Pageable pageable) {
         return PageUtil.toPage(jobLogRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             Predicate autoPredicate = QueryHelp.getPredicate(root, criteria, criteriaBuilder);
-            if (criteria.getLogStatus() == 1) {
+            if (criteria.getLogStatus() != null && criteria.getLogStatus() == 1) {
                 Predicate logStatus = criteriaBuilder.equal(root.get("handleCode").as(Integer.class), 200);
                 return criteriaBuilder.and(autoPredicate, logStatus);
-            } else if (criteria.getLogStatus() == 2) {
+            } else if (criteria.getLogStatus() != null && criteria.getLogStatus() == 2) {
                 List<Long> notStatus = Arrays.asList(0L, 200L);
                 Predicate triggerCode = criteriaBuilder.not(root.get("triggerCode").in(notStatus));
                 Predicate handleCode = criteriaBuilder.not(root.get("handleCode").in(notStatus));
                 Predicate triggerOrHandle = criteriaBuilder.or(triggerCode, handleCode);
                 return criteriaBuilder.and(autoPredicate, triggerOrHandle);
-            } else if (criteria.getLogStatus() == 3) {
+            } else if (criteria.getLogStatus() != null && criteria.getLogStatus() == 3) {
                 Predicate triggerCode = criteriaBuilder.equal(root.get("triggerCode").as(Integer.class), 200L);
                 Predicate handleCode = criteriaBuilder.equal(root.get("handleCode").as(Integer.class), 0L);
                 return criteriaBuilder.and(autoPredicate, triggerCode, handleCode);
@@ -95,7 +95,7 @@ public class JobLogServiceImpl implements JobLogService {
     }
 
     @Override
-    public List<Long> findLostJobIds(Date losedTime) {
+    public List<Integer> findLostJobIds(Date losedTime) {
         return jobLogRepository.findLostJobIds(losedTime);
     }
 
@@ -105,7 +105,7 @@ public class JobLogServiceImpl implements JobLogService {
     }
 
     @Override
-    public List<Long> findFailJobLogIds(Long pagesize) {
+    public List<Integer> findFailJobLogIds(Long pagesize) {
         return jobLogRepository.findFailJobLogIds(pagesize);
     }
 }

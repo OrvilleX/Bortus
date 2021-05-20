@@ -19,12 +19,38 @@ BEGIN;
 INSERT INTO `sys_dict` VALUES (1, 'user_status', '用户状态', NULL, NULL, '2019-10-27 20:31:36', NULL);
 INSERT INTO `sys_dict` VALUES (4, 'dept_status', '部门状态', NULL, NULL, '2019-10-27 20:31:36', NULL);
 INSERT INTO `sys_dict` VALUES (5, 'job_status', '岗位状态', NULL, NULL, '2019-10-27 20:31:36', NULL);
+INSERT INTO `sys_dict` VALUES (13, 'glue_type', '运行模式', NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict` VALUES (14, 'route_strategy_type', '路由策略', NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict` VALUES (15, 'block_strategy_type', '阻塞方案', NULL, NULL, '2021-05-07 14:28:00', NULL);
 COMMIT;
 
 -- ----------------------------
 -- Records of sys_dict_detail
 -- ----------------------------
 BEGIN;
+INSERT INTO `sys_dict_detail` VALUES (28, 13, 'BEAN', 'BEAN', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (29, 13, 'GLUE(Java)', 'GLUE_GROOVY', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (30, 13, 'GLUE(Shell)', 'GLUE_SHELL', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (31, 13, 'GLUE(Python)', 'GLUE_PYTHON', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (32, 13, 'GLUE(PHP)', 'GLUE_PHP', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (33, 13, 'GLUE(Nodejs)', 'GLUE_NODEJS', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (34, 13, 'GLUE(PowerShell)', 'GLUE_POWERSHELL', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+
+INSERT INTO `sys_dict_detail` VALUES (35, 14, '第一个', 'FIRST', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (36, 14, '最后一个', 'LAST', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (37, 14, '轮询', 'ROUND', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (38, 14, '随机', 'RANDOM', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (39, 14, '一致性HASH', 'CONSISTENT_HASH', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (40, 14, '最不经常使用', 'LEAST_FREQUENTLY_USED', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (41, 14, '最近最久未使用', 'LEAST_RECENTLY_USED', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (42, 14, '故障转移', 'FAILOVER', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (43, 14, '忙碌转移', 'BUSYOVER', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (44, 14, '分片广播', 'SHARDING_BROADCAST', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+
+INSERT INTO `sys_dict_detail` VALUES (45, 15, '顺序执行', 'SERIAL_EXECUTION', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (46, 15, '丢弃之后', 'DISCARD_LATER', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+INSERT INTO `sys_dict_detail` VALUES (47, 15, '丢弃之前', 'COVER_EARLY', 1, NULL, NULL, '2021-05-07 14:28:00', NULL);
+
 INSERT INTO `sys_dict_detail` VALUES (1, 1, '激活', 'true', 1, NULL, NULL, '2019-10-27 20:31:36', NULL);
 INSERT INTO `sys_dict_detail` VALUES (2, 1, '禁用', 'false', 2, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_dict_detail` VALUES (3, 4, '启用', 'true', 1, NULL, NULL, NULL, NULL);
@@ -60,10 +86,6 @@ INSERT INTO `sys_menu` VALUES (5, 1, 3, 1, '菜单管理', 'Menu', 'system/menu/
 INSERT INTO `sys_menu` VALUES (52, 5, 0, 2, '菜单新增', NULL, '', 2, '', '', b'0', b'0', b'0', 'menu:add', NULL, NULL, '2019-10-29 12:55:07', NULL);
 INSERT INTO `sys_menu` VALUES (53, 5, 0, 2, '菜单编辑', NULL, '', 3, '', '', b'0', b'0', b'0', 'menu:edit', NULL, NULL, '2019-10-29 12:55:40', NULL);
 INSERT INTO `sys_menu` VALUES (54, 5, 0, 2, '菜单删除', NULL, '', 4, '', '', b'0', b'0', b'0', 'menu:del', NULL, NULL, '2019-10-29 12:56:00', NULL);
-INSERT INTO `sys_menu` VALUES (28, 1, 3, 1, '任务调度', 'Timing', 'system/timing/Index.vue', 999, 'timing', 'timing', b'0', b'0', b'0', 'timing:list', NULL, NULL, '2019-01-07 20:34:40', NULL);
-INSERT INTO `sys_menu` VALUES (73, 28, 0, 2, '任务新增', NULL, '', 2, '', '', b'0', b'0', b'0', 'timing:add', NULL, NULL, '2019-10-29 13:07:28', NULL);
-INSERT INTO `sys_menu` VALUES (74, 28, 0, 2, '任务编辑', NULL, '', 3, '', '', b'0', b'0', b'0', 'timing:edit', NULL, NULL, '2019-10-29 13:07:41', NULL);
-INSERT INTO `sys_menu` VALUES (75, 28, 0, 2, '任务删除', NULL, '', 4, '', '', b'0', b'0', b'0', 'timing:del', NULL, NULL, '2019-10-29 13:07:54', NULL);
 INSERT INTO `sys_menu` VALUES (35, 1, 3, 1, '部门管理', 'Dept', 'system/dept/Index.vue', 6, 'dept', 'dept', b'0', b'0', b'0', 'dept:list', NULL, NULL, '2019-03-25 09:46:00', NULL);
 INSERT INTO `sys_menu` VALUES (56, 35, 0, 2, '部门新增', NULL, '', 2, '', '', b'0', b'0', b'0', 'dept:add', NULL, NULL, '2019-10-29 12:57:09', NULL);
 INSERT INTO `sys_menu` VALUES (57, 35, 0, 2, '部门编辑', NULL, '', 3, '', '', b'0', b'0', b'0', 'dept:edit', NULL, NULL, '2019-10-29 12:57:27', NULL);
@@ -90,6 +112,12 @@ INSERT INTO `sys_menu` VALUES (83, 10, 0, 1, '图表库', 'Echarts', 'components
 
 INSERT INTO `sys_menu` VALUES (36, NULL, 7, 0, '系统工具', NULL, '', 30, 'sys-tools', 'sys-tools', b'0', b'0', b'0', NULL, NULL, NULL, '2019-03-29 10:57:35', NULL);
 INSERT INTO `sys_menu` VALUES (14, 36, 0, 1, '邮件工具', 'Email', 'tools/email/Index.vue', 35, 'email', 'email', b'0', b'0', b'0', NULL, NULL, NULL, '2018-12-27 10:13:09', NULL);
+
+INSERT INTO `sys_menu` VALUES (90, NULL, 3, 0, '调度管理', NULL, '', 50, 'zujian', 'job', b'0', b'0', b'0', NULL, NULL, NUll, '2021-05-07 14:00:00', NULL);
+INSERT INTO `sys_menu` VALUES (91, 90, 0, 1, '执行器管理', 'Group', 'job/group/Index.vue', 51, 'timing', 'deviceInfo', b'0', b'0', b'0', NULL, NULL, NULL, '2018-12-27 10:13:09', NULL);
+INSERT INTO `sys_menu` VALUES (92, 90, 0, 1, '任务管理', 'Task', 'job/info/Index.vue', 52, 'timing', 'task', b'0', b'0', b'0', NULL, NULL, NULL, '2018-12-27 10:13:09', NULL);
+INSERT INTO `sys_menu` VALUES (93, 90, 0, 1, '任务日志', 'JobLog', 'job/log/Index.vue', 53, 'timing', 'jobLog', b'0', b'0', b'0', NULL, NULL, NULL, '2018-12-27 10:13:09', NULL);
+
 COMMIT;
 
 

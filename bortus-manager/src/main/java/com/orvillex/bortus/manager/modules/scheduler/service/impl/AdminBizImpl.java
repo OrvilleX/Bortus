@@ -28,10 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service(value = "adminBiz")
 public class AdminBizImpl implements AdminBiz {
-    private JobLogService jobLogService;
-    private JobInfoService jobInfoService;
-    private JobRegistryService jobRegistryService;
-    private JobTriggerPool jobTriggerPool;
+    private final JobLogService jobLogService;
+    private final JobInfoService jobInfoService;
+    private final JobRegistryService jobRegistryService;
+    private final JobTriggerPool jobTriggerPool;
 
     @Override
     public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList) {

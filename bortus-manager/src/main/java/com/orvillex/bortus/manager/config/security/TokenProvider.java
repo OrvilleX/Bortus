@@ -71,6 +71,17 @@ public class TokenProvider implements InitializingBean {
     }
 
     /**
+     * 创建Token
+     */
+    public String createToken(String authorities, String name) {
+        return jwtBuilder
+                .setId(IdUtil.simpleUUID())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setSubject(name)
+                .compact();
+    }
+
+    /**
      * 依据Token 获取鉴权信息
      */
     public Authentication getAuthentication(String token) {
