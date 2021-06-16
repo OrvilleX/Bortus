@@ -75,11 +75,11 @@ public class DaemonRun implements InitializingBean, DisposableBean {
         jobRegistryMonitorRun = new JobRegistryMonitorRun(jobGroupService, jobRegistryService);
         jobScheduleRun = new JobScheduleRun(schedulerProperties.getTriggerPoolFastMax(), schedulerProperties.getTriggerPoolSlowMax(), jobInfoService, jobTriggerPool);
 
-        // pool.execute(jobFailMonitor);
-        // pool.execute(jobLogReportRun);
-        // pool.execute(jobLosedMonitorRun);
-        // pool.execute(jobRegistryMonitorRun);
-        // pool.execute(jobScheduleRun.getScheduleRun());
-        // pool.execute(jobScheduleRun.getRingRun());
+        pool.execute(jobFailMonitor);
+        pool.execute(jobLogReportRun);
+        pool.execute(jobLosedMonitorRun);
+        pool.execute(jobRegistryMonitorRun);
+        pool.execute(jobScheduleRun.getScheduleRun());
+        pool.execute(jobScheduleRun.getRingRun());
     }
 }

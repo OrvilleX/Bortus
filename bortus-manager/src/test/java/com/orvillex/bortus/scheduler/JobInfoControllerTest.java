@@ -5,7 +5,6 @@ import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobInfo;
 import com.orvillex.bortus.manager.modules.scheduler.rest.JobInfoController;
 import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobInfoCriteria;
-import com.orvillex.bortus.manager.modules.scheduler.service.dto.JobInfoDto;
 
 import org.junit.Assert;
 import org.junit.Test;
