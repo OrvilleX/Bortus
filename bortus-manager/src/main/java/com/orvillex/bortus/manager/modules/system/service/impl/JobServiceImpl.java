@@ -1,4 +1,4 @@
-package com.orvillex.bortus.manager.modules.system.service;
+package com.orvillex.bortus.manager.modules.system.service.impl;
 
 import com.orvillex.bortus.manager.modules.system.domain.Job;
 import com.orvillex.bortus.manager.entity.BasePage;
@@ -6,6 +6,7 @@ import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.exception.EntityExistException;
 import com.orvillex.bortus.manager.modules.system.repository.JobRepository;
 import com.orvillex.bortus.manager.modules.system.repository.UserRepository;
+import com.orvillex.bortus.manager.modules.system.service.JobService;
 import com.orvillex.bortus.manager.modules.system.service.automap.JobMapper;
 import com.orvillex.bortus.manager.modules.system.service.dto.JobDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.JobQueryCriteria;

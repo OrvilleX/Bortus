@@ -1,8 +1,9 @@
-package com.orvillex.bortus.manager.modules.system.service;
+package com.orvillex.bortus.manager.modules.system.service.impl;
 
 import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Dict;
 import com.orvillex.bortus.manager.modules.system.repository.DictRepository;
+import com.orvillex.bortus.manager.modules.system.service.DictDetailService;
 import com.orvillex.bortus.manager.modules.system.service.automap.DictDetailMapper;
 import com.orvillex.bortus.manager.modules.system.domain.DictDetail;
 import com.orvillex.bortus.manager.modules.system.repository.DictDetailRepository;

@@ -1,4 +1,4 @@
-package com.orvillex.bortus.manager.modules.system.service;
+package com.orvillex.bortus.manager.modules.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.orvillex.bortus.manager.modules.security.service.UserCacheClean;
@@ -12,6 +12,7 @@ import com.orvillex.bortus.manager.exception.BadRequestException;
 import com.orvillex.bortus.manager.exception.EntityExistException;
 import com.orvillex.bortus.manager.modules.system.domain.Role;
 import com.orvillex.bortus.manager.modules.system.repository.UserRepository;
+import com.orvillex.bortus.manager.modules.system.service.RoleService;
 import com.orvillex.bortus.manager.modules.system.service.automap.RoleMapper;
 import com.orvillex.bortus.manager.modules.system.service.automap.RoleSmallMapper;
 import com.orvillex.bortus.manager.modules.system.service.dto.RoleDto;
@@ -51,7 +52,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleDto> queryAll() {
-        Sort sort = new Sort(Sort.Direction.ASC, "level");
+        Sort sort = Sort.by(Sort.Direction.ASC, "level");
         return roleMapper.toDto(roleRepository.findAll(sort));
     }
 

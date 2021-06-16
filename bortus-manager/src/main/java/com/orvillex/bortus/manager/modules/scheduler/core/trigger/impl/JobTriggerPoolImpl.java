@@ -171,7 +171,7 @@ public class JobTriggerPoolImpl implements JobTriggerPool {
 
     private boolean isNumeric(String str) {
         try {
-            int result = Integer.valueOf(str);
+            Integer.valueOf(str);
             return true;
         } catch (NumberFormatException e) {
             return false;

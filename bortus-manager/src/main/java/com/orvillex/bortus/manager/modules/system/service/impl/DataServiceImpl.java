@@ -1,6 +1,9 @@
-package com.orvillex.bortus.manager.modules.system.service;
+package com.orvillex.bortus.manager.modules.system.service.impl;
 
 import com.orvillex.bortus.manager.enums.DataScopeType;
+import com.orvillex.bortus.manager.modules.system.service.DataService;
+import com.orvillex.bortus.manager.modules.system.service.DeptService;
+import com.orvillex.bortus.manager.modules.system.service.RoleService;
 import com.orvillex.bortus.manager.modules.system.service.dto.RoleSmallDto;
 import com.orvillex.bortus.manager.modules.system.domain.Dept;
 import com.orvillex.bortus.manager.modules.system.service.dto.UserDto;

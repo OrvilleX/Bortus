@@ -1,4 +1,4 @@
-package com.orvillex.bortus.manager.modules.system.service;
+package com.orvillex.bortus.manager.modules.system.service.impl;
 
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.RandomUtil;
@@ -8,6 +8,7 @@ import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
 import com.orvillex.bortus.manager.utils.RedisUtils;
 import com.orvillex.bortus.manager.exception.BadRequestException;
+import com.orvillex.bortus.manager.modules.system.service.VerifyService;
 import com.orvillex.bortus.manager.modules.tools.domain.vo.EmailVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

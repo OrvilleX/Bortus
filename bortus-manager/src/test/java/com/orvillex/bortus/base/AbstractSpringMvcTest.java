@@ -1,11 +1,18 @@
 package com.orvillex.bortus.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.orvillex.bortus.manager.AppRun;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +29,13 @@ public class AbstractSpringMvcTest {
   
     @Before
     public void setup() {
+      this.init();
+    }
+
+    protected void init() {
       this.mockMvc = MockMvcBuilders.webAppContextSetup(this.applicationContext).build();
+      MockUserDetails userDetails = new MockUserDetails();
+      UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, "123456");
+      SecurityContextHolder.getContext().setAuthentication(token);
     }
 }

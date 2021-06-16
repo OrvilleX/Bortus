@@ -6,9 +6,9 @@ logging:
 
 spring:
   mqtt:
-    username: 
-    password: 
-    url: 
+    username: 384819
+    password: 5755367039510045632
+    url: tcp://mqtt.heclouds.com:6002
   retrofit:
     url: http://127.0.0.1:8000
 

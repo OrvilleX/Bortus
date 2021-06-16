@@ -45,6 +45,13 @@ spring:
     #连接超时时间
     timeout: 5000
 
+swagger:
+  enable: true
+
+qiniu:
+  accessKey: _CGqnIKGRynUlS2pp3CcJm7IX8itbVHsvBbR3Jy7
+  secretKey: w_maqR43Z1ren4BcRJDj2ZefrkrB7w3WbtBy3wkC
+
 scheduler:
   accessToken: 
   triggerPoolFastMax: 200

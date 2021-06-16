@@ -1,4 +1,4 @@
-package com.orvillex.bortus.manager.modules.system.service;
+package com.orvillex.bortus.manager.modules.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 
@@ -8,6 +8,7 @@ import com.orvillex.bortus.manager.modules.system.repository.DictRepository;
 import com.orvillex.bortus.manager.modules.system.service.dto.DictDetailDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.DictDto;
 import com.orvillex.bortus.manager.utils.*;
+import com.orvillex.bortus.manager.modules.system.service.DictService;
 import com.orvillex.bortus.manager.modules.system.service.automap.DictMapper;
 import com.orvillex.bortus.manager.modules.system.service.dto.DictQueryCriteria;
 import lombok.RequiredArgsConstructor;

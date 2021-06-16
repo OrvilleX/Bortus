@@ -1,8 +1,9 @@
-package com.orvillex.bortus.manager.modules.system.service;
+package com.orvillex.bortus.manager.modules.system.service.impl;
 
 import com.orvillex.bortus.manager.exception.EntityNotFoundException;
 import com.orvillex.bortus.manager.modules.security.service.UserCacheClean;
 import com.orvillex.bortus.manager.modules.system.domain.User;
+import com.orvillex.bortus.manager.modules.system.service.UserService;
 import com.orvillex.bortus.manager.modules.system.service.automap.UserMapper;
 import com.orvillex.bortus.manager.modules.system.service.dto.JobSmallDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.RoleSmallDto;

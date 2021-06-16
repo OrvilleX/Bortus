@@ -1,10 +1,11 @@
-package com.orvillex.bortus.manager.modules.system.service;
+package com.orvillex.bortus.manager.modules.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.orvillex.bortus.manager.enums.DataScopeType;
 import com.orvillex.bortus.manager.modules.system.domain.User;
 import com.orvillex.bortus.manager.modules.system.repository.RoleRepository;
+import com.orvillex.bortus.manager.modules.system.service.DeptService;
 import com.orvillex.bortus.manager.modules.system.service.automap.DeptMapper;
 import com.orvillex.bortus.manager.modules.system.service.dto.DeptDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.DeptQueryCriteria;
@@ -43,7 +44,7 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public List<DeptDto> queryAll(DeptQueryCriteria criteria, Boolean isQuery) throws Exception {
-        Sort sort = new Sort(Sort.Direction.ASC, "deptSort");
+        Sort sort = Sort.by(Sort.Direction.ASC, "deptSort");
         String dataScopeType = SecurityUtils.getDataScopeType();
         if (isQuery) {
             if (dataScopeType.equals(DataScopeType.ALL.getValue())) {

@@ -1,4 +1,4 @@
-package com.orvillex.bortus.manager.modules.system.service;
+package com.orvillex.bortus.manager.modules.system.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -13,6 +13,8 @@ import com.orvillex.bortus.manager.exception.EntityExistException;
 import com.orvillex.bortus.manager.modules.system.domain.Role;
 import com.orvillex.bortus.manager.modules.system.domain.vo.MenuVo;
 import com.orvillex.bortus.manager.modules.system.repository.UserRepository;
+import com.orvillex.bortus.manager.modules.system.service.MenuService;
+import com.orvillex.bortus.manager.modules.system.service.RoleService;
 import com.orvillex.bortus.manager.modules.system.service.automap.MenuMapper;
 import com.orvillex.bortus.manager.modules.system.service.dto.MenuDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.MenuQueryCriteria;
@@ -46,7 +48,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuDto> queryAll(MenuQueryCriteria criteria, Boolean isQuery) throws Exception {
-        Sort sort = new Sort(Sort.Direction.ASC, "menuSort");
+        Sort sort = Sort.by(Sort.Direction.ASC, "menuSort");
         if (isQuery) {
             criteria.setPidIsNull(true);
             List<Field> fields = QueryHelp.getAllFields(criteria.getClass(), new ArrayList<>());
