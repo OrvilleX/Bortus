@@ -16,6 +16,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +30,7 @@ import java.util.Set;
  * @version 0.1
  */
 @RestController
+@Api(tags = "字典")
 @RequiredArgsConstructor
 @RequestMapping("/api/dict")
 public class DictController {
@@ -35,6 +39,7 @@ public class DictController {
     @Log("导出字典数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@x.check('dict:list')")
+    @ApiOperation(value = "导出字典数据")
     public void download(HttpServletResponse response, DictQueryCriteria criteria) throws IOException {
         dictService.download(dictService.queryAll(criteria), response);
     }
@@ -42,6 +47,7 @@ public class DictController {
     @Log("查询字典")
     @GetMapping(value = "/all")
     @PreAuthorize("@x.check('dict:list')")
+    @ApiOperation(value = "查询字典")
     public ResponseEntity<List<DictDto>> queryAll(){
         return new ResponseEntity<>(dictService.queryAll(new DictQueryCriteria()), HttpStatus.OK);
     }
@@ -49,6 +55,7 @@ public class DictController {
     @Log("查询字典")
     @GetMapping
     @PreAuthorize("@x.check('dict:list')")
+    @ApiOperation(value = "查询字典")
     public ResponseEntity<BasePage<DictDto>> query(DictQueryCriteria resources, Pageable pageable){
         return new ResponseEntity<>(dictService.queryAll(resources,pageable),HttpStatus.OK);
     }
@@ -56,6 +63,7 @@ public class DictController {
     @Log("新增字典")
     @PostMapping
     @PreAuthorize("@x.check('dict:add')")
+    @ApiOperation(value = "新增字典")
     public ResponseEntity<Object> create(@Validated @RequestBody Dict resources){
         if (resources.getId() != null) {
             throw new BadRequestException("不能携带ID");
@@ -67,6 +75,7 @@ public class DictController {
     @Log("修改字典")
     @PutMapping
     @PreAuthorize("@x.check('dict:edit')")
+    @ApiOperation(value = "修改字典")
     public ResponseEntity<Object> update(@Validated(BaseEntity.Update.class) @RequestBody Dict resources){
         dictService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -75,6 +84,7 @@ public class DictController {
     @Log("删除字典")
     @DeleteMapping
     @PreAuthorize("@x.check('dict:del')")
+    @ApiOperation(value = "删除字典")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         dictService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);

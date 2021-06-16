@@ -29,11 +29,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@Api(tags = "任务日志")
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/log")
 public class JobLogController {
@@ -42,12 +45,14 @@ public class JobLogController {
 
     @Log("获取日志列表")
     @GetMapping()
+    @ApiOperation(value = "获取日志列表")
     public ResponseEntity<BasePage<JobLog>> pageList(JobLogCriteria criteria, Pageable pageable) {
         return new ResponseEntity<>(jobLogService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 
     @Log("获取日志详情")
     @GetMapping(value = "/{id}")
+    @ApiOperation(value = "获取日志详情")
     public ResponseEntity<Object> logDetailPage(@PathVariable Long id) {
         JobLog jobLog = jobLogService.findById(id);
         return new ResponseEntity<Object>(jobLog, HttpStatus.OK);
@@ -55,6 +60,7 @@ public class JobLogController {
 
     @Log("获取执行器上任务日志")
     @GetMapping(value = "/executor")
+    @ApiOperation(value = "获取执行器上任务日志")
     public ResponseEntity<LogResult> logDetailCat(String executorAddress, long triggerTime, long logId,
             int fromLineNum) {
         try {
@@ -78,6 +84,7 @@ public class JobLogController {
 
     @Log("删除日志")
     @DeleteMapping()
+    @ApiOperation(value = "删除日志")
     public ResponseEntity<Object> logKill(@RequestBody Set<Long> ids) {
         for (Long id : ids) {
             JobLog joLog = jobLogService.findById(id);

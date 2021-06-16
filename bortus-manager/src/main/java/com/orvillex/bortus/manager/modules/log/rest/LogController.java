@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -20,6 +23,7 @@ import java.io.IOException;
  * @version 0.1
  */
 @RestController
+@Api(tags = "审计日志")
 @RequiredArgsConstructor
 @RequestMapping("/api/logs")
 public class LogController {
@@ -28,6 +32,7 @@ public class LogController {
     @Log("导出数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@x.check()")
+    @ApiOperation(value = "导出数据")
     public void download(HttpServletResponse response, LogQueryCriteria criteria) throws IOException {
         criteria.setLogType("INFO");
         logService.download(logService.queryAll(criteria), response);
@@ -36,6 +41,7 @@ public class LogController {
     @Log("导出错误数据")
     @GetMapping(value = "/error/download")
     @PreAuthorize("@x.check()")
+    @ApiOperation(value = "导出错误数据")
     public void downloadErrorLog(HttpServletResponse response, LogQueryCriteria criteria) throws IOException {
         criteria.setLogType("ERROR");
         logService.download(logService.queryAll(criteria), response);
@@ -71,6 +77,7 @@ public class LogController {
     @DeleteMapping(value = "/del/error")
     @Log("删除所有ERROR日志")
     @PreAuthorize("@x.check()")
+    @ApiOperation(value = "删除所有ERROR日志")
     public  ResponseEntity<Object> delAllErrorLog() {
         logService.delAllByError();
         return new ResponseEntity<>(HttpStatus.OK);
@@ -79,6 +86,7 @@ public class LogController {
     @DeleteMapping(value = "/del/info")
     @Log("删除所有INFO日志")
     @PreAuthorize("@x.check()")
+    @ApiOperation(value = "删除所有INFO日志")
     public ResponseEntity<Object> delAllInfoLog() {
         logService.delAllByInfo();
         return new ResponseEntity<>(HttpStatus.OK);

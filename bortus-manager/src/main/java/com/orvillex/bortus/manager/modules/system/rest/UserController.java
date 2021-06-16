@@ -1,6 +1,9 @@
 package com.orvillex.bortus.manager.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.config.RsaProperties;
 import com.orvillex.bortus.manager.entity.BasePage;
@@ -40,6 +43,7 @@ import java.util.stream.Collectors;
  * @version 0.1
  */
 @RestController
+@Api(tags = "用户管理")
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
@@ -53,6 +57,7 @@ public class UserController {
     @Log("导出用户数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@x.check('user:list')")
+    @ApiOperation(value = "导出用户数据")
     public void download(HttpServletResponse response, UserQueryCriteria criteria) throws IOException {
         userService.download(userService.queryAll(criteria), response);
     }
@@ -60,6 +65,7 @@ public class UserController {
     @Log("查询用户")
     @GetMapping
     @PreAuthorize("@x.check('user:list')")
+    @ApiOperation(value = "查询用户")
     public ResponseEntity<BasePage<UserDto>> query(UserQueryCriteria criteria, Pageable pageable){
         if (!ObjectUtils.isEmpty(criteria.getDeptId())) {
             criteria.getDeptIds().add(criteria.getDeptId());
@@ -82,6 +88,7 @@ public class UserController {
     @Log("新增用户")
     @PostMapping
     @PreAuthorize("@x.check('user:add')")
+    @ApiOperation(value = "新增用户")
     public ResponseEntity<Object> create(@Validated @RequestBody User resources){
         checkLevel(resources);
         resources.setPassword(passwordEncoder.encode("123456"));
@@ -92,6 +99,7 @@ public class UserController {
     @Log("修改用户")
     @PutMapping
     @PreAuthorize("@x.check('user:edit')")
+    @ApiOperation(value = "修改用户")
     public ResponseEntity<Object> update(@Validated(User.Update.class) @RequestBody User resources){
         checkLevel(resources);
         userService.update(resources);
@@ -100,6 +108,7 @@ public class UserController {
 
     @Log("修改用户：个人中心")
     @PutMapping(value = "center")
+    @ApiOperation(value = "修改用户：个人中心")
     public ResponseEntity<Object> center(@Validated(User.Update.class) @RequestBody User resources){
         if(!resources.getId().equals(SecurityUtils.getCurrentUserId())){
             throw new BadRequestException("不能修改他人资料");
@@ -111,6 +120,7 @@ public class UserController {
     @Log("删除用户")
     @DeleteMapping
     @PreAuthorize("@x.check('user:del')")
+    @ApiOperation(value = "删除用户")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         for (Long id : ids) {
             Integer currentLevel =  Collections.min(roleService.findByUsersId(SecurityUtils.getCurrentUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
@@ -124,6 +134,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/updatePass")
+    @ApiOperation(value = "修改密码")
     public ResponseEntity<Object> updatePass(@RequestBody UserPassVo passVo) throws Exception {
         String oldPass = RsaUtils.decryptByPrivateKey(RsaProperties.privateKey,passVo.getOldPass());
         String newPass = RsaUtils.decryptByPrivateKey(RsaProperties.privateKey,passVo.getNewPass());
@@ -145,6 +156,7 @@ public class UserController {
 
     @Log("修改邮箱")
     @PostMapping(value = "/updateEmail/{code}")
+    @ApiOperation(value = "修改邮箱")
     public ResponseEntity<Object> updateEmail(@PathVariable String code,@RequestBody User user) throws Exception {
         String password = RsaUtils.decryptByPrivateKey(RsaProperties.privateKey,user.getPassword());
         UserDto userDto = userService.findByName(SecurityUtils.getCurrentUsername());

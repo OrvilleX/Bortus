@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.Objects;
 
 /**
@@ -18,6 +21,7 @@ import java.util.Objects;
  * @version 0.1
  */
 @RestController
+@Api(tags = "验证服务")
 @RequiredArgsConstructor
 @RequestMapping("/api/code")
 public class VerifyController {
@@ -25,6 +29,7 @@ public class VerifyController {
     private final EmailService emailService;
 
     @PostMapping(value = "/resetEmail")
+    @ApiOperation(value = "重置邮件")
     public ResponseEntity<Object> resetEmail(@RequestParam String email){
         EmailVo emailVo = verifyService.sendEmail(email, CacheKey.EMAIL_RESET_EMAIL_CODE);
         emailService.send(emailVo,emailService.find());
@@ -32,6 +37,7 @@ public class VerifyController {
     }
 
     @PostMapping(value = "/email/resetPass")
+    @ApiOperation(value = "重置密码")
     public ResponseEntity<Object> resetPass(@RequestParam String email){
         EmailVo emailVo = verifyService.sendEmail(email, CacheKey.EMAIL_RESET_PWD_CODE);
         emailService.send(emailVo,emailService.find());
@@ -39,6 +45,7 @@ public class VerifyController {
     }
 
     @GetMapping(value = "/validated")
+    @ApiOperation(value = "验证邮箱")
     public ResponseEntity<Object> validated(@RequestParam String email, @RequestParam String code, @RequestParam Integer codeBi){
         CodeBiType biEnum = CodeBiType.find(codeBi);
         switch (Objects.requireNonNull(biEnum)){

@@ -1,6 +1,9 @@
 package com.orvillex.bortus.manager.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.exception.BadRequestException;
@@ -25,6 +28,7 @@ import java.util.*;
  * @version 0.1
  */
 @RestController
+@Api(tags = "部门管理")
 @RequiredArgsConstructor
 @RequestMapping("/api/dept")
 public class DeptController {
@@ -33,6 +37,7 @@ public class DeptController {
     @Log("导出部门数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@x.check('dept:list')")
+    @ApiOperation(value = "导出部门数据")
     public void download(HttpServletResponse response, DeptQueryCriteria criteria) throws Exception {
         deptService.download(deptService.queryAll(criteria, false), response);
     }
@@ -40,6 +45,7 @@ public class DeptController {
     @Log("查询部门")
     @GetMapping
     @PreAuthorize("@x.check('user:list','dept:list')")
+    @ApiOperation(value = "查询部门")
     public ResponseEntity<BasePage<DeptDto>> query(DeptQueryCriteria criteria) throws Exception {
         List<DeptDto> deptDtos = deptService.queryAll(criteria, true);
         return new ResponseEntity<>(PageUtil.toPage(deptDtos, (long)deptDtos.size()), HttpStatus.OK);
@@ -48,6 +54,7 @@ public class DeptController {
     @Log("查询部门")
     @PostMapping("/superior")
     @PreAuthorize("@x.check('user:list','dept:list')")
+    @ApiOperation(value = "查询部门")
     public ResponseEntity<Object> getSuperior(@RequestBody List<Long> ids) {
         Set<DeptDto> deptDtos  = new LinkedHashSet<>();
         for (Long id : ids) {
@@ -61,6 +68,7 @@ public class DeptController {
     @Log("新增部门")
     @PostMapping
     @PreAuthorize("@x.check('dept:add')")
+    @ApiOperation(value = "新增部门")
     public ResponseEntity<Object> create(@Validated @RequestBody Dept resources){
         if (resources.getId() != null) {
             throw new BadRequestException("不能携带ID");
@@ -72,6 +80,7 @@ public class DeptController {
     @Log("修改部门")
     @PutMapping
     @PreAuthorize("@x.check('dept:edit')")
+    @ApiOperation(value = "修改部门")
     public ResponseEntity<Object> update(@Validated(Dept.Update.class) @RequestBody Dept resources){
         deptService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -80,6 +89,7 @@ public class DeptController {
     @Log("删除部门")
     @DeleteMapping
     @PreAuthorize("@x.check('dept:del')")
+    @ApiOperation(value = "删除部门")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         Set<DeptDto> deptDtos = new HashSet<>();
         for (Long id : ids) {

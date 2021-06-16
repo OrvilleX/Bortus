@@ -21,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
@@ -32,6 +34,7 @@ import java.util.*;
  * @version 0.1
  */
 @RestController
+@Api(tags = "执行器组管理")
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/group")
 public class JobGroupController {
@@ -41,12 +44,14 @@ public class JobGroupController {
 
 	@Log("执行器列表")
 	@GetMapping
+	@ApiOperation(value = "执行器列表")
 	public ResponseEntity<BasePage<JobGroup>> pageList(JobGroupCriteria criteria, Pageable pageable) {
 		return new ResponseEntity<>(jobGroupService.queryAll(criteria, pageable), HttpStatus.OK);
 	}
 
 	@Log("创建执行器")
 	@PostMapping
+	@ApiOperation(value = "创建执行器")
 	public ResponseEntity<Object> create(@Validated @RequestBody JobGroup jobGroup) {
 		if (jobGroup.getAppName().length() < 4 || jobGroup.getAppName().length() > 64) {
 			throw new BadRequestException(I18nUtil.getString("jobgroup_field_appname_length"));
@@ -58,6 +63,7 @@ public class JobGroupController {
 
 	@Log("更新执行器")
 	@PutMapping
+	@ApiOperation(value = "更新执行器")
 	public ResponseEntity<Object> update(@Validated @RequestBody JobGroup jobGroup) {
 		if (jobGroup.getAppName().length() < 4 || jobGroup.getAppName().length() > 64) {
 			throw new BadRequestException(I18nUtil.getString("jobgroup_field_appname_length"));
@@ -114,6 +120,7 @@ public class JobGroupController {
 
 	@Log("删除执行器")
 	@DeleteMapping
+	@ApiOperation(value = "删除执行器")
 	public ResponseEntity<Object> remove(@RequestBody Set<Long> ids) {
 		for (Long id : ids) {
 			JobInfoCriteria criteria = new JobInfoCriteria();
@@ -138,6 +145,7 @@ public class JobGroupController {
 
 	@Log("获取执行器明细")
 	@GetMapping("/{id}")
+	@ApiOperation(value = "获取执行器明细")
 	public ResponseEntity<JobGroup> loadById(@PathVariable Long id) {
 		JobGroup jobGroup = jobGroupService.findById(id);
 		return new ResponseEntity<>(jobGroup, HttpStatus.OK);

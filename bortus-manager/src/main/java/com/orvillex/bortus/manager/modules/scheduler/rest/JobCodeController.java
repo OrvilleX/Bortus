@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -29,6 +31,7 @@ import lombok.RequiredArgsConstructor;
  * @version 0.1
  */
 @RestController
+@Api(tags = "源码方式运行的任务详情与编辑")
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/code")
 public class JobCodeController {
@@ -37,6 +40,7 @@ public class JobCodeController {
 
     @Log("获取任务")
     @GetMapping("/")
+    @ApiOperation(value = "获取任务")
     public ResponseEntity<JobLogGlueDto> detail(Long jobId) {
         JobInfo jobInfo = jobInfoService.findById(jobId);
         List<JobLogGlue> jobLogGlues = jobLogGlueService.findByJobId(jobId);
@@ -55,6 +59,7 @@ public class JobCodeController {
 
     @Log("编辑任务")
     @PutMapping("/")
+    @ApiOperation(value = "编辑任务")
     public ResponseEntity<Object> update(Long id, String glueSource, String glueRemark) {
         if (glueRemark == null) {
             throw new BadRequestException(

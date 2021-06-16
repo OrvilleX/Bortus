@@ -1,6 +1,9 @@
 package com.orvillex.bortus.manager.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.modules.system.domain.Menu;
@@ -12,6 +15,8 @@ import com.orvillex.bortus.manager.modules.system.service.dto.MenuDto;
 import com.orvillex.bortus.manager.modules.system.service.dto.MenuQueryCriteria;
 import com.orvillex.bortus.manager.utils.PageUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +32,7 @@ import java.util.*;
  * @version 0.1
  */
 @RestController
+@Api(tags = "菜单管理")
 @RequiredArgsConstructor
 @RequestMapping("/api/menus")
 public class MenuController {
@@ -36,6 +42,7 @@ public class MenuController {
     @Log("导出菜单数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@x.check('menu:list')")
+    @ApiOperation(value = "导出菜单数据")
     public void download(HttpServletResponse response, MenuQueryCriteria criteria) throws Exception {
         menuService.download(menuService.queryAll(criteria, false), response);
     }
@@ -56,6 +63,7 @@ public class MenuController {
     @Log("查询菜单")
     @GetMapping
     @PreAuthorize("@x.check('menu:list')")
+    @ApiOperation(value = "查询菜单")
     public ResponseEntity<BasePage<MenuDto>> query(MenuQueryCriteria criteria) throws Exception {
         List<MenuDto> menuDtoList = menuService.queryAll(criteria, true);
         return new ResponseEntity<>(PageUtil.toPage(menuDtoList, (long)menuDtoList.size()),HttpStatus.OK);
@@ -64,6 +72,7 @@ public class MenuController {
     @Log("查询菜单")
     @PostMapping("/superior")
     @PreAuthorize("@x.check('menu:list')")
+    @ApiOperation(value = "查询菜单")
     public ResponseEntity<Object> getSuperior(@RequestBody List<Long> ids) {
         Set<MenuDto> menuDtos = new LinkedHashSet<>();
         if(CollectionUtil.isNotEmpty(ids)){
@@ -79,6 +88,7 @@ public class MenuController {
     @Log("新增菜单")
     @PostMapping
     @PreAuthorize("@x.check('menu:add')")
+    @ApiOperation(value = "新增菜单")
     public ResponseEntity<Object> create(@Validated @RequestBody Menu resources){
         if (resources.getId() != null) {
             throw new BadRequestException("不能携带ID");
@@ -90,6 +100,7 @@ public class MenuController {
     @Log("修改菜单")
     @PutMapping
     @PreAuthorize("@x.check('menu:edit')")
+    @ApiOperation(value = "修改菜单")
     public ResponseEntity<Object> update(@Validated(Menu.Update.class) @RequestBody Menu resources){
         menuService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -98,6 +109,7 @@ public class MenuController {
     @Log("删除菜单")
     @DeleteMapping
     @PreAuthorize("@x.check('menu:del')")
+    @ApiOperation(value = "删除菜单")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         Set<Menu> menuSet = new HashSet<>();
         for (Long id : ids) {

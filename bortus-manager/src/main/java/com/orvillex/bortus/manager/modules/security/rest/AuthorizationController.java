@@ -149,6 +149,7 @@ public class AuthorizationController {
 
     @Log("用户登录")
     @AnonymousPostMapping(value = "/login")
+    @ApiOperation(value = "用户登录")
     public ResponseEntity<Object> login(@Validated @RequestBody AuthUserDto authUser, HttpServletRequest request) throws Exception {
         // 密码解密
         String password = RsaUtils.decryptByPrivateKey(RsaProperties.privateKey, authUser.getPassword());

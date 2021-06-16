@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
@@ -20,6 +23,7 @@ import java.util.Set;
  * @version 0.1
  */
 @RestController
+@Api(tags = "在线用户管理")
 @RequiredArgsConstructor
 @RequestMapping("/auth/online")
 public class OnlineController {
@@ -34,6 +38,7 @@ public class OnlineController {
     @Log("导出数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@x.check()")
+    @ApiOperation(value = "导出数据")
     public void download(HttpServletResponse response, String filter) throws IOException {
         onlineUserService.download(onlineUserService.getAll(filter), response);
     }

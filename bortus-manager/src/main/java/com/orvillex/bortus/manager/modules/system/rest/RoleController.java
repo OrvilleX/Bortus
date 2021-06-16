@@ -1,6 +1,9 @@
 package com.orvillex.bortus.manager.modules.system.rest;
 
 import cn.hutool.core.lang.Dict;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import com.orvillex.bortus.manager.annotation.Log;
 import com.orvillex.bortus.manager.entity.BasePage;
 import com.orvillex.bortus.manager.utils.SecurityUtils;
@@ -31,6 +34,7 @@ import java.util.stream.Collectors;
  * @version 0.1
  */
 @RestController
+@Api(tags = "角色管理")
 @RequiredArgsConstructor
 @RequestMapping("/api/roles")
 public class RoleController {
@@ -39,6 +43,7 @@ public class RoleController {
     @Log("获取单个role")
     @GetMapping(value = "/{id}")
     @PreAuthorize("@x.check('roles:list')")
+    @ApiOperation(value = "获取单个role")
     public ResponseEntity<Object> query(@PathVariable Long id){
         return new ResponseEntity<>(roleService.findById(id), HttpStatus.OK);
     }
@@ -46,6 +51,7 @@ public class RoleController {
     @Log("导出角色数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@x.check('role:list')")
+    @ApiOperation(value = "导出角色数据")
     public void download(HttpServletResponse response, RoleQueryCriteria criteria) throws IOException {
         roleService.download(roleService.queryAll(criteria), response);
     }
@@ -59,6 +65,7 @@ public class RoleController {
     @Log("查询角色")
     @GetMapping
     @PreAuthorize("@x.check('roles:list')")
+    @ApiOperation(value = "查询角色")
     public ResponseEntity<BasePage<RoleDto>> query(RoleQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(roleService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -71,6 +78,7 @@ public class RoleController {
     @Log("新增角色")
     @PostMapping
     @PreAuthorize("@x.check('roles:add')")
+    @ApiOperation(value = "新增角色")
     public ResponseEntity<Object> create(@Validated @RequestBody Role resources){
         if (resources.getId() != null) {
             throw new BadRequestException("不能携带ID");
@@ -83,6 +91,7 @@ public class RoleController {
     @Log("修改角色")
     @PutMapping
     @PreAuthorize("@x.check('roles:edit')")
+    @ApiOperation(value = "修改角色")
     public ResponseEntity<Object> update(@Validated(Role.Update.class) @RequestBody Role resources){
         getLevels(resources.getLevel());
         roleService.update(resources);
@@ -92,6 +101,7 @@ public class RoleController {
     @Log("修改角色菜单")
     @PutMapping(value = "/menu")
     @PreAuthorize("@x.check('roles:edit')")
+    @ApiOperation(value = "修改角色菜单")
     public ResponseEntity<Object> updateMenu(@RequestBody Role resources){
         RoleDto role = roleService.findById(resources.getId());
         getLevels(role.getLevel());
@@ -102,6 +112,7 @@ public class RoleController {
     @Log("删除角色")
     @DeleteMapping
     @PreAuthorize("@x.check('roles:del')")
+    @ApiOperation(value = "删除角色")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         for (Long id : ids) {
             RoleDto role = roleService.findById(id);

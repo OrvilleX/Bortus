@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -41,6 +43,7 @@ import lombok.RequiredArgsConstructor;
  * @version 0.1
  */
 @RestController
+@Api(tags = "任务信息")
 @RequiredArgsConstructor
 @RequestMapping("/scheduler/info")
 public class JobInfoController {
@@ -50,12 +53,14 @@ public class JobInfoController {
 
     @Log("任务列表")
     @GetMapping()
+    @ApiOperation(value = "任务列表")
     public ResponseEntity<BasePage<JobInfo>> pageList(JobInfoCriteria criteria, Pageable pageable) {
         return new ResponseEntity<>(jobInfoService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 
     @Log("添加任务")
     @PostMapping()
+    @ApiOperation(value = "添加任务")
     public ResponseEntity<Object> create(@Validated @RequestBody JobInfo jobInfo) {
         jobService.add(jobInfo);
 
@@ -64,6 +69,7 @@ public class JobInfoController {
 
     @Log("更新任务")
     @PutMapping()
+    @ApiOperation(value = "更新任务")
     public ResponseEntity<Object> update(@Validated @RequestBody JobInfo jobInfo) {
         jobService.update(jobInfo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -71,6 +77,7 @@ public class JobInfoController {
 
     @Log("删除任务")
     @DeleteMapping()
+    @ApiOperation(value = "删除任务")
     public ResponseEntity<Object> remove(@RequestBody Set<Long> ids) {
         for (Long id : ids) {
             jobService.remove(id);
@@ -80,6 +87,7 @@ public class JobInfoController {
 
     @Log("根据执行器获取任务")
     @GetMapping(value = "/group/{id}")
+    @ApiOperation(value = "根据执行器获取任务")
     public ResponseEntity<List<JobInfo>> getJobsByGroup(@PathVariable Long jobGroup) {
         List<JobInfo> list = jobInfoService.findByJobGroup(jobGroup);
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -87,6 +95,7 @@ public class JobInfoController {
 
     @Log("停止任务")
     @PutMapping(value = "/stop/{id}")
+    @ApiOperation(value = "停止任务")
     public ResponseEntity<Object> pause(@PathVariable Long id) {
         jobService.stop(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -94,6 +103,7 @@ public class JobInfoController {
 
     @Log("启动任务")
     @PutMapping(value = "/start/{id}")
+    @ApiOperation(value = "启动任务")
     public ResponseEntity<Object> start(@PathVariable Long id) {
         jobService.start(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -101,6 +111,7 @@ public class JobInfoController {
 
     @Log("触发任务")
     @PutMapping(value = "/trigger")
+    @ApiOperation(value = "触发任务")
     public ResponseEntity<Object> triggerJob(Long id, String executorParam, String addressList) {
         if (executorParam == null) {
             executorParam = "";
