@@ -59,6 +59,8 @@ spring:
         wall:
           config:
             multi-statement-allow: true
+  flyway:
+    enabled: false
 
 # 登录相关配置
 login:

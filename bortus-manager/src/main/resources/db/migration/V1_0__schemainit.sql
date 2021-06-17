@@ -20,7 +20,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for sys_wx_user
 -- ----------------------------
-CREATE TABLE `wxuser_id` (
+CREATE TABLE `sys_wx_user` (
   `wxuser_id` int(11) NOT NULL AUTO_INCREMENT,
   `wx_open_id` varchar(512) NOT NULL COMMENT '微信OpenId',
   `phone_number` varchar(256) NOT NULL COMMENT '手机号',

@@ -256,6 +256,12 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>7.7.0</version>
         </dependency>
+
+        <!-- flyway 数据库文件版本控制 -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
