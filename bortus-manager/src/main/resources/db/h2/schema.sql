@@ -20,14 +20,21 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for sys_wx_user
 -- ----------------------------
-CREATE TABLE `wxuser_id` (
+CREATE TABLE `sys_wx_user` (
   `wxuser_id` int(11) NOT NULL AUTO_INCREMENT,
   `wx_open_id` varchar(512) NOT NULL COMMENT '微信OpenId',
-  `phone_number` varchar(256) NOT NULL COMMENT '手机号',
+  `phone_number` varchar(256) DEFAULT NULL COMMENT '手机号',
   `nick_name` varchar(256) NOT NULL COMMENT '昵称',
-  `password` varchar(256) NOT NULL COMMENT '密码',
-  `email` varchar(256) NOT NULL COMMENT '邮箱',
+  `password` varchar(256) DEFAULT NULL COMMENT '密码',
+  `email` varchar(256) DEFAULT NULL COMMENT '邮箱',
   `head_url` varchar(256) NOT NULL COMMENT '头像',
+  `city` varchar(128) DEFAULT NULL COMMENT '城市',
+  `province` varchar(128) DEFAULT NULL COMMENT '省份',
+  `gender` int(11) DEFAULT NULL COMMENT '性别',
+  `session_key` varchar(255) DEFAULT NULL COMMENT '会话令牌',
+  `encrypted_data` varchar(512) DEFAULT NULL,
+  `iv` varchar(512) DEFAULT NULL,
+  `source` int(11) DEFAULT NULL COMMENT '用户来源',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
   `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
   `create_time` datetime DEFAULT NULL COMMENT '创建日期',
