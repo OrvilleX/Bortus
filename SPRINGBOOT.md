@@ -109,7 +109,16 @@ spring:
 * update：启动时如果表格式不一致则更新，保留数据;  
 * validate: 启动时校验表格式是否一致，不一致则报错;  
 
-如果使用OnToMany，子对象指向父对象的字段需要可为空，因为JPA是先新增子数据然后更新指向的主键。  
+如果使用OnToMany，子对象指向父对象的字段需要可为空，因为JPA是先新增子数据然后更新指向的主键。本框架已自带
+软删除机制，要求凡继承自`BaseEntity`的模型仓储必须实现`BaseRepository`接口，同时数据库字典中需要增加如下
+所示的字段。  
+
+```sql
+`is_deleted` int(11) NOT NULL DEFAULT '0' COMMENT '软删除',
+```  
+
+完成以上工作后可通过扩展的`void logicDelete(ID id)`方法删除需要删除的数据，对于原生编写的SQL需要用户自行
+增加对应判断字段`where logicDelete = 0`以排除已软删除的数据。  
 
 # 单元测试  
 
