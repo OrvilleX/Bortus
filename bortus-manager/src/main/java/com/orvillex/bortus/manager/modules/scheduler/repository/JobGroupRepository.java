@@ -3,9 +3,8 @@ package com.orvillex.bortus.manager.modules.scheduler.repository;
 import java.util.List;
 
 import com.orvillex.bortus.manager.modules.scheduler.domain.JobGroup;
+import com.orvillex.bortus.manager.repository.BaseRepository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 /**
@@ -13,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
  * @author y-z-f
  * @version 0.1
  */
-public interface JobGroupRepository extends JpaRepository<JobGroup, Long>, JpaSpecificationExecutor<JobGroup> {
+public interface JobGroupRepository extends BaseRepository<JobGroup, Long> {
     
     /**
      * 根据执行器地址类型查询

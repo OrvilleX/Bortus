@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,6 +24,7 @@ import java.sql.Timestamp;
  */
 @Getter
 @Setter
+@Where(clause = "is_deleted = 0")
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity implements Serializable {
@@ -43,6 +45,9 @@ public class BaseEntity implements Serializable {
     @UpdateTimestamp
     @Column(name = "update_time")
     private Timestamp updateTime;
+
+    @Column(name = "is_deleted")
+    private Integer deleted;
 
     public @interface Create {}
     public @interface Update {}

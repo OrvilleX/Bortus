@@ -101,7 +101,7 @@ public class JobGroupServiceImpl implements JobGroupService {
             throw new BadRequestException("拒绝删除，该执行器使用中");
         }
 
-        jobGroupRepository.deleteById(id);
+        jobGroupRepository.logicDelete(id);
     }
 
     @Override
