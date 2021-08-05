@@ -16,11 +16,6 @@ List<CustomModel> selectModelByPkid(@Param("pkid") BigDecimal pkid);
 
 其中需要注意模型必须采用全路径的格式，否则会无法找到具体的类，当然这类方式存在一个致命的缺点就是该类发生变化或者需要修改则无法及时修正，为此建议读者使用`EntityUtils`工具类提供的方法进行转换，而仓储层采用返回`Object[]`的方式接收单个对象，或者`List<Object[]>`接收多个自定义对象，并采用`T caseEntity(Object[] entity, Class<T> clazz)`进行转换即可。  
 
-### 数据库迁移  
-
-考虑到实际生产环境中往往存在数据库的修改，为了保证其能过够智能化并进行版本控制。当前框架已经内置了flyway框架，用户仅仅需要按照V_[版本号]__[文件名].sql的方式用于保存那些进行对数据库
-进行调整的语句，具体文件需要放在`resources/db/migration`文件夹下。[官网文档](https://flywaydb.org/documentation/)
-
 ## 其他部分  
 
 ### 微信登录  
