@@ -256,7 +256,12 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>7.7.0</version>
         </dependency>
-
+        <!--logback输出logstash-->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>5.3</version>
+        </dependency>
         <!-- flyway 数据库文件版本控制 -->
         <dependency>
             <groupId>org.flywaydb</groupId>
