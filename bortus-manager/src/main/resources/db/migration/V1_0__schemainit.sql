@@ -18,24 +18,6 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for sys_wx_user
--- ----------------------------
-CREATE TABLE `sys_wx_user` (
-  `wxuser_id` int(11) NOT NULL AUTO_INCREMENT,
-  `wx_open_id` varchar(512) NOT NULL COMMENT '微信OpenId',
-  `phone_number` varchar(256) NOT NULL COMMENT '手机号',
-  `nick_name` varchar(256) NOT NULL COMMENT '昵称',
-  `password` varchar(256) NOT NULL COMMENT '密码',
-  `email` varchar(256) NOT NULL COMMENT '邮箱',
-  `head_url` varchar(256) NOT NULL COMMENT '头像',
-  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
-  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
-  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`wxuser_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
 -- Table structure for sys_dept
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dept`;
