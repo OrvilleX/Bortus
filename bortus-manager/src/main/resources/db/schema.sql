@@ -14,7 +14,7 @@
  Date: 05/09/2020 10:49:19
 */
 
---SET NAMES utf8mb4;
+-- SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
@@ -151,8 +151,8 @@ CREATE TABLE `sys_menu` (
   `icon` varchar(255) DEFAULT NULL COMMENT '图标',
   `path` varchar(255) DEFAULT NULL COMMENT '链接地址',
   `i_frame` bit(1) DEFAULT NULL COMMENT '是否外链',
-  `cache` bit(1) DEFAULT '0' COMMENT '缓存',
-  `hidden` bit(1) DEFAULT '0' COMMENT '隐藏',
+  `cache` bit(1) DEFAULT b'0' COMMENT '缓存',
+  `hidden` bit(1) DEFAULT b'0' COMMENT '隐藏',
   `permission` varchar(255) DEFAULT NULL COMMENT '权限',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
   `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
@@ -220,7 +220,7 @@ CREATE TABLE `sys_user` (
   `avatar_name` varchar(255) DEFAULT NULL COMMENT '头像地址',
   `avatar_path` varchar(255) DEFAULT NULL COMMENT '头像真实路径',
   `password` varchar(255) DEFAULT NULL COMMENT '密码',
-  `is_admin` bit(1) DEFAULT '0' COMMENT '是否为admin账号',
+  `is_admin` bit(1) DEFAULT b'0' COMMENT '是否为admin账号',
   `enabled` bigint(20) DEFAULT NULL COMMENT '状态：1启用、0禁用',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
   `update_by` varchar(255) DEFAULT NULL COMMENT '更新着',
@@ -307,7 +307,7 @@ CREATE TABLE `sys_job_info` (
 -- Table structure for sys_job_log
 -- ----------------------------
 CREATE TABLE `sys_job_log` (
-  `log_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
   `job_group` int(11) NOT NULL COMMENT '执行器主键ID',
   `job_id` int(11) NOT NULL COMMENT '任务，主键ID',
   `executor_address` varchar(255) DEFAULT NULL COMMENT '执行器地址，本次执行的地址',
@@ -388,6 +388,7 @@ CREATE TABLE `sys_job_group` (
   PRIMARY KEY (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
+
 -- ----------------------------
 -- Table structure for cmm_favorites
 -- ----------------------------
@@ -409,12 +410,14 @@ CREATE TABLE `cmm_favorites` (
 CREATE TABLE `member_info` (
   `member_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL COMMENT '用户主键',
+  `wx_open_id` varchar(128) NOT NULL COMMENT '微信标识',
   `level` int(11) NOT NULL COMMENT '会员等级',
   `experience` int(11) NOT NULL COMMENT '当前经验',
   `qrcode` varchar(128) NOT NULL COMMENT '会员码',
   `integral` int(11) NOT NULL DEFAULT '0' COMMENT '积分总值',
-  `brithday` datetime DEFAULT NULL COMMENT '生日',
+  `brithday` date DEFAULT NULL COMMENT '生日',
   `mailing_address` varchar(255) DEFAULT NULL COMMENT '邮寄地址',
+  `gender` varchar(4) DEFAULT NULL COMMENT '性别',
   `email` varchar(128) DEFAULT NULL COMMENT '邮箱',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
   `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
@@ -464,7 +467,7 @@ CREATE TABLE `member_coupon` (
   `coupon_id` int(11) NOT NULL AUTO_INCREMENT,
   `member_id` int(11) NOT NULL COMMENT '会员主键',
   `type` varchar(128) NOT NULL COMMENT '折扣目标',
-  `min_price` decimal(18,2) NOT NULL COMMENT '最低金额',
+  `min_price` decimal(18,2) DEFAULT NULL COMMENT '最低金额',
   `price` decimal(18,2) DEFAULT NULL COMMENT '折扣金额',
   `discount` decimal(18,2) DEFAULT NULL COMMENT '折扣',
   `expire_time` datetime NOT NULL COMMENT '过期时间',
@@ -509,7 +512,7 @@ CREATE TABLE `cmm_comment` (
   `weight` int(11) NOT NULL DEFAULT '0' COMMENT '评论权重',
   `nick_name` varchar(128) NOT NULL COMMENT '会员昵称',
   `head_url` varchar(255) NOT NULL COMMENT '会员头像',
-  `is_show` bit(1) DEFAULT '0' COMMENT '是否可看',
+  `is_show` bit(1) DEFAULT b'0' COMMENT '是否可看',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
   `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
   `create_time` datetime DEFAULT NULL COMMENT '创建日期',
@@ -529,10 +532,10 @@ CREATE TABLE `cmm_pay` (
   `sync_state` varchar(125) DEFAULT NULL COMMENT '同步状态',
   `third_order_id` varchar(125) DEFAULT NULL COMMENT '三方订单号',
   `third_order_remark` varchar(256) DEFAULT NULL COMMENT '三方备注',
-  `third_callback` bit(1) NOT NULL DEFAULT '0' COMMENT '三方回调',
+  `third_callback` bit(1) NOT NULL DEFAULT b'0' COMMENT '三方回调',
   `commodity_id` int(11) NOT NULL COMMENT '商品编号',
   `commodity_type` varchar(125) NOT NULL COMMENT '商品类型',
-  `is_refund` bit(1) NOT NULL DEFAULT '0' COMMENT '是否为退款',
+  `is_refund` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否为退款',
   `refund_state` varchar(125) DEFAULT NULL COMMENT '退款状态',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
   `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
@@ -548,7 +551,7 @@ CREATE TABLE `cmm_shop_info` (
   `shop_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL COMMENT '名称',
   `main_pic` varchar(255) NOT NULL COMMENT '主图',
-  `per_consumption` decimal(18,2) DEFAULT NULL COMMENT '人均消费',
+  `per_consumption` decimal(18,2) NOT NULL DEFAULT '0' COMMENT '人均消费',
   `grade` decimal(5, 1) NOT NULL DEFAULT '0' COMMENT '评分',
   `latitude` decimal(10, 7) NOT NULL COMMENT '精度',
   `longitude` decimal(10, 7) NOT NULL COMMENT '纬度',
@@ -556,7 +559,7 @@ CREATE TABLE `cmm_shop_info` (
   `phone` varchar(128) NOT NULL COMMENT '电话',
   `opening_hours` varchar(128) NOT NULL COMMENT '营业时间',
   `description` varchar(512) DEFAULT NULL COMMENT '店铺说明',
-  `isshow` bit(1) DEFAULT '0' COMMENT '是否显示',
+  `isshow` bit(1) DEFAULT b'0' COMMENT '是否显示',
   `code` varchar(128) NOT NULL COMMENT '店铺编号',
   `lowest_box` int(11) NOT NULL DEFAULT '0' COMMENT '包厢最低人数',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
@@ -574,11 +577,11 @@ CREATE TABLE `shop_dishes_info` (
   `shop_id` int(11) NOT NULL COMMENT '店铺编号',
   `name` varchar(128) NOT NULL COMMENT '菜品名称',
   `price` decimal(18,2) NOT NULL COMMENT '菜品价格',
-  `is_home_top` bit(1) NOT NULL DEFAULT '0' COMMENT '是否首页显示',
+  `is_home_top` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否首页显示',
   `home_weight` int(11) NOT NULL DEFAULT '0' COMMENT '首页显示权重',
-  `is_shop_top` bit(1) NOT NULL DEFAULT '0' COMMENT '是否店铺首页显示',
+  `is_shop_top` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否店铺首页显示',
   `shop_weight` int(11) NOT NULL DEFAULT '0' COMMENT '店铺首页显示权重',
-  `is_star` bit(1) NOT NULL DEFAULT '0' COMMENT '是否为明星菜品',
+  `is_star` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否为明星菜品',
   `sales_volume` int(11) NOT NULL DEFAULT '0' COMMENT '销量',
   `description` varchar(512) DEFAULT NULL COMMENT '介绍',
   `pic_url` varchar(255) DEFAULT NULL COMMENT '主图',
@@ -601,7 +604,7 @@ CREATE TABLE `shop_activity_info` (
   `main_pic` varchar(255) NOT NULL COMMENT '活动主图',
   `second_pic` varchar(255) DEFAULT NULL COMMENT '活动次图',
   `thrid_pic` varchar(255) DEFAULT NULL COMMENT '活动尾图',
-  `is_show` bit(1) DEFAULT '0' COMMENT '是否显示',
+  `is_show` bit(1) DEFAULT b'0' COMMENT '是否显示',
   `description` varchar(512) NOT NULL COMMENT '活动说明',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
   `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
@@ -696,7 +699,7 @@ CREATE TABLE `comiket_activity` (
   `second_pic` varchar(255) DEFAULT NULL COMMENT '次图地址',
   `third_pic` varchar(255) DEFAULT NULL COMMENT '三图地址',
   `forth_pic` varchar(255) DEFAULT NULL COMMENT '四图地址',
-  `has_booth_owner` bit(1) NOT NULL DEFAULT '0' COMMENT '是否存在摊主',
+  `has_booth_owner` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否存在摊主',
   `ticket_description` varchar(512) DEFAULT NULL COMMENT '票类说明',
   `booth_onwer_pic` varchar(255) DEFAULT NULL COMMENT '摊位图片',
   `booth_onwer_description` varchar(512) DEFAULT NULL COMMENT '摊位说明',
@@ -809,97 +812,4 @@ CREATE TABLE `comiket_order_detail` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`detail_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Table structure for pospal_customer 
--- ----------------------------
-CREATE TABLE `pospal_customer` (
-  `customer_uid` int(11) NOT NULL,
-  `category_name` varchar(128) DEFAULT NULL,
-  `number` varchar(128) NOT NULL,
-  `name` varchar(128) NOT NULL,
-  `point` decimal(18,2) DEFAULT NULL,
-  `discount` decimal(18,2) DEFAULT NULL,
-  `balance` decimal(18,2) DEFAULT NULL,
-  `phone` varchar(128) DEFAULT NULL,
-  `birthday` varchar(128) DEFAULT NULL,
-  `qq` varchar(128) DEFAULT NULL,
-  `email` varchar(128) DEFAULT NULL,
-  `address` varchar(128) DEFAULT NULL,
-  `onAccount` int(11) DEFAULT NULL,
-  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
-  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
-  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`customer_uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Table structure for pospal_shop 
--- ----------------------------
-CREATE TABLE `pospal_shop` (
-  `id` int(11) NOT NULL,
-  `account` varchar(128) DEFAULT NULL,
-  `email` varchar(128) DEFAULT NULL,
-  `address` varchar(128) DEFAULT NULL,
-  `tel` varchar(128) DEFAULT NULL,
-  `company` varchar(128) DEFAULT NULL,
-  `industry` varchar(128) DEFAULT NULL,
-  `appId` varchar(128) NOT NULL,
-  `number` varchar(128) NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
-  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
-  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Table structure for pospal_ticket 
--- ----------------------------
-CREATE TABLE `pospal_ticket` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cashier_uid` int(11) NOT NULL,
-  `customer_uid` int(11) NOT NULL,
-  `sn` varchar(128) DEFAULT NULL,
-  `datetime` varchar(128) DEFAULT NULL,
-  `total_amount` decimal(18,2) NOT NULL,
-  `total_profit` decimal(18,2) NOT NULL,
-  `discount` decimal(18,2) NOT NULL,
-  `external_order_no` varchar(128) DEFAULT NULL,
-  `remark` varchar(128) DEFAULT NULL,
-  `rounding` decimal(18,2) NOT NULL,
-  `ticket_type` varchar(128) DEFAULT NULL,
-  `invalid` int(11) NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
-  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
-  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Table structure for pospal_ticket_item 
--- ----------------------------
-CREATE TABLE `pospal_ticket_item` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ticket_id` int(11) NOT NULL,
-  `name` varchar(128) DEFAULT NULL,
-  `buy_price` decimal(18,2) NOT NULL,
-  `sell_price` decimal(18,2) NOT NULL,
-  `customer_price` decimal(18,2) NOT NULL,
-  `quantity` decimal(18,2) NOT NULL,
-  `discount` decimal(18,2) NOT NULL,
-  `customer_discount` decimal(18,2) NOT NULL,
-  `total_amount` decimal(18,2) NOT NULL,
-  `total_profit` decimal(18,2) NOT NULL,
-  `is_customer_discount` int(11) NOT NULL,
-  `product_uid` int(11) NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
-  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
-  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
 SET FOREIGN_KEY_CHECKS = 1;

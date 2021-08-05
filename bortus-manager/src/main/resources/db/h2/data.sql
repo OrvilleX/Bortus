@@ -208,3 +208,42 @@ BEGIN;
 INSERT INTO `sys_job_info`(`info_id`, `job_group`, `job_cron`, `job_desc`, `create_time`, `update_time`, `author`, `alarm_email`, `executor_route_strategy`, `executor_handler`, `executor_param`, `executor_block_strategy`, `executor_timeout`, `executor_fail_retry_count`, `glue_type`, `glue_source`, `glue_remark`, `glue_updatetime`, `child_job_id`) VALUES (1, 1, '0 0 0 * * ? *', '测试任务1', '2018-11-03 22:21:31', '2018-11-03 22:21:31', 'admin', '', 'FIRST', 'demoJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2018-11-03 22:21:31', '');
 INSERT INTO `sys_job_info`(`info_id`, `job_group`, `job_cron`, `job_desc`, `create_time`, `update_time`, `author`, `alarm_email`, `executor_route_strategy`, `executor_handler`, `executor_param`, `executor_block_strategy`, `executor_timeout`, `executor_fail_retry_count`, `glue_type`, `glue_source`, `glue_remark`, `glue_updatetime`, `child_job_id`) VALUES (2, 1, '0 0 0 * * ? *', '测试任务2', '2018-11-03 22:21:31', '2018-11-03 22:21:31', 'admin', '', 'FIRST', 'demoJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'GLUE(Java)', '', 'GLUE代码初始化', '2018-11-03 22:21:31', '');
 COMMIT;
+
+-- ----------------------------
+-- Records of cmm_shop_info 
+-- ----------------------------
+BEGIN;
+INSERT INTO `cmm_shop_info` VALUES (1, '店铺1', 'https://www.orvillex.com/1.png', 50.0, 3.5, 132.13213, 231.132313, '镇江京口区', '0511-23568564', '周一至周五 9:00-18:00', '介绍1', 1, '10000001', 5, 'admin', '', '2018-11-03 22:21:31', NULL);
+INSERT INTO `cmm_shop_info` VALUES (2, '店铺2', 'https://www.orvillex.com/2.png', 50.0, 3.5, 132.13213, 231.132313, '镇江润州区', '0511-23568564', '周一至周五 9:00-18:00', '介绍2', 1, '10000002', 5, 'admin', '', '2018-11-03 22:21:31', NULL);
+COMMIT;
+
+-- ----------------------------
+-- Records of member_info 
+-- ----------------------------
+BEGIN;
+INSERT INTO `member_info` VALUES (1, 1, 1, 100, '123456', 0, '2021-05-30', '未知', '123@qq.com', 'admin', '', '2018-11-03 22:21:31', NULL);
+INSERT INTO `member_info` VALUES (2, 2, 1, 100, '123456', 0, '2021-05-30', '未知', '456@qq.com', 'admin', '', '2018-11-03 22:21:31', NULL);
+COMMIT;
+
+-- ----------------------------
+-- Records of shop_activity_info
+-- ----------------------------
+BEGIN;
+INSERT INTO `shop_activity_info` VALUES (1, 1, '活动1', 5.5, 'small_pic1', 'main_pic1', 'second_pic1', 'thrid_pic1', 1, 'description1', 'admin', '', '2018-11-03 22:21:31', NULL);
+INSERT INTO `shop_activity_info` VALUES (2, 2, '活动2', 10.7, 'small_pic2', 'main_pic2', 'second_pic2', 'thrid_pic2', 0, 'description2', 'admin', '', '2018-11-03 22:21:31', NULL);
+COMMIT;
+
+-- ----------------------------
+-- Records of shop_activity_time
+-- ----------------------------
+BEGIN;
+INSERT INTO `shop_activity_time` VALUES (1, '2018-11-03 22:21:00', '2018-11-03 22:22:00', 5, 0, '21:00 - 22:00', 1, 5.5, 'admin', '', '2018-11-03 22:21:31', NULL);
+INSERT INTO `shop_activity_time` VALUES (2, '2018-11-03 13:00:00', '2018-11-03 14:00:00', 10, 0, '13:00 - 14:00', 2, 10.7,'admin', '', '2018-11-03 22:21:31', NULL);
+COMMIT;
+
+-- ----------------------------
+-- Records of sys_wx_user
+-- ----------------------------
+BEGIN;
+INSERT INTO `sys_wx_user` VALUES (1, 'ojGUm5TQY0P20KwKxw6IpK6388c8', NULL, '.Ping', NULL, NULL, 'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLOnSyq5FxaSqUdjc9QvicsyZvlhUjiciaDsiaveABdo3lMOVI9aA1CVbvYdELkpJnosHgJQbw6XsdpFg/132', 'Minhang', 'Shanghai', 1, 'fG7ghOMhPMjFogHACoSpfA==', 'CJrwjv9TYxivMVk1VdTdmiTwLtWMTNGabpQ1HIjwjZgRG/kEm7N2iCJOjeRZjc3aUlstmm91vqpj8oXm/IQW0ytR7kUIm9yA+FeyQnWdTybndES48wvcijNTlur/uYEsZQDDXGfYJye4WDffYxZs0zxxl0w9fEjv69KLpPZwb4h2h3fq7azvKgSj9xjhW85ByOV5kt7nrWsu/JxHexAR5zJiefM/96/sDYwoGhjiD0jCPNHaQ4IUpVlBdgWDJJ0z4Ui7N3wrVKOjIIIHq6VrvSz2suyJWNe2DdYok5vokJA3zo7lpJ4vVcbKJgD6XsMI/SWgUivHs4zYDW15Iy9riM/EE8+FQnI8prw1glaevSBxl/7FUgUDjiPH+r984EM4m4Mht0jfzgTtw/AjIjMYdB8wbOAWV25dNIXe2nd09qqafOJhSMLyIQwsICWcgFKU', 'cM4RjhUUUiM37RU2mtiGjQ==', 1, NULL, NULL, NULL, NULL);
+COMMIT;
