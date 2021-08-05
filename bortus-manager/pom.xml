@@ -218,18 +218,6 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 
-        <!--微信小程序SDK-->
-        <dependency>
-            <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-miniapp</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-pay</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-
         <!--swagger-->
         <dependency>
             <groupId>io.springfox</groupId>
