@@ -12,6 +12,13 @@
         </encoder>
     </appender>
 
+    <appender name="druid" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n</pattern>
+            <charset>${log.charset}</charset>
+        </encoder>
+    </appender>
+
     <!--普通日志输出到控制台-->
     <root level="info">
         <appender-ref ref="console" />
@@ -41,5 +48,9 @@
 
     <logger name="jdbc.audit" level="OFF" additivity="false">
         <appender-ref ref="console" />
+    </logger>
+
+    <logger name="com.alibaba.druid.filter.stat.StatFilter" level="ERROR">
+        <appender-ref ref="druid" />
     </logger>
 </configuration>

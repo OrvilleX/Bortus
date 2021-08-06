@@ -12,6 +12,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+  shardingsphere:
+    enabled: false
   datasource:
     platform: h2
     url: jdbc:h2:mem:bortus;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
@@ -59,8 +61,6 @@ spring:
         wall:
           config:
             multi-statement-allow: true
-  flyway:
-    enabled: false
 
 # 登录相关配置
 login:
