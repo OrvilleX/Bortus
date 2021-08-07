@@ -4,7 +4,6 @@ import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.orvillex.bortus.manager.annotation.AnonymousGetMapping;
 import com.orvillex.bortus.manager.handler.SpringContextHolder;
 
-import org.apache.shardingsphere.shardingjdbc.spring.boot.SpringBootConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @EnableAsync
 @RestController
-@SpringBootApplication //(exclude = {DruidDataSourceAutoConfigure.class})
+@SpringBootApplication(exclude = {DruidDataSourceAutoConfigure.class})
 @EnableTransactionManagement
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class AppRun {

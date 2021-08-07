@@ -44,13 +44,6 @@ spring:
       test-on-return: false
       # 检测连接是否有效
       validation-query: select 1
-      # 配置监控统计
-      webStatFilter:
-        enabled: true
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-        reset-enable: false
       filter:
         stat:
           enabled: true

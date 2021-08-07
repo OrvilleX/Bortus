@@ -50,6 +50,10 @@
         <appender-ref ref="console" />
     </logger>
 
+    <!-- <logger name="druid.sql.Statement" level="debug">
+        <appender-ref ref="druid" />
+    </logger> -->
+
     <logger name="com.alibaba.druid.filter.stat.StatFilter" level="ERROR">
         <appender-ref ref="druid" />
     </logger>
