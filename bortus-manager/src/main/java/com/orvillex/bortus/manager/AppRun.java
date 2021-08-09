@@ -1,6 +1,5 @@
 package com.orvillex.bortus.manager;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.orvillex.bortus.manager.annotation.AnonymousGetMapping;
 import com.orvillex.bortus.manager.handler.SpringContextHolder;
 
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @EnableAsync
 @RestController
-@SpringBootApplication(exclude = {DruidDataSourceAutoConfigure.class})
+@SpringBootApplication
 @EnableTransactionManagement
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class AppRun {
