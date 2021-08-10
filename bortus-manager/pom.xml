@@ -249,6 +249,12 @@
             <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
             <version>4.1.1</version>
         </dependency>
+        <!-- websocket插件 -->        
+        <dependency>
+            <groupId>com.corundumstudio.socketio</groupId>
+            <artifactId>netty-socketio</artifactId>
+            <version>1.7.9</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

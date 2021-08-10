@@ -120,6 +120,31 @@ spring:
 完成以上工作后可通过扩展的`void logicDelete(ID id)`方法删除需要删除的数据，对于原生编写的SQL需要用户自行
 增加对应判断字段`where logicDelete = 0`以排除已软删除的数据。  
 
+### 4. netty-socketio使用  
+
+从当前B/S的实际需求出发，使用者对于实时性要求越来越高。而采用以往的轮询或者长连接的技术对于浏览器的压力较大且
+实时度减低，为了彻底解决这类需求，本框架将采用netty-socketio框架为其提供技术支撑。下面我们将介绍如何使用。  
+
+首先服务相关配置以及原生接口的注入已经实现，具体可以参考`config/socketio`文件夹下，对于需要使用其高级特性的用户
+则可以直接引用其实现类进行操作，而其他常规情况下建议使用本框架已封装好的服务已经访问，当然读者也可以对此进行二次开
+发以满足个性化的开发需求，其实现在`service`文件夹下，该文件将统一放置所有通用服务的实现。当前服务提供了对应的方法
+如下。   
+
+```java
+public interface SocketioService {
+    /**
+     * 推送的事件
+     */
+    public static final String PUSH_EVENT = "push_event";
+    
+    /**
+     * 推送信息
+     */
+    void pushMessageToUser(PushMessage pushMessage);
+}
+```
+
+
 # 单元测试  
 
 ### 1. BigDecimal类型测试  
