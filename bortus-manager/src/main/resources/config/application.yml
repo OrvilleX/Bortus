@@ -4,11 +4,6 @@ server:
 spring:
   datasource:
     druid:
-      web-stat-filter:
-        #默认为false，设置为true启动
-        enabled: true
-        url-pattern: "/*"
-        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
       stat-view-servlet:
         url-pattern: "/druid/*"
         login-username: admin

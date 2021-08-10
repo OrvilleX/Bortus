@@ -10,7 +10,7 @@ spring:
         url: jdbc:mysql://localhost:3306/bortus?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
         username: root
         password: 123456
-        filters: stat,wall,slf4j
+        filters: stat,wall
         validationQuery: select 1
         # 初始连接数
         initial-size: 5
@@ -45,7 +45,7 @@ spring:
         url: jdbc:mysql://localhost:3306/bortus?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
         username: root
         password: 123456
-        filters: stat,wall,slf4j
+        filters: stat,wall
         validationQuery: select 1
         # 初始连接数
         initial-size: 5
