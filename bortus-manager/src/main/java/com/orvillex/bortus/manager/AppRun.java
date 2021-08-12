@@ -28,6 +28,8 @@ import co.elastic.apm.attach.ElasticApmAttacher;
 public class AppRun {
 
     public static void main(String[] args) {
+        System.setProperty("sun.stdout.encoding", "UTF-8");
+        System.setProperty("sun.stderr.encoding", "UTF-8");
         ElasticApmAttacher.attach();
         SpringApplication.run(AppRun.class, args);
     }

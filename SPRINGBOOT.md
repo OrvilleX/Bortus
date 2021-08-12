@@ -241,3 +241,14 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 
 其他更多的参数可以参考[官方文档](https://www.elastic.co/guide/en/apm/agent/java/1.x/configuration.html)  
 
+注意，在实际开发中会无法根据编码读取正确编码，这里可以在应用启动的时候采用手动写入系统参数以及通过
+代码植入的方式进行监控。  
+
+```java
+public static void main(String[] args) {
+    System.setProperty("sun.stdout.encoding", "UTF-8");
+    System.setProperty("sun.stderr.encoding", "UTF-8");
+    ElasticApmAttacher.attach();
+    SpringApplication.run(AppRun.class, args);
+}
+```
