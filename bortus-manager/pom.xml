@@ -255,6 +255,12 @@
             <artifactId>netty-socketio</artifactId>
             <version>1.7.9</version>
         </dependency>
+        <!-- elastic-apm插件 -->
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-agent-attach</artifactId>
+            <version>1.25.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

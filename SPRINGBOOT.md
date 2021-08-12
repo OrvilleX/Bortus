@@ -219,3 +219,25 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 
 最终发布后可以通过设置环境变量`SPRING_PROFILES_ACTIVE`来决定具体使用的配置。  
 
+
+# 服务监控  
+
+### Elastic-APM  
+
+为了保障应用的监控，本平台已植入了`elastic-apm`组建服务，为了保障开发人员对其可以快捷
+使用，本教程将给出具体的说明。首先在`resources`文件夹下存在一个`elasticapm`配置文件，
+该文件提供了对应开发测试环境的配置，如果读者希望生产环境也采用这种方式进行配置可以在实际
+发布中通过环境变量调整其对应配置文件。环境变量名为`ELASTIC_APM_CONFIG_FILE`其中的默认值
+设置为`_AGENT_HOME_/elasticapm.properties`，读者可以根据环境调整为`_AGENT_HOME_/elasticapm-prod.properties`
+等各类环境的配置文件。  
+
+如果读者不希望通过配置文件进行设置也可以通过使用环境变量进行独立的设置，具体的环境变量参数
+如下所示。  
+
+* ELASTIC_APM_SERVICE_NAME  
+* ELASTIC_APM_APPLICATION_PACKAGES
+* ELASTIC_APM_SERVER_URL
+* ELASTIC_APM_SECRET_TOKEN  
+
+其他更多的参数可以参考[官方文档](https://www.elastic.co/guide/en/apm/agent/java/1.x/configuration.html)  
+

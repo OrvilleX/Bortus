@@ -13,6 +13,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.elastic.apm.attach.ElasticApmAttacher;
+
 /**
  * 主入口
  * @author y-z-f
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AppRun {
 
     public static void main(String[] args) {
+        ElasticApmAttacher.attach();
         SpringApplication.run(AppRun.class, args);
     }
 
