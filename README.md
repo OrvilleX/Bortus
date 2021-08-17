@@ -13,47 +13,7 @@
 > 命名含义：Bortus一词来自一部低成本的科幻美剧《奥维尔号》，该电视剧致敬了《星际迷航》。虽然是一部
 > 低成本的科幻片，但是其本身的质量、故事和特效依然保持很高。  
 
-## 二、生态共建  
-
-本平台将结合市面常用的各类企业管理软件的数据库设计模型内置完整的解决方案库，用户通过直接下载并激活即
-可无需任何额外的配置就可以实现特定品牌系统的大屏需求。即自动下达分析任务、配置大屏。  
-
-企业或开发者可上传自己的解决方案至解决方案库中，所有使用本平台的用户可根据上传者的版权策略进行下载使
-用，实现生态共建。
-
-## 三、技术特点  
-
-#### 1. 多数据库/平台兼容  
-   首先企业内部存在大量现有的系统，有自研以及采购的部分。为此我们参考了阿里云开源方案DataX设计思路，并
-   在此基础上进行了删减和优化，以满足主流数据库的定时同步与实时同步。  
-   而针对物联网数据同步，不仅仅可以采用以上基于数据库的同步方式，如平台开放了基于RabbitMQ、Kafka等消
-   息中间件的订阅方式均可支持。上述是针对企业自研/私有化的物联网平台，如企业客户使用的是阿里云、华为
-   云与腾讯云的公有云平台，可以直接使用OpenApi进行快速接入，无需额外对接成本。  
-
-#### 2. 灵活扩缩容  
-   本平台全部兼容基于Kubernetes的灵活扩缩容方案，即使是私有部署，依然可以降低企业30%的服务器成本。如企
-   业混合使用云服务器或者全托管云平台，将大幅的降低计算成本。计算节点仅在任务计算任务下达后灵活增加计算
-   节点，计算完成后即回收资源。  
-
-#### 3. 存储分级  
-   通过L1与L2分级技术，实现了冷热数据统一管理。L1级数据将存储在SSD等高速存储中，而L2存储用户可以选择采
-   用HDFS，也可以采用阿里云OSS等云存储方案。通过组合不同的存储方案进一步的降低存储的成本。保证数据的长
-   久留存。并在需要时将L2数据加载致L1存储。  
-
-#### 4. 元数据  
-   所有经由本平台的数据，用户通过元数据管理可管理并维护其元数据。元数据功能将作为自动填充以降低用户在通
-   过Web IDE进行SQL编辑时的难度。对于非导入平台的数据，用户可单独直接接入元数据进行管理。  
-
-#### 5. 流批一体  
-   本平台使用了当前最新的Flink技术，实现了离线计算与实时计算技术栈统一。企业招聘或培训相关人员来说，其
-   技术门槛将得到进一步的降低。  
-
-#### 6. 可视化  
-   数据报表与数据大屏不在需要专业的前端与技术人员进行单独的定制开发。平台植入了社区可视化解决方案。用户
-   仅仅通过拖拽即可实现数据大屏与报表的生成。并且后期数据组件将会不断增加，以满足特定行业的数据可视化需
-   求。  
-
-## 四、系统功能  
+## 二、系统功能  
 
 ### 1. 基础功能  
 
@@ -80,58 +40,363 @@
 #### 日志管理  
 便于查看任务执行过程中产生的所有日志，日志采用了`ElasticSearch`集中存储，并不会在计算节点本地产生日志，以保障日志的有效存储。  
 
-### 3. 同步管理  
+## 三、 通用技术  
 
-用于新增同步方式、查看同步状态，数据库、事件总线与云OpenApi均在此管理模块下。  
+### 1. 仓储开发  
 
-#### 数据源管理  
-用于管理采用数据库、事件订阅和OpenApi接入源的管理，后续实际同步任务需要通过该管理列表进行选择。如果数据源不可用则无法选择，需要通过此管理进行编辑。  
+* 使用自定义结果  
 
-#### 数据同步管理  
-用于实际创建同步任务，用户将需要选择具体的数据源，根据不同类型的数据源将需要用户进一步完善需求。其中数据将根据具体数据库是否支持实时同步供用户选择。平台将自动读取数据库元数据，用户仅通过拖拽方式即可决定需要同步的表与字段。  
+由于仓储层本身使用了JPA框架，在实际研发过程中往往需要返回非Entity对象，为了满足这类需求用户可以采用自定义Pojo的方式，然后通过在`Query`中添加对应代码即可，比如下面这种方式：  
 
-#### 同步记录管理  
-提供定时与非定时列表查看具体的记录，对于定时任务则显示每次同步任务的具体记录情况。实时同步则需要用户选择具体的同步任务，具体的日志讲实时显示，用户可以通过选择时间与标签进行筛选。  
+```java
+@Query(value = "select new com.Vo.CustomModel(a.bookpkid,a.bookcode,a.bookname,b.authorname) " +
+        "FROM BookInfo a LEFT JOIN AuthorInfo b ON a.authorid=b.authorid WHERE a.bookpkid=:pkid")
+List<CustomModel> selectModelByPkid(@Param("pkid") BigDecimal pkid);
+```
 
-#### 元数据管理  
-可以查看已接入数据源的数据库元数据情况以及已导入流数据库中的元数据情况。用户可以自行编辑类型的名称、类型和备注。  
+其中需要注意模型必须采用全路径的格式，否则会无法找到具体的类，当然这类方式存在一个致命的缺点就是该类发生变化或者需要修改则无法及时修正，为此建议读者使用`EntityUtils`工具类提供的方法进行转换，而仓储层采用返回`Object[]`的方式接收单个对象，或者`List<Object[]>`接收多个自定义对象，并采用`T caseEntity(Object[] entity, Class<T> clazz)`进行转换即可。  
 
-### 4. 分析管理  
+### 2. CommandLineRunner  
 
-用户实际任务计算，用户可以新增任务，查看任务完成情况。并支持采用DAG方式规划任务。  
+如果需要在项目运行后执行相关的初始化工作，可以新建一个类并实现`CommandLineRunner`
+接口，通过其中的`run`方法实现相关的工作。如果有多个对象需要注意不能执行阻塞类的代
+码，将会导致后续的执行无法继续执行。  
 
-#### 分析任务管理  
-用于用户创建具体的分析任务，默认可采用拖拽的方式选择需要表以及字段和计算公式进行计算，当然用户也可以通过更高级的SQL与jar方式创建具备更高级计算方式的任务。  
+```java
+@Component
+@Order(value=1)
+public class MyStartupRunner2 implements CommandLineRunner {
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println(">>>>>>>>>>>>>>>服务启动执行 111111 <<<<<<<<<<<<<");
+    }
+}
+```
 
-#### 分析日志管理  
-与同步记录一致，分为批处理与实时计算部分，对于批处理用户可以查看每次处理的日志情况，而实时任务则需要用户选择具体的分析任务，默认实时显示当前的日志信息，通过时间和标签可以进一步的进行检索。  
+### 3. ElasticSearch仓储  
 
-#### DAG管理  
-大多数分析任务通过简单的数据源写入、计算与导出即可完成。实际情况下依然存在复杂的计算情况，那么用户可以通过DAG根据同步的事件触发与分析任务事件所谓条件进行关联。本功能提供可视化的拖拽方式将不同的进行组合。  
+考虑到特殊的检索场景，仅仅依靠传统数据库无法满足这类场景。为此我们需要使用Elastic
+Search来满足。为了使用这种存储我们需要安装对应的依赖在`pom.xml`中。  
 
-### 5. 可视化管理  
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+</dependency>
+```  
 
-用于对数据进行最终的可视化。  
+安装完具体依赖后，我们需要编写对应的模型。  
 
-#### 组件管理  
-用于组织单一数据结果的视图，如柱状图、饼图和折线图等。组件不能用于直接的显示，需要依托于大屏才可以对外进行访问。用户通过组织多个组件从而实现在不同的大屏中进行复用。  
+```java
+@Getter
+@Setter
+@Document(indexName = "customer", type = "customer", shards = 1, replicas = 0, refreshInterval = "-1")
+public class Customer {
+	@Id
+	private String id;
 
-#### 大屏管理  
-用户最终的可视化，通过托管拖拽不同组件进行拼接即可完成大屏。大屏本身支持多种访问方式，可以基于固定的账户密码、开放访问与固定IP等方式。  
+	private String userName;
 
-#### API管理  
-为了便于结果数据的查询，用户可以通过GraphQL查询授权的数据供其他业务系统或第三方机构进行查询访问。  
+	private String address;
 
-### 6. 计划中...  
+	private int age;
+}
+```  
+
+完成模型的编写后，我们就需要编写对应的仓储以实现数据的读取。  
+
+```java
+public interface CustomerRepository extends ElasticsearchRepository<Customer, String> {
+	public List<Customer> findByAddress(String address);
+	public Customer findByUserName(String userName);
+	public int  deleteByUserName(String userName);
+	public Page<Customer> findByAddress(String address, Pageable pageable);
+}
+```  
+
+虽然仓储能够满足我们大多数的需求，但是有时候还是需要更高级的自定义方式来满足
+我们特定场景的需求，比如以下方式。  
+
+```java
+Pageable pageable = new PageRequest(pageNumber, pageSize);
+// Function Score Query
+FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery()
+        .add(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("cityname", searchContent)),
+                ScoreFunctionBuilders.weightFactorFunction(1000))
+        .add(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("description", searchContent)),
+                ScoreFunctionBuilders.weightFactorFunction(100));
+
+// 创建搜索 DSL 查询
+SearchQuery searchQuery = new NativeSearchQueryBuilder()
+        .withPageable(pageable)
+        .withQuery(functionScoreQueryBuilder).build();
+logger.info("\n searchCity(): searchContent [" + searchContent + "] \n DSL  = \n " + searchQuery.getQuery().toString());
+Page<Customer> searchPageResults = customerRepository.search(searchQuery);
+return searchPageResults.getContent();
+```
+
+最后就是填写相关的配置文件项。  
+
+```yml
+spring:
+  data:
+    elasticsearch:
+      cluster-name: es-mongodb
+      cluster-nodes: 192.168.0.53:9300
+```  
+
+### 4. JPA自动生成语句  
+
+如果需要根据模型自动生成数据库语句仅需要将`ddl-auto`配置为其他非`none`值即可，
+比如下方方式：   
+
+```yaml
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+```
+
+其中可选值如下：
+* create：启动时删除数据库中的表并重建;  
+* create-drop: 启动时删除数据库中的表并重建，退出删除数据库表;  
+* update：启动时如果表格式不一致则更新，保留数据;  
+* validate: 启动时校验表格式是否一致，不一致则报错;  
+
+如果使用OnToMany，子对象指向父对象的字段需要可为空，因为JPA是先新增子数据然后更新指向的主键。本框架已自带
+软删除机制，要求凡继承自`BaseEntity`的模型仓储必须实现`BaseRepository`接口，同时数据库字典中需要增加如下
+所示的字段。  
+
+```sql
+`is_deleted` int(11) NOT NULL DEFAULT '0' COMMENT '软删除',
+```  
+
+完成以上工作后可通过扩展的`void logicDelete(ID id)`方法删除需要删除的数据，对于原生编写的SQL需要用户自行
+增加对应判断字段`where logicDelete = 0`以排除已软删除的数据。  
+
+### 5. netty-socketio使用  
+
+从当前B/S的实际需求出发，使用者对于实时性要求越来越高。而采用以往的轮询或者长连接的技术对于浏览器的压力较大且
+实时度减低，为了彻底解决这类需求，本框架将采用netty-socketio框架为其提供技术支撑。下面我们将介绍如何使用。  
+
+首先服务相关配置以及原生接口的注入已经实现，具体可以参考`config/socketio`文件夹下，对于需要使用其高级特性的用户
+则可以直接引用其实现类进行操作，而其他常规情况下建议使用本框架已封装好的服务已经访问，当然读者也可以对此进行二次开
+发以满足个性化的开发需求，其实现在`service`文件夹下，该文件将统一放置所有通用服务的实现。当前服务提供了对应的方法
+如下。   
+
+```java
+public interface SocketioService {
+    /**
+     * 推送的事件
+     */
+    public static final String PUSH_EVENT = "push_event";
+    
+    /**
+     * 推送信息
+     */
+    void pushMessageToUser(PushMessage pushMessage);
+}
+```  
+
+### 6. Hystrix熔断使用  
+
+现如今的系统架构也不同于以往的单体架构，而是朝着多服务的架构，甚至是微服务架构。这么拆分后服务之间的就必然存在远程
+调用问题，而在远程调用的过程中我们往往无法保障对方服务的可靠性，所以产生了各种自定义的错误代码以提供记录。但是这仅
+仅是利用`try...catch...`手段所能达成的效果。其本身也是一种高资源消耗，为了保证服务能够在设定的阈值后自动熔断以减
+少对应用的影响，本框架引入了`hystrix`框架以提供支撑。  
+
+首先需要在引用对应的依赖：  
+
+```xml
+<!-- hystrix 熔断插件 -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+    <version>2.2.2.RELEASE</version>
+</dependency>
+<!-- hystrix 熔断可视化依赖 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```  
+
+完成上述的引用后，我们还需要启用对应的服务并进行配置。首先打开`main`函数并增加`@EnableHystrix`注解以启用该插件。随
+后我们就可以设定全局的规则，打开`application.yml`文件并添加如下内容：  
+
+```yaml
+# Hystrix settings
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            # 线程超时15秒,调用Fallback方法
+            timeoutInMilliseconds: 15000
+      metrics:
+        rollingStats:
+          timeInMilliseconds: 15000
+      circuitBreaker:
+        # 10秒内出现3个以上请求(已临近阀值),并且出错率在50%以上,开启断路器.断开服务,调用Fallback方法
+        requestVolumeThreshold: 3
+        sleepWindowInMilliseconds: 10000
+
+# actuator配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+```  
+
+完成以上的配置后，我们就可以使用其来帮助我们进行服务的熔断降级，下面我们将以一个Rest接口为例进行介绍，当然这里是基于全局默认
+的策略进行配置。  
+
+```java
+  @GetMapping
+  @PreAuthorize("@x.check()")
+  @HystrixCommand(fallbackMethod = "queryError")
+  public ResponseEntity<Object> query(LogQueryCriteria criteria, Pageable pageable) throws IOException {
+      criteria.setLogType("INFO");
+      throw new IOException();
+      //return new ResponseEntity<>(logService.queryAll(criteria,pageable), HttpStatus.OK);
+  }
+  
+  public ResponseEntity<Object> queryError(LogQueryCriteria criteria, Pageable pageable) {
+      criteria.setLogType("INFO");
+      return new ResponseEntity<>(logService.queryAll(criteria,pageable), HttpStatus.OK);
+  }
+```  
+
+这里可以看到我们在需要提供熔断支持的接口上增加了`HystrixCommand`注解，并通过其`fallbackMethod`指定了当出现熔断后需要调用
+的服务方法，这里为了便于进行演示，直接进行了异常抛出。读者可以自行访问即可发现当然出现错误后将自动调用`queryError`方法。当
+然读者也可以自行设定对应的规则，而不许遵从全局的规则，具体的使用方式如下。  
+
+```java
+@HystrixCommand(fallbackMethod = "onError",
+        commandProperties = {
+                @HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
+                @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
+                @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),
+                @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2")},
+        threadPoolProperties = {
+                @HystrixProperty(name = "coreSize", value = "5"),
+                @HystrixProperty(name = "maximumSize", value = "5"),
+                @HystrixProperty(name = "maxQueueSize", value = "10")
+        })
+```  
+
+如果读者希望了解其参数的具体说明与使用可以[参考本文档](https://github.com/Netflix/Hystrix/wiki/Configuration)  
+
+## 四、单元测试  
+
+### 1. BigDecimal类型测试  
+
+如果使用`Assert.assertEquals`对`BigDecimal`进行比较时将会发现虽然值是
+完全一样的但是依然比对失败，针对这种特殊类型我们需要利用其对象本身的`compareTo`
+方法来完成比较，并且最终的值只有等于0才代表相同，所以最终的比较方式应该如下：  
+
+```java
+Assert.assertEquals(item.getPerConsumption().compareTo(saved.getPerConsumption()), 0);
+```  
+
+### 2. No Session问题  
+
+使用存在表关联的情况下，JPA会存在`No Session`的问题，为了解决这个问题只需要在
+对应的测试方法或测试类上加上`Transactional`注解即可。  
+
+## 五、发布构建  
+
+### 1. 基于Docker发布  
+
+为了能够支持`docker`插件，需要在`maven`的配置文件`settings.xml`中增加如下
+内容：  
+
+```xml
+  <pluginGroups>
+    <pluginGroup>com.spotify</pluginGroup>
+  </pluginGroups>
+```  
+
+完成后我们在需要使用Docker进行发布的应用`pom.xml`中增加如下内容：  
+
+```xml
+<!-- Docker maven plugin -->
+<plugin>
+<groupId>com.spotify</groupId>
+<artifactId>docker-maven-plugin</artifactId>
+<version>1.2.2</version>
+<configuration>
+        <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+        <dockerDirectory>src/main/docker</dockerDirectory>
+        <resources>
+        <resource>
+                <targetPath>/</targetPath>
+                <directory>${project.build.directory}</directory>
+                <include>${project.build.finalName}.jar</include>
+        </resource>
+        </resources>
+</configuration>
+</plugin>
+<!-- Docker maven plugin -->
+```  
+
+以及：  
+
+```xml
+<properties>
+        <docker.image.prefix>theme</docker.image.prefix>
+</properties>
+```  
+
+最后我们还需要自行编写对应的`Dockerfile`文件，由于配置中已经指定了对应的配置
+文件所在的目录，所以我们需要在项目目录下的`src/main/docker`新建一个`Dockerfile`
+文件，并在其中写入如下内容：  
+
+```yaml
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+COPY bortus-manager-0.1.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
+
+最终发布后可以通过设置环境变量`SPRING_PROFILES_ACTIVE`来决定具体使用的配置。  
 
 
-## 五、产品里程
+## 六、服务监控  
 
-本项目将采用商业版与社区版双版本进行迭代更新，社区版将采用开源源码的方式贡献给社区。而商业版将保留
-核心功能与算法，用于商业化运作。  
+### 1. Elastic-APM  
 
-- [x] 2021年1月20日完成里程碑一 
-- [ ] 2021年2月19日完成里程碑二
-- [ ] 2021年3月12日完成里程碑三
-- [ ] 2021年3月31日开放SAAS版
-- [ ] 2021年6月1日发布开源社区版
+为了保障应用的监控，本平台已植入了`elastic-apm`组建服务，为了保障开发人员对其可以快捷
+使用，本教程将给出具体的说明。首先在`resources`文件夹下存在一个`elasticapm`配置文件，
+该文件提供了对应开发测试环境的配置，如果读者希望生产环境也采用这种方式进行配置可以在实际
+发布中通过环境变量调整其对应配置文件。环境变量名为`ELASTIC_APM_CONFIG_FILE`其中的默认值
+设置为`_AGENT_HOME_/elasticapm.properties`，读者可以根据环境调整为`_AGENT_HOME_/elasticapm-prod.properties`
+等各类环境的配置文件。  
+
+如果读者不希望通过配置文件进行设置也可以通过使用环境变量进行独立的设置，具体的环境变量参数
+如下所示。  
+
+* ELASTIC_APM_SERVICE_NAME  
+* ELASTIC_APM_APPLICATION_PACKAGES
+* ELASTIC_APM_SERVER_URL
+* ELASTIC_APM_SECRET_TOKEN  
+
+其他更多的参数可以参考[官方文档](https://www.elastic.co/guide/en/apm/agent/java/1.x/configuration.html)  
+
+注意，在实际开发中会无法根据编码读取正确编码，这里可以在应用启动的时候采用手动写入系统参数以及通过
+代码植入的方式进行监控。  
+
+```java
+public static void main(String[] args) {
+    System.setProperty("sun.stdout.encoding", "UTF-8");
+    System.setProperty("sun.stderr.encoding", "UTF-8");
+    ElasticApmAttacher.attach();
+    SpringApplication.run(AppRun.class, args);
+}
+```  
+
