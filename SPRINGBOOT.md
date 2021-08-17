@@ -142,8 +142,99 @@ public interface SocketioService {
      */
     void pushMessageToUser(PushMessage pushMessage);
 }
-```
+```  
 
+### 5. Hystrix熔断使用  
+
+现如今的系统架构也不同于以往的单体架构，而是朝着多服务的架构，甚至是微服务架构。这么拆分后服务之间的就必然存在远程
+调用问题，而在远程调用的过程中我们往往无法保障对方服务的可靠性，所以产生了各种自定义的错误代码以提供记录。但是这仅
+仅是利用`try...catch...`手段所能达成的效果。其本身也是一种高资源消耗，为了保证服务能够在设定的阈值后自动熔断以减
+少对应用的影响，本框架引入了`hystrix`框架以提供支撑。  
+
+首先需要在引用对应的依赖：  
+
+```xml
+<!-- hystrix 熔断插件 -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+    <version>2.2.2.RELEASE</version>
+</dependency>
+<!-- hystrix 熔断可视化依赖 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```  
+
+完成上述的引用后，我们还需要启用对应的服务并进行配置。首先打开`main`函数并增加`@EnableHystrix`注解以启用该插件。随
+后我们就可以设定全局的规则，打开`application.yml`文件并添加如下内容：  
+
+```yaml
+# Hystrix settings
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            # 线程超时15秒,调用Fallback方法
+            timeoutInMilliseconds: 15000
+      metrics:
+        rollingStats:
+          timeInMilliseconds: 15000
+      circuitBreaker:
+        # 10秒内出现3个以上请求(已临近阀值),并且出错率在50%以上,开启断路器.断开服务,调用Fallback方法
+        requestVolumeThreshold: 3
+        sleepWindowInMilliseconds: 10000
+
+# actuator配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+```  
+
+完成以上的配置后，我们就可以使用其来帮助我们进行服务的熔断降级，下面我们将以一个Rest接口为例进行介绍，当然这里是基于全局默认
+的策略进行配置。  
+
+```java
+  @GetMapping
+  @PreAuthorize("@x.check()")
+  @HystrixCommand(fallbackMethod = "queryError")
+  public ResponseEntity<Object> query(LogQueryCriteria criteria, Pageable pageable) throws IOException {
+      criteria.setLogType("INFO");
+      throw new IOException();
+      //return new ResponseEntity<>(logService.queryAll(criteria,pageable), HttpStatus.OK);
+  }
+  
+  public ResponseEntity<Object> queryError(LogQueryCriteria criteria, Pageable pageable) {
+      criteria.setLogType("INFO");
+      return new ResponseEntity<>(logService.queryAll(criteria,pageable), HttpStatus.OK);
+  }
+```  
+
+这里可以看到我们在需要提供熔断支持的接口上增加了`HystrixCommand`注解，并通过其`fallbackMethod`指定了当出现熔断后需要调用
+的服务方法，这里为了便于进行演示，直接进行了异常抛出。读者可以自行访问即可发现当然出现错误后将自动调用`queryError`方法。当
+然读者也可以自行设定对应的规则，而不许遵从全局的规则，具体的使用方式如下。  
+
+```java
+@HystrixCommand(fallbackMethod = "onError",
+        commandProperties = {
+                @HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
+                @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
+                @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),
+                @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2")},
+        threadPoolProperties = {
+                @HystrixProperty(name = "coreSize", value = "5"),
+                @HystrixProperty(name = "maximumSize", value = "5"),
+                @HystrixProperty(name = "maxQueueSize", value = "10")
+        })
+```  
+
+如果读者希望了解其参数的具体说明与使用可以[参考本文档](https://github.com/Netflix/Hystrix/wiki/Configuration)  
 
 # 单元测试  
 
