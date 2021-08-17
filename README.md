@@ -400,3 +400,9 @@ public static void main(String[] args) {
 }
 ```  
 
+## 七、 其他技巧  
+
+### 1. 多例模式  
+
+由于Spring Boot默认采用单例的模式，如果读者需要进行多例的方式进行引用，可以在对应的对象上放入`@Scope("prototype")`注解属性即可。  
+
