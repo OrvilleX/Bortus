@@ -292,6 +292,143 @@ management:
 
 如果读者希望了解其参数的具体说明与使用可以[参考本文档](https://github.com/Netflix/Hystrix/wiki/Configuration)  
 
+### 7. Kafka消息中心  
+
+考虑到实际企业应用中，往往缺少不了对于企业总线的使用，同时也为了保障系统的高度解耦。那么我们就需要借助于当下流行的Kafka
+来帮我们的应用进行解耦。首先我们需要增加对应的依赖库。  
+
+```xml
+<!-- Kafka消息中心 -->
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency>
+```  
+
+在使用之前我们需要通过Kafka的指令创建主题，当然也可以通过应用启动时自动创建对应的主题，比如以下方式。  
+
+```java
+/**
+ * Kafka主题配置
+ */
+@Configuration
+public class KafkaInitialConfiguration {
+    
+    @Bean
+    public NewTopic initialTopic() {
+        return new NewTopic("testtopi", 2, (short)2);
+    }
+}
+```  
+
+为了能够连接到Kafka并且设定对应参数数值，我们需要在我们的`application.yml`中写入对应的配置项。  
+
+```yaml
+spring:
+  kafka:
+    bootstrap-servers: 172.101.203.33:9092
+    producer:
+      # 发生错误后，消息重发的次数。
+      retries: 0
+      #当有多个消息需要被发送到同一个分区时，生产者会把它们放在同一个批次里。该参数指定了一个批次可以使用的内存大小，按照字节数计算。
+      batch-size: 16384
+      # 设置生产者内存缓冲区的大小。
+      buffer-memory: 33554432
+      # 键的序列化方式
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 值的序列化方式
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # acks=0 ： 生产者在成功写入消息之前不会等待任何来自服务器的响应。
+      # acks=1 ： 只要集群的首领节点收到消息，生产者就会收到一个来自服务器成功响应。
+      # acks=all ：只有当所有参与复制的节点全部收到消息时，生产者才会收到一个来自服务器的成功响应。
+      acks: 1
+    consumer:
+      # 默认的消费组ID
+      properties-group-id: defaultConsumerGroup
+      # 消费会话超时时间(超过这个时间consumer没有发送心跳,就会触发rebalance操作)
+      properties-session-timeout-ms: 120000
+      # 消费请求超时时间
+      properties-request-timeout.ms: 150000
+      # 自动提交的时间间隔 在spring boot 2.X 版本中这里采用的是值的类型为Duration 需要符合特定的格式，如1S,1M,2H,5D
+      auto-commit-interval: 1S
+      # 该属性指定了消费者在读取一个没有偏移量的分区或者偏移量无效的情况下该作何处理：
+      # latest（默认值）在偏移量无效的情况下，消费者将从最新的记录开始读取数据（在消费者启动之后生成的记录）
+      # earliest ：在偏移量无效的情况下，消费者将从起始位置读取分区的记录
+      auto-offset-reset: earliest
+      # 是否自动提交偏移量，默认值是true,为了避免出现重复数据和数据丢失，可以把它设置为false,然后手动提交偏移量
+      enable-auto-commit: false
+      # 键的反序列化方式
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # 值的反序列化方式
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      # 在侦听器容器中运行的线程数。
+      concurrency: 5
+      #listner负责ack，每调用一次，就立即commit
+      ack-mode: manual_immediate
+      # 消费端监听的topic不存在时，项目启动会报错(关掉)
+      missing-topics-fatal: false
+```  
+
+根据实际情况完成上述的配置后我们就可以发送与消费消息了，对应的实例代码如下。  
+
+生产者  
+```java
+@Component
+@Slf4j
+public class KafkaProducer {
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
+
+    public static final String TOPIC_TEST = "topic.test";
+
+    public void send(Object obj) {
+        String obj2String = JSONObject.toJSONString(obj);
+        log.info("准备发送消息为：{}", obj2String);
+        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(TOPIC_TEST, obj);
+        future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log.info(TOPIC_TEST + " - 生产者 发送消息失败：" + throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(SendResult<String, Object> stringObjectSendResult) {
+                log.info(TOPIC_TEST + " - 生产者 发送消息成功：" + stringObjectSendResult.toString());
+            }
+        });
+    }
+}
+```
+
+消费者
+```java
+@Component
+@Slf4j
+public class KafkaConsumer {
+
+    @KafkaListener(topics = KafkaProducer.TOPIC_TEST, groupId = "topic.group1")
+    public void topic_test(ConsumerRecord<?, ?> record, Acknowledgment ack, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        Optional message = Optional.ofNullable(record.value());
+        if (message.isPresent()) {
+            Object msg = message.get();
+            log.info("topic_test 消费了： Topic:" + topic + ",Message:" + msg);
+            ack.acknowledge();
+        }
+    }
+
+    @KafkaListener(topics = KafkaProducer.TOPIC_TEST, groupId = "topic.group2")
+    public void topic_test1(ConsumerRecord<?, ?> record, Acknowledgment ack, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        Optional message = Optional.ofNullable(record.value());
+        if (message.isPresent()) {
+            Object msg = message.get();
+            log.info("topic_test1 消费了： Topic:" + topic + ",Message:" + msg);
+            ack.acknowledge();
+        }
+    }
+}
+```
+
 ## 四、单元测试  
 
 ### 1. BigDecimal类型测试  

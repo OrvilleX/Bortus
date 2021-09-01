@@ -261,10 +261,15 @@
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
             <version>2.2.2.RELEASE</version>
         </dependency>
-        <!-- hystrix 熔断可视化依赖 -->
+        <!-- hystrix 熔断数据对外服务 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!-- Kafka消息中心 -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
         </dependency>
     </dependencies>
     <build>
