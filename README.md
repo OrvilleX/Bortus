@@ -200,6 +200,24 @@ public interface SocketioService {
 }
 ```  
 
+如果读者通过学习其他框架可以得知，处理具体的事件可以采用`OnEvent`注解实现的，但是当前框架尚未支持这类方式。如果读
+者需要支持这类方式可以在`config/socketio/SocketProvider.java`文件中增加如下代码。  
+
+```java
+@Bean
+public SpringAnnotationScanner springAnnotationScanner() {
+    return new SpringAnnotationScanner(socketIOServer());
+}
+```  
+
+然后具体使用方式如下。  
+
+```java
+@OnEvent(value = "messageevent")
+public void onEvent(SocketIOClient client, AckRequest request, Message data) {
+}
+```
+
 ### 6. Hystrix熔断使用  
 
 现如今的系统架构也不同于以往的单体架构，而是朝着多服务的架构，甚至是微服务架构。这么拆分后服务之间的就必然存在远程
